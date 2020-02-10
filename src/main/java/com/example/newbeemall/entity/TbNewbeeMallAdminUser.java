@@ -9,7 +9,7 @@ import java.io.Serializable;
  * 
  * </p>
  *
- * @author ***
+ * @author ***      加点东西测试
  * @since 2020-02-07
  */
 public class TbNewbeeMallAdminUser implements Serializable {
