@@ -10,7 +10,7 @@ import java.io.Serializable;
  * 
  * </p>
  *
- * @author *** 时间2.10
+ * @author *** 时间2.11
  * @since 2020-02-07
  */
 public class TbNewbeeMallCarousel implements Serializable {
