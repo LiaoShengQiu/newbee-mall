@@ -7,9 +7,9 @@ $(function () {
         datatype: "json",
         colModel: [
             {label: 'id', name: 'categoryId', index: 'categoryId', width: 50, key: true, hidden: true},
-            {label: '分类名称', name: 'categoryName', index: 'categoryName', width: 240},
-            {label: '排序值', name: 'categoryRank', index: 'categoryRank', width: 120},
-            {label: '添加时间', name: 'createTime', index: 'createTime', width: 120}
+            {label: '分类名称', name: 'categoryName', index: 'category_name', width: 240},
+            {label: '排序值', name: 'categoryRank', index: 'category_rank', width: 120},
+            {label: '添加时间', name: 'createTime', index: 'create_time', width: 120}
         ],
         height: 560,
         rowNum: 10,

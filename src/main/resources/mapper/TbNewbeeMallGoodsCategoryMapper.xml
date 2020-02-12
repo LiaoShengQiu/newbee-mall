@@ -21,4 +21,16 @@
         category_id, category_level, parent_id, category_name, category_rank, is_deleted, create_time, create_user, update_time, update_user
     </sql>
 
+    <select id="findGoodsCategoryPage" resultMap="BaseResultMap" parameterType="map">
+        SELECT
+        <include refid="Base_Column_List"></include>
+        FROM tb_newbee_mall_goods_category
+        <where>
+            <if test="parentId != null and parentId != ''"> and parent_id=#{parentId}</if>
+            <if test="categoryLevel != null and categoryLevel != ''"> and category_level=#{categoryLevel}</if>
+        </where>
+        <if test="sidx != null and sidx != ''"> ORDER BY ${sidx} ${order}</if>
+        <if test="start != null and limit != null"> limit ${start},${limit}</if>
+    </select>
+
 </mapper>
