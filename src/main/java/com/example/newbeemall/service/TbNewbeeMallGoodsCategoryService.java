@@ -3,6 +3,9 @@ package com.example.newbeemall.service;
 import com.example.newbeemall.entity.TbNewbeeMallGoodsCategory;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * <p>
  *  服务类
@@ -13,4 +16,11 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface TbNewbeeMallGoodsCategoryService extends IService<TbNewbeeMallGoodsCategory> {
 
+    List<TbNewbeeMallGoodsCategory> findGoodsCategory(Map<String,Object> map);
+	
+	boolean save(Map<String,Object> map);
+	
+	boolean update(Map<String,Object> map);
+	
+	boolean delete();
 }
