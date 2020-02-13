@@ -2,7 +2,10 @@ package com.example.newbeemall.controller;
 
 
 import com.example.newbeemall.entity.TbNewbeeMallGoodsCategory;
+import com.example.newbeemall.entity.TbNewbeeMallAdminUser;
 import com.example.newbeemall.service.TbNewbeeMallGoodsCategoryService;
+import com.example.newbeemall.utils.ResultUtil;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.stereotype.Controller;
@@ -11,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Map;
 
@@ -28,6 +32,34 @@ public class TbNewbeeMallGoodsCategoryController {
 
     @Resource
     private TbNewbeeMallGoodsCategoryService goodsCategoryService;
+
+    @RequestMapping("/categories/save")
+    @ResponseBody
+    public Object save(@RequestBody Map<String,Object> map,HttpSession session){
+		TbNewbeeMallAdminUser user = (TbNewbeeMallAdminUser)session.getAttribute("admin");
+        System.out.println(map.toString());
+		map.put("createUser",user.getAdminUserId());
+		boolean isok = goodsCategoryService.save(map);
+	    ResultUtil resultObject = new ResultUtil(isok);
+        return resultObject;
+    }
+	
+	@RequestMapping("/categories/delete")
+    @ResponseBody
+    public Object delete(@RequestParam Map<String,Object> map){
+		
+        return null;
+    }
+	
+	@RequestMapping("/categories/update")
+    @ResponseBody
+    public Object update(@RequestBody Map<String,Object> map,HttpSession session){
+		TbNewbeeMallAdminUser user = (TbNewbeeMallAdminUser)session.getAttribute("admin");
+		map.put("updateUser",user.getAdminUserId());
+		boolean isok = goodsCategoryService.update(map);
+	    ResultUtil resultObject = new ResultUtil(isok);
+        return resultObject;
+    }
 
     @RequestMapping("/categories/list")
     @ResponseBody

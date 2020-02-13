@@ -30,4 +30,20 @@ public class TbNewbeeMallGoodsCategoryServiceImpl extends ServiceImpl<TbNewbeeMa
     public List<TbNewbeeMallGoodsCategory> findGoodsCategory(Map<String,Object> map) {
         return goodsCategoryMapper.findGoodsCategoryPage(map);
     }
+	
+	@Override
+	public boolean save(Map<String,Object> map){
+	    return goodsCategoryMapper.add(map)==1;
+	}
+	
+	@Override
+	public boolean update(Map<String,Object> map){
+		return goodsCategoryMapper.update(map)==1;
+	};
+	
+	@Override
+	public boolean delete(){
+		
+		return false;
+	};
 }

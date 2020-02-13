@@ -17,4 +17,10 @@ import java.util.Map;
 public interface TbNewbeeMallGoodsCategoryService extends IService<TbNewbeeMallGoodsCategory> {
 
     List<TbNewbeeMallGoodsCategory> findGoodsCategory(Map<String,Object> map);
+	
+	boolean save(Map<String,Object> map);
+	
+	boolean update(Map<String,Object> map);
+	
+	boolean delete();
 }

@@ -32,5 +32,16 @@
         <if test="sidx != null and sidx != ''"> ORDER BY ${sidx} ${order}</if>
         <if test="start != null and limit != null"> limit ${start},${limit}</if>
     </select>
+	
+	<insert id="add" parameterType="map">
+	INSERT INTO tb_newbee_mall_goods_category(parent_id,category_name,category_rank,category_level,create_user,create_time)
+	value(#{parentId},#{categoryName},#{categoryRank},#{categoryLevel},#{createUser},NOW())
+	</insert>
+	
+	<update id="update" parameterType="map">
+	UPDATE tb_newbee_mall_goods_category
+	SET parent_id=#{parentId},category_name=#{categoryName},category_rank=#{categoryRank},category_level=#{categoryLevel},update_user=#{updateUser},update_time=NOW()
+	WHERE category_id=#{categoryId}
+	</update>
 
 </mapper>

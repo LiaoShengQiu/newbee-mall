@@ -114,6 +114,7 @@ $('#saveButton').click(function () {
         var url = '/admin/categories/save';
         var id = getSelectedRowWithoutAlert();
         if (id != null) {
+            console.log(id);
             url = '/admin/categories/update';
             data = {
                 "categoryId": id,
