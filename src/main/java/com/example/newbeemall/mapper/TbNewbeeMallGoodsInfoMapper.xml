@@ -27,4 +27,21 @@
         goods_id, goods_name, goods_intro, goods_category_id, goods_cover_img, goods_carousel, goods_detail_content, original_price, selling_price, stock_num, tag, goods_sell_status, create_user, create_time, update_user, update_time
     </sql>
 
+
+    <select id="selectByPrimaryKeys" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from tb_newbee_mall_goods_info
+        where goods_id in
+        <foreach item="id" collection="list" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+        order by field(goods_id,
+        <foreach item="id" collection="list" separator=",">
+            #{id}
+        </foreach>
+        );
+    </select>
+
+
 </mapper>
