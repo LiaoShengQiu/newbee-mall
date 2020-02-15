@@ -27,9 +27,9 @@
         from tb_newbee_mall_goods_category
         where parent_id in
         <foreach item="parentId" collection="parentIds" open="(" separator="," close=")">
-            #{parentId,jdbcType=BIGINT}
+            #{parentId}
         </foreach>
-        and category_level = #{categoryLevel,jdbcType=TINYINT}
+        and category_level = #{categoryLevel}
         and is_deleted = 0
         order by category_rank desc
         <if test="number>0">

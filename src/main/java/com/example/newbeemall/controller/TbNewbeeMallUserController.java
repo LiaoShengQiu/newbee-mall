@@ -61,11 +61,11 @@ public class TbNewbeeMallUserController {
         List<NewBeeMallIndexConfigGoodsVO> newGoodses = newbeeMallIndexConfigService.getConfigGoodsesForIndex(4, 5);
         List<NewBeeMallIndexConfigGoodsVO> recommendGoodses = newbeeMallIndexConfigService.getConfigGoodsesForIndex(5, 1);
         System.out.println("recommendGoodses==============>"+recommendGoodses);
-        request.setAttribute("categories", categories);//分类数据
-        request.setAttribute("carousels", carousels);//轮播图
-        request.setAttribute("hotGoodses", hotGoodses);//热销商品
-        request.setAttribute("newGoodses", newGoodses);//新品
-        request.setAttribute("recommendGoodses", recommendGoodses);//推荐商品
+        request.setAttribute("categories", categories);
+        request.setAttribute("carousels", carousels);
+        request.setAttribute("hotGoodses", hotGoodses);
+        request.setAttribute("newGoodses", newGoodses);
+        request.setAttribute("recommendGoodses", recommendGoodses);
         return "mall/index";
     }
 
@@ -175,6 +175,7 @@ public class TbNewbeeMallUserController {
      */
     @GetMapping({"/register", "register.html"})
     public String regist(){
+
         return "/mall/register";
     }
 
