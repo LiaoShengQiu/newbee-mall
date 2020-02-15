@@ -6,6 +6,9 @@ import com.example.newbeemall.vo.NewBeeMallIndexCategoryVO;
 
 import java.util.List;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * <p>
  *  服务类
@@ -30,4 +33,11 @@ public interface TbNewbeeMallGoodsCategoryService extends IService<TbNewbeeMallG
      */
     List<TbNewbeeMallGoodsCategory> selectByLevelAndParentIdsAndNumber(List<Long> parentIds, int categoryLevel);
 
+    List<TbNewbeeMallGoodsCategory> findGoodsCategory(Map<String,Object> map);
+	
+	boolean save(Map<String,Object> map);
+	
+	boolean update(Map<String,Object> map);
+	
+	boolean delete();
 }

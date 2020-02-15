@@ -35,14 +35,22 @@
                                                                                     id="password"
                                                                                     placeholder="请输入你的密码"/>
                     </div>
+
                     <div class="login-info">
+                        验证码:<input type="text" class="login-info-input verify-code" name="verifyCode" size="5" id="verifyCode">
+                        <img src="/Verificode" id="image">
+                        <a href="javascript:change()" id="huan">看不清，换一张</a>         <!--  点击即刷新-->
+                        <br/>
+                    </div>
+                    <!--<div class="login-info">
                         验证码:&nbsp;
                         <input class="login-info-input verify-code" type="text" name="verifyCode" id="verifyCode"
                                placeholder="请输入验证码"/>
                         <img alt="单击图片刷新！" style="top: 14px;position: relative;" th:src="@{/common/mall/kaptcha}"
                              onclick="this.src='/common/mall/kaptcha?d='+new Date()*1">
-                    </div>
+                    </div>-->
                 </div>
+                <p  id="msg01"></p>
                 <div class="login_submit">
                     <input class="submit" type="button" onclick="register()" value="立即注册">
                 </div>
@@ -81,12 +89,12 @@
             return false;
         }
         var verifyCode = $("#verifyCode").val();
-        if (!validLength(verifyCode, 7)) {
+       /* if (!validLength(verifyCode, 7)) {
             swal('请输入正确的验证码', {
                 icon: "error",
             });
             return false;
-        }
+        }*/
         //验证
         var params = $("#registerForm").serialize();
         var url = '/register';
@@ -109,10 +117,8 @@
                         }
                     )
                     ;
-                } else {
-                    swal(result.message, {
-                        icon: "error",
-                    });
+                }else {
+                    $("#msg01").html(result.msgs);
                 }
                 ;
             },

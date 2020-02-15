@@ -13,4 +13,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface TbNewbeeMallAdminUserService extends IService<TbNewbeeMallAdminUser> {
 
+    TbNewbeeMallAdminUser login(String loginName,String password);
+
 }

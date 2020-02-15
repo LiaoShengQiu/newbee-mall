@@ -1,5 +1,6 @@
 package com.example.newbeemall.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.example.newbeemall.entity.TbNewbeeMallCarousel;
 import com.example.newbeemall.mapper.TbNewbeeMallCarouselMapper;
 import com.example.newbeemall.service.TbNewbeeMallCarouselService;
@@ -11,6 +12,9 @@ import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.List;
+
+import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -39,4 +43,9 @@ public class TbNewbeeMallCarouselServiceImpl extends ServiceImpl<TbNewbeeMallCar
         }
         return newBeeMallIndexCarouselVOS;
     }
+
+   /* @Resource
+    private TbNewbeeMallCarouselMapper carouselMapper;*/
+
+
 }

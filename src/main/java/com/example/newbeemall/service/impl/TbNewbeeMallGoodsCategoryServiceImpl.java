@@ -1,5 +1,7 @@
 package com.example.newbeemall.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.example.newbeemall.entity.TbNewbeeMallCarousel;
 import com.example.newbeemall.entity.TbNewbeeMallGoodsCategory;
 import com.example.newbeemall.mapper.TbNewbeeMallGoodsCategoryMapper;
 import com.example.newbeemall.service.TbNewbeeMallGoodsCategoryService;
@@ -19,6 +21,10 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.groupingBy;
+
+import javax.annotation.Resource;
+import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -103,4 +109,25 @@ public class TbNewbeeMallGoodsCategoryServiceImpl extends ServiceImpl<TbNewbeeMa
     public List<TbNewbeeMallGoodsCategory> selectByLevelAndParentIdsAndNumber(List<Long> parentIds, int categoryLevel) {
         return goodsCategoryMapper.selectByLevelAndParentIdsAndNumber(parentIds, categoryLevel, 0);//0代表查询所有
     }
+
+    @Override
+    public List<TbNewbeeMallGoodsCategory> findGoodsCategory(Map<String,Object> map) {
+        return goodsCategoryMapper.findGoodsCategoryPage(map);
+    }
+	
+	@Override
+	public boolean save(Map<String,Object> map){
+	    return goodsCategoryMapper.add(map)==1;
+	}
+	
+	@Override
+	public boolean update(Map<String,Object> map){
+		return goodsCategoryMapper.update(map)==1;
+	};
+	
+	@Override
+	public boolean delete(){
+		
+		return false;
+	};
 }

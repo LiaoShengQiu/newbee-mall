@@ -29,20 +29,13 @@
                                                              id="loginName"
                                                              placeholder="请输入你的手机号"/>
                     </div>
-                    <div class="login-info">密&nbsp;&nbsp;&nbsp;&nbsp;码:&nbsp;<input class="login-info-input"
-                                                                                    id="password"
-                                                                                    type="password"
-                                                                                    name="password"
-                                                                                    placeholder="请输入你的密码"/></div>
-
-                    <div class="login-info">
-                    验证码:<input type="text" class="login-info-input verify-code" name="vcode" size="5" id="vcode">
-                    <img src="/Verificode" id="image">
-                    <a href="javascript:change()" id="huan">看不清，换一张</a>         <!--  点击即刷新-->
-                    <br/>
-                    </div>
-
-                   <!-- <div class="login-info">
+                    <div class="login-info">验证码:&nbsp;<input class="login-info-input"
+                                                                                    id="yanz"
+                                                                                    type="text"
+                                                                                    name="yanz"
+                                                                                    placeholder="请输入你的短信验证码"/></div>
+                    <input type="button" id="btn" value="获取短信验证码" onclick="sendemail()" />
+<!-- <div class="login-info">
                         验证码:&nbsp;
                         <input class="login-info-input verify-code" type="text" name="verifyCode"
                                placeholder="请输入验证码" id="verifyCode"/>
@@ -51,7 +44,7 @@
                     </div>-->
                 </div>
                 <p  id="msg01"></p>
-                <a href="/dlogin" id="duanxin">短信登录</a>
+
                 <div class="login_submit">
                     <input class="submit" type="submit" onclick="login()" value="立即登录">
                 </div>
@@ -64,7 +57,49 @@
 <script th:src="@{/admin/plugins/jquery/jquery.min.js}"></script>
 <script th:src="@{/admin/dist/js/public.js}"></script>
 <script th:src="@{/admin/plugins/sweetalert/sweetalert.min.js}"></script>
+
+
+
+
 <script type="text/javascript">
+
+
+    var countdown=60;
+    function sendemail(){
+        var loginName = $("#loginName").val();
+
+        var obj = $("#btn");
+        if(loginName!=null){
+            if (!validPhoneNumber(loginName)) {
+                swal('请输入正确的登录名(即手机号)', {
+                    icon: "error",
+                });
+                return false;
+            }
+            $.post("/huoqud","loginName="+loginName+"&time=60");
+            settime(obj);
+        }
+
+
+    }
+    function settime(obj) { //发送验证码倒计时
+        if (countdown == 0) {
+            obj.attr('disabled',false);
+            //obj.removeattr("disabled");
+            obj.val("免费获取验证码");
+            countdown = 60;
+            return;
+        } else {
+            obj.attr('disabled',true);
+            obj.val("重新发送(" + countdown + ")");
+            countdown--;
+        }
+        setTimeout(function() {
+                settime(obj) }
+            ,1000)
+    }
+
+
     function change()
     {
         var img=document.getElementById("image");
@@ -82,15 +117,13 @@
             });
             return false;
         }
-        var password = $("#password").val();
-        if (!validPassword(password)) {
-            swal('请输入正确的密码格式(6-20位字符和数字组合)', {
+        var yanz = $("#yanz").val();
+        if (!validDuanx(yanz)) {
+            swal('请输入正确的验证码格式(6位数字)', {
                 icon: "error",
             });
             return false;
         }
-        var verfyCode = $("#vcode").val();
-
 
      /*   var verifyCode = $("#verifyCode").val();
         if (!validLength(verifyCode, 7)) {
@@ -102,14 +135,14 @@
         //验证
         var params = $("#loginForm").serialize();
 
-        var url = '/dologin';
+        var url = '/duanlogin';
         $.ajax({
             type: 'POST',//方法类型
             url: url,
            /* data: params,*/
-            data:"loginName="+loginName+"&password="+password+"&verfyCode="+verfyCode,
+            data:"loginName="+loginName+"&yanz="+yanz,
             success: function (result) {
-                if (result.resultCode == 200) {
+                if ("200" == result) {
                     window.location.href = '/index';
                 } else {
                     $("#msg01").html(result.msgs);
