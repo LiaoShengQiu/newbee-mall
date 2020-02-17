@@ -29,9 +29,6 @@ public class TbNewbeeMallUserController {
     private TbNewbeeMallUserService tbNewbeeMallUserService;
     @Resource
     private TbNewbeeMallGoodsCategoryService newbeeMallGoodsCategoryService;
-
-    @Resource
-    private TbNewbeeMallCarouselService newbeeMallCarouselService;
     @Resource
     private TbNewbeeMallIndexConfigService newbeeMallIndexConfigService;
 
@@ -56,12 +53,10 @@ public class TbNewbeeMallUserController {
         List<NewBeeMallIndexCategoryVO> categories = newbeeMallGoodsCategoryService.getCategoriesForIndex();
         request.setAttribute("categories", categories);
 
-        List<NewBeeMallIndexCarouselVO> carousels = newbeeMallCarouselService.getCarouselsForIndex(5);
         List<NewBeeMallIndexConfigGoodsVO> hotGoodses = newbeeMallIndexConfigService.getConfigGoodsesForIndex(3, 4);
         List<NewBeeMallIndexConfigGoodsVO> newGoodses = newbeeMallIndexConfigService.getConfigGoodsesForIndex(4, 5);
         List<NewBeeMallIndexConfigGoodsVO> recommendGoodses = newbeeMallIndexConfigService.getConfigGoodsesForIndex(5, 1);
 
-        //request.setAttribute("carousels", carousels);
         request.setAttribute("hotGoodses", hotGoodses);//热销商品
         request.setAttribute("newGoodses", newGoodses);//新品上线
         request.setAttribute("recommendGoodses", recommendGoodses);//为你推荐
