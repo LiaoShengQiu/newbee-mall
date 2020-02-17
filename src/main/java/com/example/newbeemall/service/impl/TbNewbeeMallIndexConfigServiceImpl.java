@@ -44,19 +44,6 @@ public class TbNewbeeMallIndexConfigServiceImpl extends ServiceImpl<TbNewbeeMall
             List<Long> goodsIds = indexConfigs.stream().map(TbNewbeeMallIndexConfig::getGoodsId).collect(Collectors.toList());
             List<TbNewbeeMallGoodsInfo> newBeeMallGoods = goodsMapper.selectByPrimaryKeys(goodsIds);
             newBeeMallIndexConfigGoodsVOS = BeanUtil.copyList(newBeeMallGoods, NewBeeMallIndexConfigGoodsVO.class);
-            for (NewBeeMallIndexConfigGoodsVO newBeeMallIndexConfigGoodsVO : newBeeMallIndexConfigGoodsVOS) {
-                String goodsName = newBeeMallIndexConfigGoodsVO.getGoodsName();
-                String goodsIntro = newBeeMallIndexConfigGoodsVO.getGoodsIntro();
-                // 字符串过长导致文字超出的问题
-                /*if (goodsName.length() > 30) {
-                    goodsName = goodsName.substring(0, 30) + "...";
-                    newBeeMallIndexConfigGoodsVO.setGoodsName(goodsName);
-                }
-                if (goodsIntro.length() > 22) {
-                    goodsIntro = goodsIntro.substring(0, 22) + "...";
-                    newBeeMallIndexConfigGoodsVO.setGoodsIntro(goodsIntro);
-                }*/
-            }
         }
         return newBeeMallIndexConfigGoodsVOS;
     }

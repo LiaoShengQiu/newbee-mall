@@ -12,7 +12,6 @@ import com.example.newbeemall.vo.NewBeeMallIndexCategoryVO;
 import com.example.newbeemall.vo.NewBeeMallIndexConfigGoodsVO;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -24,14 +23,13 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
-//@RequestMapping("/tbNewbeeMallUser")
 public class TbNewbeeMallUserController {
 
     @Resource
     private TbNewbeeMallUserService tbNewbeeMallUserService;
-
     @Resource
     private TbNewbeeMallGoodsCategoryService newbeeMallGoodsCategoryService;
+
     @Resource
     private TbNewbeeMallCarouselService newbeeMallCarouselService;
     @Resource
@@ -56,16 +54,19 @@ public class TbNewbeeMallUserController {
     public String index(HttpServletRequest request){
         System.out.println("首页........................................");
         List<NewBeeMallIndexCategoryVO> categories = newbeeMallGoodsCategoryService.getCategoriesForIndex();
+        request.setAttribute("categories", categories);
+
         List<NewBeeMallIndexCarouselVO> carousels = newbeeMallCarouselService.getCarouselsForIndex(5);
         List<NewBeeMallIndexConfigGoodsVO> hotGoodses = newbeeMallIndexConfigService.getConfigGoodsesForIndex(3, 4);
         List<NewBeeMallIndexConfigGoodsVO> newGoodses = newbeeMallIndexConfigService.getConfigGoodsesForIndex(4, 5);
         List<NewBeeMallIndexConfigGoodsVO> recommendGoodses = newbeeMallIndexConfigService.getConfigGoodsesForIndex(5, 1);
-        System.out.println("recommendGoodses==============>"+recommendGoodses);
-        request.setAttribute("categories", categories);
-        request.setAttribute("carousels", carousels);
-        request.setAttribute("hotGoodses", hotGoodses);
-        request.setAttribute("newGoodses", newGoodses);
-        request.setAttribute("recommendGoodses", recommendGoodses);
+
+        //request.setAttribute("carousels", carousels);
+        request.setAttribute("hotGoodses", hotGoodses);//热销商品
+        request.setAttribute("newGoodses", newGoodses);//新品上线
+        request.setAttribute("recommendGoodses", recommendGoodses);//为你推荐
+
+
         return "mall/index";
     }
 

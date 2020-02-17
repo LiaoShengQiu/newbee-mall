@@ -3,13 +3,15 @@
 <head th:replace="mall/header::head-fragment('NewBee商城-首页','index')">
 </head>
 <body>
+
 <header th:replace="mall/header::header-fragment"></header>
 <content id="content">
     <nav th:replace="mall/header::nav-fragment"></nav>
+
     <div id="banner">
+        <!--左侧三级菜单-->
         <div class="all-sort-list">
             <th:block th:each="category : ${categories}">
-
             <div class="item">
                 <h3><span>·</span><a href="##"><th:block th:text="${category.categoryName}"></th:block></a></h3>
                 <div class="item-list clearfix">
@@ -31,6 +33,7 @@
             </div>
             </th:block>
         </div>
+        <!--中央轮播图-->
         <div class="swiper-container fl">
             <div class="swiper-wrapper">
                 <!-- 配置了轮播图则显示后台配置的轮播图 -->
@@ -61,6 +64,8 @@
             <div class="swiper-button-next"></div>
         </div>
     </div>
+
+
 
     <div id="sub_banner">
         <!-- 已配置热销商品则显示配置内容 -->
@@ -98,6 +103,7 @@
         </th:block>
     </div>
 
+    <!--新品上线-->
     <div id="flash">
         <h2>新品上线</h2>
         <ul>
@@ -114,6 +120,7 @@
                     </li>
                 </th:block>
             </th:block>
+
             <!-- 未配置则显示默认 -->
             <th:block th:if="${#lists.isEmpty(newGoodses)}">
                 <li>
@@ -160,6 +167,7 @@
         </ul>
     </div>
 
+    <!--为你推荐-->
     <div id="recommend">
         <h2>为你推荐</h2>
         <a href="##" class="more">查看更多>></a>
@@ -184,6 +192,7 @@
                     </li>
                 </th:block>
             </th:block>
+
             <!-- 未配置则显示默认 -->
             <th:block th:if="${#lists.isEmpty(recommendGoodses)}">
                 <li>
@@ -339,6 +348,7 @@
             </th:block>
         </ul>
     </div>
+
 </content>
 <div th:replace="mall/footer::footer-fragment"></div>
 <!-- jQuery -->

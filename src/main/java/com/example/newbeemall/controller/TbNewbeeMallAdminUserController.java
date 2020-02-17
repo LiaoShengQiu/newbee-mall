@@ -37,15 +37,6 @@ public class TbNewbeeMallAdminUserController {
 
     @Resource
     private TbNewbeeMallAdminUserService adminUserService;
-    @Resource
-    private TbNewbeeMallCarouselService carouselService;
-
-    @Resource
-    private TbNewbeeMallGoodsCategoryService newbeeMallGoodsCategoryService;
-    @Resource
-    private TbNewbeeMallCarouselService newbeeMallCarouselService;
-    @Resource
-    private TbNewbeeMallIndexConfigService newbeeMallIndexConfigService;
 
 
     /**
@@ -53,37 +44,17 @@ public class TbNewbeeMallAdminUserController {
      */
     @RequestMapping("/login")
     public String login(String userName, String password, HttpSession session){
+        System.out.println("login...................................");
         if(userName==null || password == null){
             return "admin/login";
         }
         TbNewbeeMallAdminUser adminUser = adminUserService.login(userName,password);
-        if(adminUser==null) {
+        if(adminUser == null) {
             session.setAttribute("","用户名 或密码错误");
             return "admin/login";
         }
         session.setAttribute("admin",adminUser);
         return "admin/index";
-    }
-
-
-    @GetMapping("/index")
-    public String index(HttpServletRequest request) {
-        System.out.println("首页........................................");
-        List<NewBeeMallIndexCategoryVO> categories = newbeeMallGoodsCategoryService.getCategoriesForIndex();
-        if (CollectionUtils.isEmpty(categories)) {
-            return "error/error_5xx";
-        }
-        List<NewBeeMallIndexCarouselVO> carousels = newbeeMallCarouselService.getCarouselsForIndex(5);
-        List<NewBeeMallIndexConfigGoodsVO> hotGoodses = newbeeMallIndexConfigService.getConfigGoodsesForIndex(3, 4);
-        List<NewBeeMallIndexConfigGoodsVO> newGoodses = newbeeMallIndexConfigService.getConfigGoodsesForIndex(4, 5);
-        List<NewBeeMallIndexConfigGoodsVO> recommendGoodses = newbeeMallIndexConfigService.getConfigGoodsesForIndex(5, 1);
-        System.out.println("recommendGoodses==============>"+recommendGoodses);
-        request.setAttribute("categories", categories);
-        request.setAttribute("carousels", carousels);
-        request.setAttribute("hotGoodses", hotGoodses);
-        request.setAttribute("newGoodses", newGoodses);
-        request.setAttribute("recommendGoodses", recommendGoodses);
-        return "mall/index";
     }
 }
 
