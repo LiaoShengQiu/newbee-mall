@@ -1,4 +1,4 @@
-package com.example.newbeemall.controller;
+package com.example.newbeemall.controller.admin;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;

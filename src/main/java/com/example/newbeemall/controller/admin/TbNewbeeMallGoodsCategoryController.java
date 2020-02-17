@@ -1,4 +1,4 @@
-package com.example.newbeemall.controller;
+package com.example.newbeemall.controller.admin;
 
 
 import com.example.newbeemall.entity.TbNewbeeMallGoodsCategory;

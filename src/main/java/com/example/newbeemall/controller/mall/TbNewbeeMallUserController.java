@@ -1,4 +1,4 @@
-package com.example.newbeemall.controller;
+package com.example.newbeemall.controller.mall;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -123,6 +123,7 @@ if(request.getSession().getAttribute("code")!=null){
                 System.out.println("数据库的密码"+list.get(0).getPasswordMd5());
                 if(list.get(0).getPasswordMd5().equals(md5Text)){
                     map.put("resultCode",200);
+                    request.getSession().setAttribute("newBeeMallUser",list.get(0));
                     System.out.println("登录成功！");
                 }else{
                     System.out.println("密码错误！");
