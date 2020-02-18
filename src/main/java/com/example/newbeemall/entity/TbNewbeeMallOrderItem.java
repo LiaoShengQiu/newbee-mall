@@ -58,6 +58,18 @@ public class TbNewbeeMallOrderItem implements Serializable {
      */
     private LocalDateTime createTime;
 
+    /**
+     * 购物车序号
+     */
+    private Long cartItemId;
+
+    public Long getCartItemId() {
+        return cartItemId;
+    }
+
+    public void setCartItemId(Long cartItemId) {
+        this.cartItemId = cartItemId;
+    }
 
     public Long getOrderItemId() {
         return orderItemId;

@@ -3,6 +3,7 @@ package com.example.newbeemall.controller.mall;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.example.newbeemall.entity.TbNewbeeMallUser;
+import com.example.newbeemall.service.TbNewbeeMallShoppingCartItemService;
 import com.example.newbeemall.service.TbNewbeeMallUserService;
 import com.example.newbeemall.utils.PhoneCode;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -31,6 +32,8 @@ import java.util.Map;
 public class TbNewbeeMallUserController {
     @Resource
     private TbNewbeeMallUserService tbNewbeeMallUserService;
+    @Resource
+    private TbNewbeeMallShoppingCartItemService cartItemService;
 
     @GetMapping({"/login", "login.html"})
     public String login(){
@@ -123,6 +126,8 @@ if(request.getSession().getAttribute("code")!=null){
                 System.out.println("数据库的密码"+list.get(0).getPasswordMd5());
                 if(list.get(0).getPasswordMd5().equals(md5Text)){
                     map.put("resultCode",200);
+                    int count = cartItemService.getCartCountByUserId(list.get(0).getUserId());
+                    list.get(0).setShopCartItemCount(count);
                     request.getSession().setAttribute("newBeeMallUser",list.get(0));
                     System.out.println("登录成功！");
                 }else{

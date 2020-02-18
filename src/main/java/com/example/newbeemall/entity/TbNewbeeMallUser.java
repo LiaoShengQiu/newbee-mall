@@ -63,6 +63,15 @@ public class TbNewbeeMallUser implements Serializable {
      */
     private LocalDateTime createTime;
 
+    private int shopCartItemCount;
+
+    public int getShopCartItemCount() {
+        return shopCartItemCount;
+    }
+
+    public void setShopCartItemCount(int shopCartItemCount) {
+        this.shopCartItemCount = shopCartItemCount;
+    }
 
     public Long getUserId() {
         return userId;
