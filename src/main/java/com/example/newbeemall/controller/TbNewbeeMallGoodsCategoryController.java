@@ -1,20 +1,20 @@
 package com.example.newbeemall.controller;
 
 
-import com.example.newbeemall.entity.TbNewbeeMallGoodsCategory;
 import com.example.newbeemall.entity.TbNewbeeMallAdminUser;
+import com.example.newbeemall.entity.TbNewbeeMallGoodsCategory;
 import com.example.newbeemall.service.TbNewbeeMallGoodsCategoryService;
 import com.example.newbeemall.utils.ResultUtil;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -32,6 +32,31 @@ public class TbNewbeeMallGoodsCategoryController {
 
     @Resource
     private TbNewbeeMallGoodsCategoryService goodsCategoryService;
+
+    @RequestMapping("/index01")
+    public String sanjiDaohan(HttpServletRequest request){
+        //查询一级
+        List<TbNewbeeMallGoodsCategory> yiji = goodsCategoryService.findYiji();
+        List<TbNewbeeMallGoodsCategory> erji = null;
+        List<TbNewbeeMallGoodsCategory> sanji = null;
+        List<Long> erjis = new ArrayList<Long>();
+        List<Long> sanjis = new ArrayList<Long>();
+        //查询二、三级
+        for (TbNewbeeMallGoodsCategory yi : yiji){
+            System.out.println("二级的parentId"+yi.getCategoryId());
+            erjis.add(yi.getCategoryId());
+        }
+        erji = goodsCategoryService.finderji(erjis);
+        for (TbNewbeeMallGoodsCategory er : erji){
+            System.out.println("san级的parentId"+er.getCategoryId());
+            sanjis.add(er.getCategoryId());
+        }
+        sanji = goodsCategoryService.finderji(sanjis);
+        request.setAttribute("yiji",yiji);
+        request.setAttribute("erji",erji);
+        request.setAttribute("sanji",sanji);
+        return "/mall/index";
+    }
 
     @RequestMapping("/categories/save")
     @ResponseBody
