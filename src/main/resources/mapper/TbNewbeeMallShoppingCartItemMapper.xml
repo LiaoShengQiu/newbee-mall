@@ -32,10 +32,14 @@
     </select>
 
     <select id="getCartByUserId" resultType="com.example.newbeemall.entity.TbNewbeeMallOrderItem" parameterType="long">
-        SELECT c.cart_item_id,c.goods_count,c.goods_id,g.goods_cover_img,g.goods_name
+        SELECT c.cart_item_id,c.goods_count,c.goods_id,g.goods_cover_img,g.goods_name,g.selling_price
         FROM tb_newbee_mall_shopping_cart_item c,tb_newbee_mall_goods_info g
         WHERE c.goods_id=g.goods_id AND c.user_id = #{userId} AND c.is_deleted = 0
     </select>
 
-
+    <update id="updateCartCount" parameterType="map">
+        UPDATE tb_newbee_mall_shopping_cart_item
+        SET goods_count=#{goodsCount},update_time=NOW()
+        WHERE cart_item_id=#{cartItemId}
+    </update>
 </mapper>

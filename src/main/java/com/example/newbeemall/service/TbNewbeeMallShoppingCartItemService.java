@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -30,4 +31,6 @@ public interface TbNewbeeMallShoppingCartItemService extends IService<TbNewbeeMa
      * @return
      */
     public List<TbNewbeeMallOrderItem> getCartByUserId(Long userId);
+
+    public boolean update(Map<String,Object> map);
 }

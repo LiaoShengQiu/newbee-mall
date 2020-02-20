@@ -1,6 +1,7 @@
 package com.example.newbeemall.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.time.LocalDateTime;
 import java.io.Serializable;
@@ -61,6 +62,7 @@ public class TbNewbeeMallOrderItem implements Serializable {
     /**
      * 购物车序号
      */
+    @TableField(exist = false)
     private Long cartItemId;
 
     public Long getCartItemId() {

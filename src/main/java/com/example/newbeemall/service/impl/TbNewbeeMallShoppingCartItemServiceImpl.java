@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -36,5 +37,10 @@ public class TbNewbeeMallShoppingCartItemServiceImpl extends ServiceImpl<TbNewbe
     @Override
     public List<TbNewbeeMallOrderItem> getCartByUserId(Long userId) {
         return mapper.getCartByUserId(userId);
+    }
+
+    @Override
+    public boolean update(Map<String,Object> map) {
+        return mapper.updateCartCount(map)>0;
     }
 }

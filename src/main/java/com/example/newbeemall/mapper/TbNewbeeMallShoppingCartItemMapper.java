@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -37,4 +38,6 @@ public interface TbNewbeeMallShoppingCartItemMapper extends BaseMapper<TbNewbeeM
      * @return
      */
     public List<TbNewbeeMallOrderItem> getCartByUserId(@Param("userId") Long userId);
+
+    public int updateCartCount(Map<String,Object> map);
 }

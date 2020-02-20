@@ -12,6 +12,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 public class ShopCatController {
@@ -33,6 +34,14 @@ public class ShopCatController {
         return "mall/cart";
     }
 
+    @PutMapping("/shop-cart")
+    @ResponseBody
+    public Object updateShopCart(@RequestBody Map<String,Object> map, HttpServletRequest request, HttpSession session){
+        ResultUtil resultUtil = new ResultUtil(shopCatService.update(map));
+        return resultUtil;
+
+    }
+
     @PostMapping("/shop-cart")
     @ResponseBody
     public Object addShopCart(@RequestBody TbNewbeeMallShoppingCartItem cartItem,HttpServletRequest request,HttpSession session){
@@ -43,6 +52,26 @@ public class ShopCatController {
         newBeeMallUser.setShopCartItemCount(count);
         session.setAttribute("newBeeMallUser",newBeeMallUser);
         return resultUtil;
+
+    }
+
+    /**
+     * 删除购物车商品
+     * @param id
+     * @param request
+     * @param session
+     * @return
+     */
+    @DeleteMapping("/shop-cart/{id}")
+    @ResponseBody
+    public Object deleteShopCart(@PathVariable("id") Long id,HttpServletRequest request,HttpSession session){
+        return new ResultUtil(shopCatService.removeById(id));
+
+    }
+
+    @GetMapping("/shop-cart/settle")
+    public Object settle(HttpServletRequest request,HttpSession session){
+        return "mall/order-settle";
 
     }
 }

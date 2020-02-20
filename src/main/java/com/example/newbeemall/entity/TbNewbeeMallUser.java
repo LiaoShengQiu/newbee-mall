@@ -1,6 +1,7 @@
 package com.example.newbeemall.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.time.LocalDateTime;
 import java.io.Serializable;
@@ -63,6 +64,8 @@ public class TbNewbeeMallUser implements Serializable {
      */
     private LocalDateTime createTime;
 
+
+    @TableField(exist = false)
     private int shopCartItemCount;
 
     public int getShopCartItemCount() {
