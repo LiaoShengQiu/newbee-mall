@@ -1,9 +1,13 @@
 package com.example.newbeemall.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
-import java.time.LocalDateTime;
+
 import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * <p>
@@ -42,6 +46,7 @@ public class TbNewbeeMallOrder implements Serializable {
      * 支付状态:0.未支付,1.支付成功,-1:支付失败
      */
     private Integer payStatus;
+
 
     /**
      * 0.无 1.支付宝支付 2.微信支付
@@ -93,6 +98,56 @@ public class TbNewbeeMallOrder implements Serializable {
      */
     private LocalDateTime updateTime;
 
+
+    /**
+     * 订单状态
+     */
+    @TableField(exist = false)
+    private String orderStatusString;
+
+    /**
+     * 支付状态
+     */
+    @TableField(exist = false)
+    private String payTypeString;
+
+    @TableField(exist = false)
+    private List<TbNewbeeMallOrder> userList = new ArrayList<TbNewbeeMallOrder>();
+
+    @TableField(exist = false)
+    private List<TbNewbeeMallOrderItem> orderItems = new ArrayList<TbNewbeeMallOrderItem>();
+
+    public List<TbNewbeeMallOrderItem> getOrderItems() {
+        return orderItems;
+    }
+
+    public void setOrderItems(List<TbNewbeeMallOrderItem> orderItems) {
+        this.orderItems = orderItems;
+    }
+
+    public String getOrderStatusString() {
+        return orderStatusString;
+    }
+
+    public void setOrderStatusString(String orderStatusString) {
+        this.orderStatusString = orderStatusString;
+    }
+
+    public String getPayTypeString() {
+        return payTypeString;
+    }
+
+    public void setPayTypeString(String payTypeString) {
+        this.payTypeString = payTypeString;
+    }
+
+    public List<TbNewbeeMallOrder> getUserList() {
+        return userList;
+    }
+
+    public void setUserList(List<TbNewbeeMallOrder> userList) {
+        this.userList = userList;
+    }
 
     public Long getOrderId() {
         return orderId;
