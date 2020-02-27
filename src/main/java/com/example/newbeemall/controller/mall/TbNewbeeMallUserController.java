@@ -150,7 +150,7 @@ if(request.getSession().getAttribute("code")!=null){
 
 
     /**
-     * 注册
+     * 注册3
      * @return
      */
     @GetMapping({"/register", "register.html"})
