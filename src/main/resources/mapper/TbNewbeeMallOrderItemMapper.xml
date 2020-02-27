@@ -19,22 +19,4 @@
         order_item_id, order_id, goods_id, goods_name, goods_cover_img, selling_price, goods_count, create_time
     </sql>
 
-    <select id="selectByOrderIds" resultMap="BaseResultMap">
-        select
-        <include refid="Base_Column_List"/>
-        from tb_newbee_mall_order_item
-        where order_id
-        in
-        <foreach item="id" collection="orderIds" open="(" separator="," close=")">
-            #{id}
-        </foreach>
-    </select>
-
-<!--    <select id="myordersItems_list" resultMap="BaseResultMap" parameterType="map">-->
-<!--        SELECT-->
-<!--        <include refid="Base_Column_List"></include>-->
-<!--         i.*,o.order_status,o.pay_type,o.order_no FROM tb_newbee_mall_order_item i,tb_newbee_mall_order o WHERE i.order_id = o.order_id AND o.user_id = (SELECT u.user_id FROM tb_newbee_mall_user u WHERE u.user_id = #{userId})-->
-
-<!--        <if test="start != null and limit != null"> limit ${start},${limit}</if>-->
-<!--    </select>-->
 </mapper>

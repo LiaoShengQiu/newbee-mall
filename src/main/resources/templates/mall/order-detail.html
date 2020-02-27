@@ -16,8 +16,8 @@
         <div th:replace="mall/personal-sidebar::sidebar-fragment"></div>
 
         <div class="intro fr">
-            <div class="uc-box uc-main-box" >
-                <div class="uc-content-box order-view-box" >
+            <div class="uc-box uc-main-box">
+                <div class="uc-content-box order-view-box">
                     <div class="box-hd">
                         <h1 class="title">订单详情
                             <small>请谨防钓鱼链接或诈骗电话，<a href="##">了解更多&gt;</a>
@@ -25,11 +25,11 @@
                         </h1>
                         <div class="more clearfix">
                             <h2 class="subtitle">订单号：
-                                <th:block th:text="${orderDetailVO.getOrderNo()}"></th:block>
+                                <th:block th:text="${orderDetailVO.orderNo}"></th:block>
                                 <span class="tag tag-subsidy"></span>
                             </h2>
                             <div class="actions">
-                                <input type="hidden" id="orderNoValue" th:value="${orderDetailVO.getOrderNo()}">
+                                <input type="hidden" id="orderNoValue" th:value="${orderDetailVO.orderNo}">
                                 <th:block th:if="${orderDetailVO.orderStatus>0 and orderDetailVO.orderStatus<3}">
                                     <a onclick="cancelOrder()"
                                        class="btn btn-small btn-line-gray" title="取消订单">取消订单</a>

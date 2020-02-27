@@ -5,6 +5,10 @@ import com.example.newbeemall.entity.TbNewbeeMallOrderItem;
 import com.example.newbeemall.mapper.TbNewbeeMallOrderItemMapper;
 import com.example.newbeemall.service.TbNewbeeMallOrderItemService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.annotation.Resource;
+import java.util.List;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -32,4 +36,11 @@ public class TbNewbeeMallOrderItemServiceImpl extends ServiceImpl<TbNewbeeMallOr
     }
 
 
+    @Resource
+    private TbNewbeeMallOrderItemMapper itemMapper;
+    @Override
+    @Transactional
+    public List<TbNewbeeMallOrderItem> getOrderItemByOrderId(Long orderId) {
+        return itemMapper.getOrderItemByOrderId(orderId);
+    }
 }
