@@ -50,18 +50,14 @@ public class TbNewbeeMallUserController {
     @GetMapping({"/index","index.html"})
     public String index(HttpServletRequest request){
         System.out.println("首页........................................");
-        List<NewBeeMallIndexCategoryVO> categories = newbeeMallGoodsCategoryService.getCategoriesForIndex();
-        request.setAttribute("categories", categories);
-
-        List<NewBeeMallIndexConfigGoodsVO> hotGoodses = newbeeMallIndexConfigService.getConfigGoodsesForIndex(3, 4);
-        List<NewBeeMallIndexConfigGoodsVO> newGoodses = newbeeMallIndexConfigService.getConfigGoodsesForIndex(4, 5);
-        List<NewBeeMallIndexConfigGoodsVO> recommendGoodses = newbeeMallIndexConfigService.getConfigGoodsesForIndex(5, 1);
-
-        request.setAttribute("hotGoodses", hotGoodses);//热销商品
-        request.setAttribute("newGoodses", newGoodses);//新品上线
-        request.setAttribute("recommendGoodses", recommendGoodses);//为你推荐
-
-
+        List<NewBeeMallIndexCategoryVO> cVO = newbeeMallGoodsCategoryService.CategoryIndex();
+        List<NewBeeMallIndexConfigGoodsVO> hotVO = newbeeMallIndexConfigService.getIndex(3, 4);//3热销商品 4数量
+        List<NewBeeMallIndexConfigGoodsVO> newVO = newbeeMallIndexConfigService.getIndex(4, 5);//4新品上线 5数量
+        List<NewBeeMallIndexConfigGoodsVO> reVO = newbeeMallIndexConfigService.getIndex(5, 10);//5为你推荐 10数量
+        request.setAttribute("categories", cVO);
+        request.setAttribute("hotGoodses", hotVO);
+        request.setAttribute("newGoodses", newVO);
+        request.setAttribute("recommendGoodses", reVO);
         return "mall/index";
     }
 

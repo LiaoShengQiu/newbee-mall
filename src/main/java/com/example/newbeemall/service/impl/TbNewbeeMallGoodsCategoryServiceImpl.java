@@ -3,11 +3,15 @@ package com.example.newbeemall.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.example.newbeemall.entity.TbNewbeeMallCarousel;
 import com.example.newbeemall.entity.TbNewbeeMallGoodsCategory;
+import com.example.newbeemall.entity.TbNewbeeMallGoodsInfo;
 import com.example.newbeemall.mapper.TbNewbeeMallGoodsCategoryMapper;
 import com.example.newbeemall.service.TbNewbeeMallGoodsCategoryService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.newbeemall.utils.BeanUtil;
+import com.example.newbeemall.utils.PageQueryUtil;
+import com.example.newbeemall.utils.PageResult;
 import com.example.newbeemall.vo.NewBeeMallIndexCategoryVO;
+import com.example.newbeemall.vo.SearchPageCategoryVO;
 import com.example.newbeemall.vo.SecondLevelCategoryVO;
 import com.example.newbeemall.vo.ThirdLevelCategoryVO;
 import org.springframework.stereotype.Service;
@@ -26,14 +30,6 @@ import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
 
-/**
- * <p>
- *  服务实现类
- * </p>
- *
- * @author ***
- * @since 2020-02-07
- */
 @Service
 public class TbNewbeeMallGoodsCategoryServiceImpl extends ServiceImpl<TbNewbeeMallGoodsCategoryMapper, TbNewbeeMallGoodsCategory> implements TbNewbeeMallGoodsCategoryService {
 
@@ -47,24 +43,23 @@ public class TbNewbeeMallGoodsCategoryServiceImpl extends ServiceImpl<TbNewbeeMa
         return goodsCategoryMapper.selectById(id);
     }
 
-
     @Override
-    public List<NewBeeMallIndexCategoryVO> getCategoriesForIndex() {
-        List<NewBeeMallIndexCategoryVO> newBeeMallIndexCategoryVOS = new ArrayList<>();
+    public List<NewBeeMallIndexCategoryVO> CategoryIndex() {
+        List<NewBeeMallIndexCategoryVO> cVO = new ArrayList<>();
         //获取一级分类的固定数量的数据
-        List<TbNewbeeMallGoodsCategory> firstLevelCategories = goodsCategoryMapper.selectByLevelAndParentIdsAndNumber(Collections.singletonList(0L), 1, 10);
-        for(TbNewbeeMallGoodsCategory goodsCategory : firstLevelCategories){
-            System.out.println(goodsCategory.getCategoryName());
+        List<TbNewbeeMallGoodsCategory> yiList = goodsCategoryMapper.selectGoodsCategory(Collections.singletonList(0L), 1, 10);
+        for(TbNewbeeMallGoodsCategory gc : yiList){
+            System.out.println(gc.getCategoryName());
         }
-        if (!CollectionUtils.isEmpty(firstLevelCategories)) {
-            List<Long> firstLevelCategoryIds = firstLevelCategories.stream().map(TbNewbeeMallGoodsCategory::getCategoryId).collect(Collectors.toList());
+        if (yiList != null) {
+            List<Long> yiIds = yiList.stream().map(TbNewbeeMallGoodsCategory::getCategoryId).collect(Collectors.toList());
             //获取二级分类的数据
-            List<TbNewbeeMallGoodsCategory> secondLevelCategories = goodsCategoryMapper.selectByLevelAndParentIdsAndNumber(firstLevelCategoryIds, 2, 0);
-            if (!CollectionUtils.isEmpty(secondLevelCategories)) {
+            List<TbNewbeeMallGoodsCategory> secondLevelCategories = goodsCategoryMapper.selectGoodsCategory(yiIds, 2, 0);
+            if (secondLevelCategories != null) {
                 List<Long> secondLevelCategoryIds = secondLevelCategories.stream().map(TbNewbeeMallGoodsCategory::getCategoryId).collect(Collectors.toList());
                 //获取三级分类的数据
-                List<TbNewbeeMallGoodsCategory> thirdLevelCategories = goodsCategoryMapper.selectByLevelAndParentIdsAndNumber(secondLevelCategoryIds, 3, 0);
-                if (!CollectionUtils.isEmpty(thirdLevelCategories)) {
+                List<TbNewbeeMallGoodsCategory> thirdLevelCategories = goodsCategoryMapper.selectGoodsCategory(secondLevelCategoryIds, 3, 0);
+                if (thirdLevelCategories != null) {
                     //根据 parentId 将 thirdLevelCategories 分组
                     Map<Long, List<TbNewbeeMallGoodsCategory>> thirdLevelCategoryMap = thirdLevelCategories.stream().collect(groupingBy(TbNewbeeMallGoodsCategory::getParentId));
                     List<SecondLevelCategoryVO> secondLevelCategoryVOS = new ArrayList<>();
@@ -80,54 +75,87 @@ public class TbNewbeeMallGoodsCategoryServiceImpl extends ServiceImpl<TbNewbeeMa
                             secondLevelCategoryVOS.add(secondLevelCategoryVO);
                         }
                     }
-                    //处理一级分类
-                    if (!CollectionUtils.isEmpty(secondLevelCategoryVOS)) {
+                    //一级分类
+                    if (secondLevelCategoryVOS != null) {
                         //根据 parentId 将 thirdLevelCategories 分组
-                        Map<Long, List<SecondLevelCategoryVO>> secondLevelCategoryVOMap = secondLevelCategoryVOS.stream().collect(groupingBy(SecondLevelCategoryVO::getParentId));
-                        for (TbNewbeeMallGoodsCategory firstCategory : firstLevelCategories) {
-                            NewBeeMallIndexCategoryVO newBeeMallIndexCategoryVO = new NewBeeMallIndexCategoryVO();
-                            BeanUtil.copyProperties(firstCategory, newBeeMallIndexCategoryVO);
+                        Map<Long, List<SecondLevelCategoryVO>> erMap = secondLevelCategoryVOS.stream().collect(groupingBy(SecondLevelCategoryVO::getParentId));
+                        for (TbNewbeeMallGoodsCategory yiCa : yiList) {
+                            NewBeeMallIndexCategoryVO icVO = new NewBeeMallIndexCategoryVO();
+                            BeanUtil.copyProperties(yiCa, icVO);
                             //如果该一级分类下有数据则放入 newBeeMallIndexCategoryVOS 对象中
-                            if (secondLevelCategoryVOMap.containsKey(firstCategory.getCategoryId())) {
+                            if (erMap.containsKey(yiCa.getCategoryId())) {
                                 //根据一级分类的id取出secondLevelCategoryVOMap分组中的二级级分类list
-                                List<SecondLevelCategoryVO> tempGoodsCategories = secondLevelCategoryVOMap.get(firstCategory.getCategoryId());
-                                newBeeMallIndexCategoryVO.setSecondLevelCategoryVOS(tempGoodsCategories);
-                                newBeeMallIndexCategoryVOS.add(newBeeMallIndexCategoryVO);
+                                List<SecondLevelCategoryVO> temp = erMap.get(yiCa.getCategoryId());
+                                icVO.setSecondLevelCategoryVOS(temp);
+                                cVO.add(icVO);
                             }
                         }
                     }
                 }
             }
-            return newBeeMallIndexCategoryVOS;
+            return cVO;
         } else {
             return null;
         }
     }
 
 
+
     @Override
-    public List<TbNewbeeMallGoodsCategory> selectByLevelAndParentIdsAndNumber(List<Long> parentIds, int categoryLevel) {
-        return goodsCategoryMapper.selectByLevelAndParentIdsAndNumber(parentIds, categoryLevel, 0);//0代表查询所有
+    public SearchPageCategoryVO getCategoryById(Long categoryId) {
+        SearchPageCategoryVO spcVO = new SearchPageCategoryVO();
+        TbNewbeeMallGoodsCategory sanCategory = goodsCategoryMapper.getById(categoryId);
+        if (sanCategory != null && sanCategory.getCategoryLevel() == 3) {
+            //获取当前三级分类的二级分类
+            TbNewbeeMallGoodsCategory erCategoryList = goodsCategoryMapper.getById(sanCategory.getParentId());
+            if (erCategoryList != null && erCategoryList.getCategoryLevel() == 2) {
+                //获取当前二级分类下的三级分类
+                List<TbNewbeeMallGoodsCategory> sanCategoryList = goodsCategoryMapper.selectGoodsCategory(Collections.singletonList(erCategoryList.getCategoryId()), 3, 8);
+                spcVO.setCurrentCategoryName(sanCategory.getCategoryName());
+                spcVO.setSecondLevelCategoryName(erCategoryList.getCategoryName());
+                spcVO.setThirdLevelCategoryList(sanCategoryList);
+                return spcVO;
+            }
+        }
+        return null;
+    }
+
+
+
+
+
+
+
+
+
+
+    @Override
+    public List<TbNewbeeMallGoodsCategory> GoodsList(List<Long> parentIds, int categoryLevel) {
+        return goodsCategoryMapper.selectGoodsCategory(parentIds, categoryLevel, 0);//0代表查询所有
     }
 
     @Override
-    public List<TbNewbeeMallGoodsCategory> findGoodsCategory(Map<String,Object> map) {
+    public List<TbNewbeeMallGoodsCategory> findGoodsCategory(Map<String, Object> map) {
         return goodsCategoryMapper.findGoodsCategoryPage(map);
     }
-	
-	@Override
-	public boolean save(Map<String,Object> map){
-	    return goodsCategoryMapper.add(map)==1;
-	}
-	
-	@Override
-	public boolean update(Map<String,Object> map){
-		return goodsCategoryMapper.update(map)==1;
-	};
-	
-	@Override
-	public boolean delete(){
-		
-		return false;
-	};
+
+    @Override
+    public boolean save(Map<String, Object> map) {
+        return goodsCategoryMapper.add(map) == 1;
+    }
+
+    @Override
+    public boolean update(Map<String, Object> map) {
+        return goodsCategoryMapper.update(map) == 1;
+    }
+
+    ;
+
+    @Override
+    public boolean delete() {
+
+        return false;
+    }
+
+    ;
 }

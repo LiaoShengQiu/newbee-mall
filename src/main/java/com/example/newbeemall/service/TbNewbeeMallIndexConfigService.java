@@ -6,19 +6,12 @@ import com.example.newbeemall.vo.NewBeeMallIndexConfigGoodsVO;
 
 import java.util.List;
 
-/**
- * <p>
- *  服务类
- * </p>
- *
- * @author ***
- * @since 2020-02-07
- */
+
 public interface TbNewbeeMallIndexConfigService extends IService<TbNewbeeMallIndexConfig> {
 
     /**
-     * 返回固定数量的首页配置商品对象(首页调用)
+     * 返回首页显示商品信息的数量
      */
-    List<NewBeeMallIndexConfigGoodsVO> getConfigGoodsesForIndex(int configType, int number);
+    List<NewBeeMallIndexConfigGoodsVO> getIndex(int configType, int number);
 
 }

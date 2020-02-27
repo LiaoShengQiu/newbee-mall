@@ -23,12 +23,10 @@
     </sql>
 
 
-    <select id="findIndexConfigsByTypeAndNum" resultMap="BaseResultMap">
-        select
-        <include refid="Base_Column_List"/>
+    <select id="getIndex" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/>
         from tb_newbee_mall_index_config
-        where config_type = #{configType} and is_deleted = 0
-        order by config_rank desc
+        where config_type = #{configType} and is_deleted = 0 order by config_rank desc
         limit #{number}
     </select>
 

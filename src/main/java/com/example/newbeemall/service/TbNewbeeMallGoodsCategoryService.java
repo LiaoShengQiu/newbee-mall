@@ -2,36 +2,37 @@ package com.example.newbeemall.service;
 
 import com.example.newbeemall.entity.TbNewbeeMallGoodsCategory;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.example.newbeemall.utils.PageQueryUtil;
+import com.example.newbeemall.utils.PageResult;
 import com.example.newbeemall.vo.NewBeeMallIndexCategoryVO;
+import com.example.newbeemall.vo.SearchPageCategoryVO;
 
 import java.util.List;
 
 import java.util.List;
 import java.util.Map;
 
-/**
- * <p>
- *  服务类
- * </p>
- *
- * @author ***
- * @since 2020-02-07
- */
 public interface TbNewbeeMallGoodsCategoryService extends IService<TbNewbeeMallGoodsCategory> {
 
     TbNewbeeMallGoodsCategory getGoodsCategoryById(Long id);
 
     /**
-     * 返回分类数据(首页调用)
-     *
-     * @return
+     * 返回首页分类数据
      */
-    List<NewBeeMallIndexCategoryVO> getCategoriesForIndex();
+    List<NewBeeMallIndexCategoryVO> CategoryIndex();
+
+    /**
+     * 返回分类数据
+     */
+    SearchPageCategoryVO getCategoryById(Long categoryId);
+
 
     /**
      * 根据parentId和level获取分类列表
      */
-    List<TbNewbeeMallGoodsCategory> selectByLevelAndParentIdsAndNumber(List<Long> parentIds, int categoryLevel);
+    List<TbNewbeeMallGoodsCategory> GoodsList(List<Long> parentIds, int categoryLevel);
+
+
 
     List<TbNewbeeMallGoodsCategory> findGoodsCategory(Map<String,Object> map);
 	

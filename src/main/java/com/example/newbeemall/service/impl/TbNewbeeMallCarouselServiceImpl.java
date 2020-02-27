@@ -34,18 +34,11 @@ public class TbNewbeeMallCarouselServiceImpl extends ServiceImpl<TbNewbeeMallCar
 
     @Override
     public List<NewBeeMallIndexCarouselVO> getCarouselsForIndex(int number) {
-        List<NewBeeMallIndexCarouselVO> newBeeMallIndexCarouselVOS = new ArrayList<>(number);
-
-        List<TbNewbeeMallCarousel> carousels = carouselMapper.findCarouselsByNum(number);
-
-        if (!CollectionUtils.isEmpty(carousels)) {
-            newBeeMallIndexCarouselVOS = BeanUtil.copyList(carousels, NewBeeMallIndexCarouselVO.class);
+        List<NewBeeMallIndexCarouselVO> cVO = new ArrayList<>(number);
+        List<TbNewbeeMallCarousel> carousel = carouselMapper.CarouselNum(number);
+        if (!CollectionUtils.isEmpty(carousel)) {
+            cVO = BeanUtil.copyList(carousel, NewBeeMallIndexCarouselVO.class);
         }
-        return newBeeMallIndexCarouselVOS;
+        return cVO;
     }
-
-   /* @Resource
-    private TbNewbeeMallCarouselMapper carouselMapper;*/
-
-
 }

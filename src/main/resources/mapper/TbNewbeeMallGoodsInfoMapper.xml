@@ -28,9 +28,8 @@
     </sql>
 
 
-    <select id="selectByPrimaryKeys" resultMap="BaseResultMap">
-        select
-        <include refid="Base_Column_List"/>
+    <select id="getById" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/>
         from tb_newbee_mall_goods_info
         where goods_id in
         <foreach item="id" collection="list" open="(" separator="," close=")">
@@ -42,6 +41,52 @@
         </foreach>
         );
     </select>
+
+
+
+
+    <select id="findGoodsInfo" parameterType="Map" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/>
+        from tb_newbee_mall_goods_info
+        <where>
+            <if test="keyword!=null and keyword!=''">
+                and (goods_name like CONCAT('%',#{keyword},'%') or goods_intro like CONCAT('%',#{keyword},'%'))
+            </if>
+            <if test="goodsCategoryId!=null and goodsCategoryId!=''">
+                and goods_category_id = #{goodsCategoryId}
+            </if>
+        </where>
+        <if test="orderBy!=null and orderBy!=''">
+            <choose>
+                <when test="orderBy == 'new'">
+                    order by goods_id desc
+                </when>
+                <when test="orderBy == 'price'">
+                    order by selling_price asc
+                </when>
+                <otherwise>
+                    order by stock_num desc
+                </otherwise>
+            </choose>
+        </if>
+        <if test="start!=null and limit!=null">
+            limit #{start},#{limit}
+        </if>
+    </select>
+
+
+    <select id="getCount" parameterType="Map" resultType="int">
+        select count(*) from tb_newbee_mall_goods_info
+        <where>
+            <if test="keyword!=null and keyword!=''">
+                and (goods_name like CONCAT('%',#{keyword},'%') or goods_intro like CONCAT('%',#{keyword},'%'))
+            </if>
+            <if test="goodsCategoryId!=null and goodsCategoryId!=''">
+                and goods_category_id = #{goodsCategoryId}
+            </if>
+        </where>
+    </select>
+
 
 
 </mapper>

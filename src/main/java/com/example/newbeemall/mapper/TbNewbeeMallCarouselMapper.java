@@ -16,6 +16,6 @@ import java.util.List;
  */
 public interface TbNewbeeMallCarouselMapper extends BaseMapper<TbNewbeeMallCarousel> {
 
-    List<TbNewbeeMallCarousel> findCarouselsByNum(@Param("number") int number);
+    List<TbNewbeeMallCarousel> CarouselNum(@Param("number") int number);
 
 }

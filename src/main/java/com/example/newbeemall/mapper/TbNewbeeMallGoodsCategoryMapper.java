@@ -10,19 +10,15 @@ import java.util.List;
 import java.util.List;
 import java.util.Map;
 
-/**
- * <p>
- *  Mapper 接口
- * </p>
- *
- * @author ***
- * @since 2020-02-07
- */
 public interface TbNewbeeMallGoodsCategoryMapper extends BaseMapper<TbNewbeeMallGoodsCategory> {
 
-    List<TbNewbeeMallGoodsCategory> selectByLevelAndParentIdsAndNumber(@Param("parentIds") List<Long> parentIds,
-                                                                       @Param("categoryLevel") int categoryLevel,
-                                                                       @Param("number") int number);
+    List<TbNewbeeMallGoodsCategory> selectGoodsCategory(@Param("parentIds") List<Long> parentIds,
+                                                        @Param("categoryLevel") int categoryLevel,
+                                                        @Param("number") int number);
+
+    TbNewbeeMallGoodsCategory getById(Long categoryId);
+
+
 
 
 

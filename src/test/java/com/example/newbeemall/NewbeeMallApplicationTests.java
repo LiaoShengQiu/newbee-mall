@@ -10,7 +10,6 @@ class NewbeeMallApplicationTests {
 
     @Test
     void contextLoads() {
-
         System.out.println("慧慧慧慧慧慧慧慧慧慧慧慧慧慧慧慧慧慧慧慧慧");
     }
 }

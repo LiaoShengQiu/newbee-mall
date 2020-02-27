@@ -19,14 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/**
- * <p>
- *  服务实现类
- * </p>
- *
- * @author ***
- * @since 2020-02-07
- */
 @Service
 public class TbNewbeeMallIndexConfigServiceImpl extends ServiceImpl<TbNewbeeMallIndexConfigMapper, TbNewbeeMallIndexConfig> implements TbNewbeeMallIndexConfigService {
 
@@ -35,16 +27,17 @@ public class TbNewbeeMallIndexConfigServiceImpl extends ServiceImpl<TbNewbeeMall
     @Resource
     private TbNewbeeMallGoodsInfoMapper goodsMapper;
 
+
     @Override
-    public List<NewBeeMallIndexConfigGoodsVO> getConfigGoodsesForIndex(int configType, int number) {
-        List<NewBeeMallIndexConfigGoodsVO> newBeeMallIndexConfigGoodsVOS = new ArrayList<>(number);
-        List<TbNewbeeMallIndexConfig> indexConfigs = indexConfigMapper.findIndexConfigsByTypeAndNum(configType, number);
-        if (!CollectionUtils.isEmpty(indexConfigs)) {
+    public List<NewBeeMallIndexConfigGoodsVO> getIndex(int configType, int number) {
+        List<NewBeeMallIndexConfigGoodsVO> icgVO = new ArrayList<>(number);
+        List<TbNewbeeMallIndexConfig> indexConfigs = indexConfigMapper.getIndex(configType, number);
+        if (indexConfigs != null) {
             //取出所有的goodsId
             List<Long> goodsIds = indexConfigs.stream().map(TbNewbeeMallIndexConfig::getGoodsId).collect(Collectors.toList());
-            List<TbNewbeeMallGoodsInfo> newBeeMallGoods = goodsMapper.selectByPrimaryKeys(goodsIds);
-            newBeeMallIndexConfigGoodsVOS = BeanUtil.copyList(newBeeMallGoods, NewBeeMallIndexConfigGoodsVO.class);
+            List<TbNewbeeMallGoodsInfo> newBeeMallGoods = goodsMapper.getById(goodsIds);
+            icgVO = BeanUtil.copyList(newBeeMallGoods, NewBeeMallIndexConfigGoodsVO.class);
         }
-        return newBeeMallIndexConfigGoodsVOS;
+        return icgVO;
     }
 }
