@@ -31,10 +31,10 @@ public class TbNewbeeMallOrderController {
     private TbNewbeeMallOrderMapper tbNewbeeMallOrderMapper;
     @Resource
     private TbNewbeeMallOrderService tbNewbeeMallOrderService;
-    @RequestMapping("/orders")
+  /*  @RequestMapping("/orders")
     public String tbNewbeeMallObder(){
         return "/admin/newbee_mall_order.html";
-    }
+    }*/
     @RequestMapping("/orders/list")
     @ResponseBody
     public Object orderList(@RequestParam Map<String,Object> map){
