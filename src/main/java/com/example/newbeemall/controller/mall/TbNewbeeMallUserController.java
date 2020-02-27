@@ -128,8 +128,9 @@ if(request.getSession().getAttribute("code")!=null){
                     map.put("resultCode",200);
                     int count = cartItemService.getCartCountByUserId(list.get(0).getUserId());
                     list.get(0).setShopCartItemCount(count);
+                    request.getSession().setAttribute("userId",list.get(0).getUserId());
                     request.getSession().setAttribute("newBeeMallUser",list.get(0));
-                    System.out.println("登录成功！！！");
+                    System.out.println("登录成功！");
                 }else{
                     System.out.println("密码错误！");
                     msg = "密码错误！";

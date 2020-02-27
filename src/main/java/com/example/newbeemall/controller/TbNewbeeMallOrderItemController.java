@@ -34,19 +34,19 @@ public class TbNewbeeMallOrderItemController {
      * @param
      * @return
      */
-       @GetMapping("/orderitems/{orderId}")
-       @ResponseBody
-           public Object items(@PathVariable("orderId")Integer orderId){
-           System.out.println("idd========"+orderId);
-           Map<String, Object> map = new HashMap<String, Object>();
-           ArrayList<TbNewbeeMallOrderItem> tbNewbeeMallOrderItems = new ArrayList<>();
-           List<TbNewbeeMallOrderItem> orderIdss = tbNewbeeMallOrderItemService.tbListItems(orderId);
-                if(orderIdss != null){
-                    map.put("resultCode",200);
-                    map.put("data",orderIdss);
-                }
-                   return  map;
-           }
+    @GetMapping("/orderitems/{orderId}")
+    @ResponseBody
+    public Object items(@PathVariable("orderId")Integer orderId){
+        System.out.println("idd========"+orderId);
+        Map<String, Object> map = new HashMap<String, Object>();
+        ArrayList<TbNewbeeMallOrderItem> tbNewbeeMallOrderItems = new ArrayList<>();
+        List<TbNewbeeMallOrderItem> orderIdss = tbNewbeeMallOrderItemService.tbListItems(orderId);
+        if(orderIdss != null){
+            map.put("resultCode",200);
+            map.put("data",orderIdss);
+        }
+        return  map;
+    }
 
 }
 
