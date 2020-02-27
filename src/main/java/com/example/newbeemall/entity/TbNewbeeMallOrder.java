@@ -115,6 +115,19 @@ public class TbNewbeeMallOrder implements Serializable {
 
     @TableField(exist = false)
     private List<TbNewbeeMallOrderItem> orderItems;
+    /**
+     * 0.无 1.支付宝支付 2.微信支付
+     */
+    @TableField(exist = false)
+    private String payTypeString;
+
+    public String getPayTypeString() {
+        return payTypeString;
+    }
+
+    public void setPayTypeString(String payTypeString) {
+        this.payTypeString = payTypeString;
+    }
 
     public List<TbNewbeeMallOrderItem> getOrderItems() {
         return orderItems;
