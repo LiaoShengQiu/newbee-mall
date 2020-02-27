@@ -1,7 +1,29 @@
 body {
     background: #14212a;
 }
+#huan{
+    font-size: 8px;
+    color: red;
+}
 
+#msg01{
+    position: relative;
+    left: 200px;
+    top: -30px;
+    font-size: 13px;
+    color: red;
+}
+#duanxin{
+    position: relative;
+    left: 300px;
+    top: -20px;
+    color: #1bd1d1;
+}
+#btn{
+    position: relative;
+    left: 240px;
+    color: #1baeae;
+}
 .top {
     width: 100%;
     height: 100px;
