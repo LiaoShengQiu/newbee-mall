@@ -129,6 +129,7 @@ if(request.getSession().getAttribute("code")!=null){
                     int count = cartItemService.getCartCountByUserId(list.get(0).getUserId());
                     list.get(0).setShopCartItemCount(count);
                     request.getSession().setAttribute("userId",list.get(0).getUserId());
+                    request.getSession().setAttribute("userId",list.get(0).getUserId());
                     request.getSession().setAttribute("newBeeMallUser",list.get(0));
                     System.out.println("登录成功！");
                 }else{
