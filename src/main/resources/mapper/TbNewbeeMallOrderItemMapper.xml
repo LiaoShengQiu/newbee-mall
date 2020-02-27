@@ -19,4 +19,11 @@
         order_item_id, order_id, goods_id, goods_name, goods_cover_img, selling_price, goods_count, create_time
     </sql>
 
+    <select id="getOrderItemByOrderId" resultType="com.example.newbeemall.entity.TbNewbeeMallOrderItem">
+        SELECT
+        <include refid="Base_Column_List"></include>
+        FROM tb_newbee_mall_order_item
+        WHERE order_id=#{orderId}
+    </select>
+
 </mapper>

@@ -2,6 +2,9 @@ package com.example.newbeemall.service;
 
 import com.example.newbeemall.entity.TbNewbeeMallOrderItem;
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +16,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface TbNewbeeMallOrderItemService extends IService<TbNewbeeMallOrderItem> {
 
+    List<TbNewbeeMallOrderItem> getOrderItemByOrderId(Long orderId);
 }

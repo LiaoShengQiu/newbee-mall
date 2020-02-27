@@ -6,12 +6,11 @@ import com.example.newbeemall.entity.TbNewbeeMallUser;
 import com.example.newbeemall.service.TbNewbeeMallShoppingCartItemService;
 import com.example.newbeemall.service.TbNewbeeMallUserService;
 import com.example.newbeemall.utils.PhoneCode;
+import com.example.newbeemall.utils.ResultUtil;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -46,6 +45,15 @@ public class TbNewbeeMallUserController {
         return "/mall/index";
     }
 
+    /**
+     * 修改收货地址
+     * @return
+     */
+    @PostMapping("/personal/updateInfo")
+    public Object updateInfo(@RequestBody TbNewbeeMallUser user){
+        boolean b = tbNewbeeMallUserService.saveOrUpdate(user);
+        return new ResultUtil(b);
+    }
 
     /**
      *

@@ -21,9 +21,9 @@ public class ShopCatController {
     @GetMapping("/shop-cart")
     public Object toCart(HttpServletRequest request,HttpSession session) {
         TbNewbeeMallUser newBeeMallUser = (TbNewbeeMallUser) session.getAttribute("newBeeMallUser");
+        List<TbNewbeeMallOrderItem> cartByUserId = shopCatService.getCartByUserId(newBeeMallUser.getUserId());
         int itemsTotal = 0;
         int priceTotal = 0;
-        List<TbNewbeeMallOrderItem> cartByUserId = shopCatService.getCartByUserId(newBeeMallUser.getUserId());
         for (TbNewbeeMallOrderItem item:cartByUserId) {
             itemsTotal+=item.getGoodsCount();
             priceTotal+=item.getGoodsCount()*item.getSellingPrice();
@@ -71,6 +71,17 @@ public class ShopCatController {
 
     @GetMapping("/shop-cart/settle")
     public Object settle(HttpServletRequest request,HttpSession session){
+        TbNewbeeMallUser newBeeMallUser = (TbNewbeeMallUser) session.getAttribute("newBeeMallUser");
+        List<TbNewbeeMallOrderItem> cartByUserId = shopCatService.getCartByUserId(newBeeMallUser.getUserId());
+        int itemsTotal = 0;
+        int priceTotal = 0;
+        for (TbNewbeeMallOrderItem item:cartByUserId) {
+            itemsTotal+=item.getGoodsCount();
+            priceTotal+=item.getGoodsCount()*item.getSellingPrice();
+        }
+        request.setAttribute("itemsTotal",itemsTotal);
+        request.setAttribute("priceTotal",priceTotal);
+        request.setAttribute("myShoppingCartItems",cartByUserId);
         return "mall/order-settle";
 
     }

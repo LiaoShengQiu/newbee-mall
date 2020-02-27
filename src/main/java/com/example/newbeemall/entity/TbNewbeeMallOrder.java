@@ -1,9 +1,12 @@
 package com.example.newbeemall.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
-import java.time.LocalDateTime;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import java.io.Serializable;
+import java.util.Date;
+import java.util.List;
 
 /**
  * <p>
@@ -51,12 +54,26 @@ public class TbNewbeeMallOrder implements Serializable {
     /**
      * 支付时间
      */
-    private LocalDateTime payTime;
+    private Date payTime;
 
     /**
      * 订单状态:0.待支付 1.已支付 2.配货完成 3:出库成功 4.交易成功 -1.手动关闭 -2.超时关闭 -3.商家关闭
      */
     private Integer orderStatus;
+
+    @TableField(exist = false)
+    private String orderStatusString;
+
+    public String getOrderStatusString() {
+        if(this.orderStatusString==null){
+            this.orderStatusString= this.orderStatus==0?"待支付":this.orderStatus==1?"已支付":this.orderStatus==2?"配货完成":this.orderStatus==3?"出库成功":this.orderStatus==4?"交易成功":this.orderStatus==-1?"手动关闭":this.orderStatus==-2?"超时关闭":"商家关闭";
+        }
+        return orderStatusString;
+    }
+
+    public void setOrderStatusString(String orderStatusString) {
+        this.orderStatusString = orderStatusString;
+    }
 
     /**
      * 订单body
@@ -86,13 +103,26 @@ public class TbNewbeeMallOrder implements Serializable {
     /**
      * 创建时间
      */
-    private LocalDateTime createTime;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    private Date createTime;
+
 
     /**
      * 最新修改时间
      */
-    private LocalDateTime updateTime;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    private Date updateTime;
 
+    @TableField(exist = false)
+    private List<TbNewbeeMallOrderItem> orderItems;
+
+    public List<TbNewbeeMallOrderItem> getOrderItems() {
+        return orderItems;
+    }
+
+    public void setOrderItems(List<TbNewbeeMallOrderItem> orderItems) {
+        this.orderItems = orderItems;
+    }
 
     public Long getOrderId() {
         return orderId;
@@ -142,11 +172,11 @@ public class TbNewbeeMallOrder implements Serializable {
         this.payType = payType;
     }
 
-    public LocalDateTime getPayTime() {
+    public Date getPayTime() {
         return payTime;
     }
 
-    public void setPayTime(LocalDateTime payTime) {
+    public void setPayTime(Date payTime) {
         this.payTime = payTime;
     }
 
@@ -198,19 +228,19 @@ public class TbNewbeeMallOrder implements Serializable {
         this.isDeleted = isDeleted;
     }
 
-    public LocalDateTime getCreateTime() {
+    public Date getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(LocalDateTime createTime) {
+    public void setCreateTime(Date createTime) {
         this.createTime = createTime;
     }
 
-    public LocalDateTime getUpdateTime() {
+    public Date getUpdateTime() {
         return updateTime;
     }
 
-    public void setUpdateTime(LocalDateTime updateTime) {
+    public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
     }
 
