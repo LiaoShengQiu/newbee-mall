@@ -1,9 +1,14 @@
 package com.example.newbeemall.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
-import java.time.LocalDateTime;
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * <p>
@@ -51,7 +56,7 @@ public class TbNewbeeMallOrder implements Serializable {
     /**
      * 支付时间
      */
-    private LocalDateTime payTime;
+    private Date payTime;
 
     /**
      * 订单状态:0.待支付 1.已支付 2.配货完成 3:出库成功 4.交易成功 -1.手动关闭 -2.超时关闭 -3.商家关闭
@@ -83,15 +88,74 @@ public class TbNewbeeMallOrder implements Serializable {
      */
     private Integer isDeleted;
 
+
+
+    @TableField(exist = false)
+    private List<TbNewbeeMallOrderItem> orderItems;
+    /**
+     * 0.无 1.支付宝支付 2.微信支付
+     */
+    @TableField(exist = false)
+    private String payTypeString;
+
+    /**
+     * 订单状态
+     */
+    @TableField(exist = false)
+    private String orderStatusString;
+
     /**
      * 创建时间
      */
-    private LocalDateTime createTime;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    private Date createTime;
+
 
     /**
      * 最新修改时间
      */
-    private LocalDateTime updateTime;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    private Date updateTime;
+
+
+    @TableField(exist = false)
+    private List<TbNewbeeMallOrder> userList = new ArrayList<TbNewbeeMallOrder>();
+
+    public String getOrderStatusString() {
+        if(this.orderStatusString==null){
+            this.orderStatusString= this.orderStatus==0?"待支付":this.orderStatus==1?"已支付":this.orderStatus==2?"配货完成":this.orderStatus==3?"出库成功":this.orderStatus==4?"交易成功":this.orderStatus==-1?"手动关闭":this.orderStatus==-2?"超时关闭":"商家关闭";
+        }
+        return orderStatusString;
+    }
+
+
+    public void setOrderStatusString(String orderStatusString) {
+        this.orderStatusString = orderStatusString;
+    }
+
+    public List<TbNewbeeMallOrder> getUserList() {
+        return userList;
+    }
+
+    public void setUserList(List<TbNewbeeMallOrder> userList) {
+        this.userList = userList;
+    }
+
+    public String getPayTypeString() {
+        return payTypeString;
+    }
+
+    public void setPayTypeString(String payTypeString) {
+        this.payTypeString = payTypeString;
+    }
+
+    public List<TbNewbeeMallOrderItem> getOrderItems() {
+        return orderItems;
+    }
+
+    public void setOrderItems(List<TbNewbeeMallOrderItem> orderItems) {
+        this.orderItems = orderItems;
+    }
 
 
     public Long getOrderId() {
@@ -142,13 +206,6 @@ public class TbNewbeeMallOrder implements Serializable {
         this.payType = payType;
     }
 
-    public LocalDateTime getPayTime() {
-        return payTime;
-    }
-
-    public void setPayTime(LocalDateTime payTime) {
-        this.payTime = payTime;
-    }
 
     public Integer getOrderStatus() {
         return orderStatus;
@@ -198,19 +255,27 @@ public class TbNewbeeMallOrder implements Serializable {
         this.isDeleted = isDeleted;
     }
 
-    public LocalDateTime getCreateTime() {
+    public Date getPayTime() {
+        return payTime;
+    }
+
+    public void setPayTime(Date payTime) {
+        this.payTime = payTime;
+    }
+
+    public Date getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(LocalDateTime createTime) {
+    public void setCreateTime(Date createTime) {
         this.createTime = createTime;
     }
 
-    public LocalDateTime getUpdateTime() {
+    public Date getUpdateTime() {
         return updateTime;
     }
 
-    public void setUpdateTime(LocalDateTime updateTime) {
+    public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
     }
 

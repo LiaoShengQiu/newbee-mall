@@ -1,7 +1,7 @@
 package com.example.newbeemall.service;
 
-import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.newbeemall.entity.TbNewbeeMallGoodsCategory;
+import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
 import java.util.Map;
@@ -23,9 +23,4 @@ public interface TbNewbeeMallGoodsCategoryService extends IService<TbNewbeeMallG
 	boolean update(Map<String,Object> map);
 	
 	boolean delete();
-
-	List<TbNewbeeMallGoodsCategory> findYiji();
-
-
-	List<TbNewbeeMallGoodsCategory> finderji(List<Long> ids);
 }
