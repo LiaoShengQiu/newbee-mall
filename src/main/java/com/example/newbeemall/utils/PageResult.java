@@ -1,8 +1,10 @@
 package com.example.newbeemall.utils;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class PageResult {
+
+public class PageResult implements Serializable {
 
     //总记录数
     private int totalCount;
@@ -15,13 +17,12 @@ public class PageResult {
     //列表数据
     private List<?> list;
 
-
     /**
-     * 分页操作
-     * @param list
-     * @param totalCount
-     * @param pageSize
-     * @param currPage
+     * 分页
+     * @param list       列表数据
+     * @param totalCount 总记录数
+     * @param pageSize   每页记录数
+     * @param currPage   当前页数
      */
     public PageResult(List<?> list, int totalCount, int pageSize, int currPage) {
         this.list = list;
@@ -30,8 +31,6 @@ public class PageResult {
         this.currPage = currPage;
         this.totalPage = (int) Math.ceil((double) totalCount / pageSize);
     }
-
-
 
     public int getTotalCount() {
         return totalCount;
@@ -72,4 +71,5 @@ public class PageResult {
     public void setList(List<?> list) {
         this.list = list;
     }
+
 }

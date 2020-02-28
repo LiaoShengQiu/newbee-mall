@@ -69,5 +69,13 @@
 	</update>
 
 
+    <select id="findersanji" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List" />
+         FROM tb_newbee_mall_goods_category WHERE parent_id in
+        <foreach collection="list" item="id" index="index" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </select>
 
 </mapper>

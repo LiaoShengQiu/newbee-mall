@@ -19,12 +19,12 @@ function isNull(obj) {
  * @param length
  * @returns {boolean}
  */
-function validLength(obj, length) {
+/*function validLength(obj, length) {
     if (obj.trim().length < length) {
         return true;
     }
     return false;
-}
+}*/
 
 /**
  * url验证
@@ -114,6 +114,22 @@ function validCN_ENString2_100(str) {
  */
 function validPassword(password) {
     var pattern = /^[a-zA-Z0-9]{6,20}$/;
+    if (pattern.test(password.trim())) {
+        return (true);
+    } else {
+        return (false);
+    }
+}
+
+
+/**
+ * 用户密码验证 最少6位，最多20位字母或数字的组合
+ *
+ * @param password
+ * @returns {boolean}
+ */
+function validDuanx(password) {
+    var pattern = /^[0-9]{6}$/;
     if (pattern.test(password.trim())) {
         return (true);
     } else {

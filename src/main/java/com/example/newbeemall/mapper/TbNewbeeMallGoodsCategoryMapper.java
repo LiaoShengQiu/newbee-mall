@@ -1,11 +1,9 @@
 package com.example.newbeemall.mapper;
 
-import com.example.newbeemall.entity.TbNewbeeMallGoodsCategory;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.example.newbeemall.entity.TbNewbeeMallGoodsInfo;
+import com.example.newbeemall.entity.TbNewbeeMallGoodsCategory;
+import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Param;
-
-import java.util.List;
 
 import java.util.List;
 import java.util.Map;
@@ -29,4 +27,12 @@ public interface TbNewbeeMallGoodsCategoryMapper extends BaseMapper<TbNewbeeMall
 	int add(Map<String,Object> map);
 
 	int update(Map<String,Object> map);
+
+	//一级
+	@Select("SELECT * FROM  tb_newbee_mall_goods_category WHERE  parent_id = 0")
+	List<TbNewbeeMallGoodsCategory> findYiji();
+
+	//二级、三级
+	List<TbNewbeeMallGoodsCategory> findersanji(List<Long> id);
+
 }

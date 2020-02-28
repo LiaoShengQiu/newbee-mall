@@ -20,4 +20,16 @@
         user_id, nick_name, login_name, password_md5, introduce_sign, address, is_deleted, locked_flag, create_time
     </sql>
 
+    <!--<update id="update">
+        UPDATE tb_newbee_mall_user
+        <set>
+            <if test="nickName != '' and nickName != null">nick_name=#{nickName},</if>
+            <if test="nickName != '' and nickName != null">nick_name=#{nickName},</if>
+            <if test="nickName != '' and nickName != null">nick_name=#{nickName},</if>
+            <if test="nickName != '' and nickName != null">nick_name=#{nickName},</if>
+            <if test="nickName != '' and nickName != null">nick_name=#{nickName},</if>
+        </set>
+        WHERE user_id=#{userId}
+    </update>-->
+
 </mapper>

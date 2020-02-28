@@ -1,11 +1,8 @@
-package com.example.newbeemall.controller;
+package com.example.newbeemall.controller.mall;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.example.newbeemall.entity.TbNewbeeMallUser;
-import com.example.newbeemall.service.TbNewbeeMallCarouselService;
-import com.example.newbeemall.service.TbNewbeeMallGoodsCategoryService;
-import com.example.newbeemall.service.TbNewbeeMallIndexConfigService;
-import com.example.newbeemall.service.TbNewbeeMallUserService;
+import com.example.newbeemall.service.*;
 import com.example.newbeemall.utils.PhoneCode;
 import com.example.newbeemall.vo.NewBeeMallIndexCarouselVO;
 import com.example.newbeemall.vo.NewBeeMallIndexCategoryVO;
@@ -31,10 +28,8 @@ public class TbNewbeeMallUserController {
     private TbNewbeeMallGoodsCategoryService newbeeMallGoodsCategoryService;
     @Resource
     private TbNewbeeMallIndexConfigService newbeeMallIndexConfigService;
-
-
-
-
+    @Resource
+    private TbNewbeeMallShoppingCartItemService cartItemService;
 
 
     @GetMapping({"/login", "login.html"})
@@ -142,6 +137,9 @@ public class TbNewbeeMallUserController {
                 System.out.println("数据库的密码"+list.get(0).getPasswordMd5());
                 if(list.get(0).getPasswordMd5().equals(md5Text)){
                     map.put("resultCode",200);
+                    int count = cartItemService.getCartCountByUserId(list.get(0).getUserId());
+                    list.get(0).setShopCartItemCount(count);
+                    request.getSession().setAttribute("newBeeMallUser",list.get(0));
                     System.out.println("登录成功！");
                 }else{
                     System.out.println("密码错误！");

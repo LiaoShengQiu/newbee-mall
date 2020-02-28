@@ -28,12 +28,29 @@
                             </dd>
                         </dl>
                         </th:block>
+                <div class="item">
+                    <h3><span>·</span><a href="##"><th:block th:text="${category.categoryName}"></th:block></a></h3>
+                    <div class="item-list clearfix">
+                        <div class="subitem">
+                            <th:block th:each="secondLevelCategory : ${category.secondLevelCategoryVOS}">
+                                <dl class="fore1">
+                                    <dt><a href="#"><th:block th:text="${secondLevelCategory.categoryName}"></th:block></a></dt>
+                                    <dd>
+                                        <th:block th:each="thirdLevelCategory : ${secondLevelCategory.thirdLevelCategoryVOS}">
+                                            <em><a href="#"th:href="@{'/admin/search?goodsCategoryId='+${thirdLevelCategory.categoryId}}">
+                                                <th:block th:text="${thirdLevelCategory.categoryName}"></th:block>
+                                            </a></em>
+                                        </th:block>
+                                    </dd>
+                                </dl>
+                            </th:block>
+                        </div>
                     </div>
                 </div>
-            </div>
             </th:block>
         </div>
         <!--中央轮播图-->
+
         <div class="swiper-container fl">
             <div class="swiper-wrapper">
                 <!-- 配置了轮播图则显示后台配置的轮播图 -->

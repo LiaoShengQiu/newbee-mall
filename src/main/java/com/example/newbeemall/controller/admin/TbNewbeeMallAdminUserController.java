@@ -1,4 +1,4 @@
-package com.example.newbeemall.controller;
+package com.example.newbeemall.controller.admin;
 
 import com.example.newbeemall.service.TbNewbeeMallCarouselService;
 import com.example.newbeemall.service.TbNewbeeMallGoodsCategoryService;
@@ -32,6 +32,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
+@Controller
 @RequestMapping("/admin")
 public class TbNewbeeMallAdminUserController {
 
@@ -44,7 +45,7 @@ public class TbNewbeeMallAdminUserController {
      */
     @RequestMapping("/login")
     public String login(String userName, String password, HttpSession session){
-        System.out.println("login...................................");
+        System.out.println("login...........................................................");
         if(userName==null || password == null){
             return "admin/login";
         }

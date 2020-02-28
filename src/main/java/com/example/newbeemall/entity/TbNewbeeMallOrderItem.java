@@ -1,9 +1,11 @@
 package com.example.newbeemall.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
-import java.time.LocalDateTime;
+
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 /**
  * <p>
@@ -58,6 +60,98 @@ public class TbNewbeeMallOrderItem implements Serializable {
      */
     private LocalDateTime createTime;
 
+    //,o.order_status,o.pay_type,o.order_no  ,o.total_price
+
+    @TableField(exist = false)
+    private double totalPrice;
+    @TableField(exist = false)
+    private Integer orderStatus;
+    /**
+     * 订单号
+     */
+    @TableField(exist = false)
+    private String orderNo;
+    /**
+     * 支付方式
+     */
+    @TableField(exist = false)
+    private Integer payType;
+    /**
+     * 订单状态
+     */
+    @TableField(exist = false)
+    private String orderStatusString;
+
+    /**
+     * 支付状态
+     */
+    @TableField(exist = false)
+    private String payTypeString;
+
+    public double getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(double totalPrice) {
+        this.totalPrice = totalPrice;
+    }
+
+    public Integer getOrderStatus() {
+        return orderStatus;
+    }
+
+    public void setOrderStatus(Integer orderStatus) {
+        this.orderStatus = orderStatus;
+    }
+
+    public String getOrderNo() {
+        return orderNo;
+    }
+
+    public void setOrderNo(String orderNo) {
+        this.orderNo = orderNo;
+    }
+
+    public Integer getPayType() {
+        return payType;
+    }
+
+    public void setPayType(Integer payType) {
+        this.payType = payType;
+    }
+
+    public String getOrderStatusString() {
+        return orderStatusString;
+    }
+
+    public void setOrderStatusString(String orderStatusString) {
+        this.orderStatusString = orderStatusString;
+    }
+
+    public String getPayTypeString() {
+        return payTypeString;
+    }
+
+    public void setPayTypeString(String payTypeString) {
+        this.payTypeString = payTypeString;
+    }
+
+    /**
+     * 购物车序号
+     */
+    @TableField(exist = false)
+    private Long cartItemId;
+
+
+
+
+    public Long getCartItemId() {
+        return cartItemId;
+    }
+
+    public void setCartItemId(Long cartItemId) {
+        this.cartItemId = cartItemId;
+    }
 
     public Long getOrderItemId() {
         return orderItemId;
