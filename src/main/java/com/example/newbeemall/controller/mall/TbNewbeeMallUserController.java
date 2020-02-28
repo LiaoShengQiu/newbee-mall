@@ -7,11 +7,19 @@ import com.example.newbeemall.utils.PhoneCode;
 import com.example.newbeemall.vo.NewBeeMallIndexCarouselVO;
 import com.example.newbeemall.vo.NewBeeMallIndexCategoryVO;
 import com.example.newbeemall.vo.NewBeeMallIndexConfigGoodsVO;
+import com.example.newbeemall.service.TbNewbeeMallOrderService;
+import com.example.newbeemall.service.TbNewbeeMallShoppingCartItemService;
+import com.example.newbeemall.service.TbNewbeeMallUserService;
+import com.example.newbeemall.utils.PageQueryUtil;
+import com.example.newbeemall.utils.PageResult;
+import com.example.newbeemall.utils.PhoneCode;
+import com.example.newbeemall.utils.ResultUtil;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -31,6 +39,8 @@ public class TbNewbeeMallUserController {
     @Resource
     private TbNewbeeMallShoppingCartItemService cartItemService;
 
+    @Resource
+    private TbNewbeeMallOrderService tbNewbeeMallOrderService;
 
     @GetMapping({"/login", "login.html"})
     public String login(){
@@ -56,6 +66,15 @@ public class TbNewbeeMallUserController {
         return "mall/index";
     }
 
+    /**
+     * 修改收货地址
+     * @return
+     */
+    @PostMapping("/personal/updateInfo")
+    public Object updateInfo(@RequestBody TbNewbeeMallUser user){
+        boolean b = tbNewbeeMallUserService.saveOrUpdate(user);
+        return new ResultUtil(b);
+    }
 
     /**
      *
@@ -139,6 +158,7 @@ public class TbNewbeeMallUserController {
                     map.put("resultCode",200);
                     int count = cartItemService.getCartCountByUserId(list.get(0).getUserId());
                     list.get(0).setShopCartItemCount(count);
+                    request.getSession().setAttribute("userId",list.get(0).getUserId());
                     request.getSession().setAttribute("newBeeMallUser",list.get(0));
                     System.out.println("登录成功！");
                 }else{
@@ -196,5 +216,66 @@ public class TbNewbeeMallUserController {
       }
         return map;
   }
+
+
+    /**
+     * 个人中心
+     */
+    @RequestMapping("/personal")
+    public String mallUser_show(){
+        return "/mall/personal";
+    }
+
+    /**
+     * 修改个人信息
+     * @param map
+     * @param request
+     * @return
+     */
+    @RequestMapping("/personal/updateInfo")
+    @ResponseBody
+    public Object upPersonall(@RequestBody Map<String,Object> map,HttpServletRequest request){
+        System.out.println(map.get("userId")+"/personal/updateInfo--address"+map.get("address"));
+        TbNewbeeMallUser tbNewbeeMallUser = new TbNewbeeMallUser();
+        tbNewbeeMallUser.setAddress(map.get("address").toString());
+        tbNewbeeMallUser.setUserId(Long.parseLong(map.get("userId").toString()));
+        tbNewbeeMallUser.setNickName(map.get("nickName").toString());
+        tbNewbeeMallUser.setIntroduceSign(map.get("introduceSign").toString());
+        boolean b = tbNewbeeMallUserService.saveOrUpdate(tbNewbeeMallUser);
+        QueryWrapper<TbNewbeeMallUser> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("user_id",Long.parseLong(map.get("userId").toString()));
+        if (b){
+            map.put("resultCode",200);
+            List<TbNewbeeMallUser> list = tbNewbeeMallUserService.list(queryWrapper);
+            request.getSession().setAttribute("newBeeMallUser",list.get(0));  //刷新会话
+        }
+        return map;
+    }
+
+    /**
+     * 跳转到我的订单
+     * @return
+     */
+    @RequestMapping("/orders")
+    public String orders_Show(HttpServletRequest request, Model model, @RequestParam Map<String,Object> map){
+        Long userId = null;
+        if (request.getSession().getAttribute("userId") != null){
+            userId =  Long.parseLong(request.getSession().getAttribute("userId").toString());
+        }
+
+        System.out.println("userId===================="+userId);
+        if (StringUtils.isEmpty(map.get("page"))) {
+            map.put("page", 1);
+        }
+        map.put("limit", 3);
+        map.put("userId",userId);
+        //封装我的订单数据
+        PageQueryUtil pageUtil = new PageQueryUtil(map);
+
+        PageResult pageResult = tbNewbeeMallOrderService.myordersItems_list(userId,pageUtil);
+        request.setAttribute("orderPageResult",pageResult);
+        return "mall/my-orders";
+    }
+
 }
 

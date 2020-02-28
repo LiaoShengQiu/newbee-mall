@@ -74,7 +74,7 @@
                                                 </th:block>
                                                 <div class="progress"><span class="text">下单</span></div>
                                                 <div class="info"
-                                                     th:text="${#dates.format(orderDetailVO.createTime, 'yyyy-MM-dd HH:mm:ss')}">
+                                                     th:text="${orderDetailVO.createTime}">
                                                     02月07日
                                                 </div>
                                                 </li>
@@ -132,7 +132,7 @@
                                 </div>
                                 <table class="order-items-table">
                                     <tbody>
-                                    <th:block th:each="item : ${orderDetailVO.newBeeMallOrderItemVOS}">
+                                    <th:block th:each="item : ${orderDetailVO.orderItems}">
                                         <tr>
                                             <td class="col col-thumb">
                                                 <div class="figure figure-thumb">
@@ -252,7 +252,7 @@
 
     function payOrder() {
         var orderNo = $("#orderNoValue").val();
-        window.location.href = '/selectPayType?orderNo=' + orderNo;
+        window.location.href = '/selectPayType?c=' + orderNo;
     }
 
     function finishOrder() {

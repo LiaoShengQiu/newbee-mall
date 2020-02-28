@@ -1,6 +1,5 @@
 package com.example.newbeemall.service.impl;
 
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.newbeemall.entity.TbNewbeeMallGoodsCategory;
 import com.example.newbeemall.mapper.TbNewbeeMallGoodsCategoryMapper;
 import com.example.newbeemall.service.TbNewbeeMallGoodsCategoryService;
@@ -9,6 +8,7 @@ import com.example.newbeemall.vo.NewBeeMallIndexCategoryVO;
 import com.example.newbeemall.vo.SearchPageCategoryVO;
 import com.example.newbeemall.vo.SecondLevelCategoryVO;
 import com.example.newbeemall.vo.ThirdLevelCategoryVO;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -26,6 +26,8 @@ public class TbNewbeeMallGoodsCategoryServiceImpl extends ServiceImpl<TbNewbeeMa
 
     @Resource
     private TbNewbeeMallGoodsCategoryMapper goodsCategoryMapper;
+
+    private TbNewbeeMallGoodsCategoryService goodsCategoryService;
 
 
     @Override
@@ -129,38 +131,39 @@ public class TbNewbeeMallGoodsCategoryServiceImpl extends ServiceImpl<TbNewbeeMa
         return goodsCategoryMapper.findGoodsCategoryPage(map);
     }
 
-    @Override
-    public boolean save(Map<String, Object> map) {
-        return goodsCategoryMapper.add(map) == 1;
-    }
-
-    @Override
-    public boolean update(Map<String, Object> map) {
-        return goodsCategoryMapper.update(map) == 1;
-    }
-
     ;
 
-    @Override
-    public boolean delete() {
-
-        return false;
-    }
 
     ;
 
 
 	@Override
 	public List<TbNewbeeMallGoodsCategory> findYiji() {
-		return goodsCategoryMapper.findYiji();
+		return goodsCategoryService.findYiji();
 	}
 
 
 
 	@Override
 	public List<TbNewbeeMallGoodsCategory> finderji(List<Long> ids) {
-		return goodsCategoryMapper.findersanji(ids);
+		return goodsCategoryService.finderji(ids);
 	}
 
 
+	
+	@Override
+	public boolean save(Map<String,Object> map){
+	    return goodsCategoryMapper.add(map)==1;
+	}
+	
+	@Override
+	public boolean update(Map<String,Object> map){
+		return goodsCategoryMapper.update(map)==1;
+	};
+	
+	@Override
+	public boolean delete(){
+		
+		return false;
+	};
 }

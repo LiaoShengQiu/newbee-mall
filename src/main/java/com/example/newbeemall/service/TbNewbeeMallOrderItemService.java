@@ -1,7 +1,9 @@
 package com.example.newbeemall.service;
 
-import com.example.newbeemall.entity.TbNewbeeMallOrderItem;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.example.newbeemall.entity.TbNewbeeMallOrderItem;
+
+import java.util.List;
 
 import java.util.List;
 
@@ -16,6 +18,8 @@ import java.util.List;
 public interface TbNewbeeMallOrderItemService extends IService<TbNewbeeMallOrderItem> {
 
     public List<TbNewbeeMallOrderItem> tbListItems(Integer oid);
+
+    List<TbNewbeeMallOrderItem> getOrderItemByOrderId(Long orderId);
 
     public List<TbNewbeeMallOrderItem> findByUidList(Long userId);
 }
