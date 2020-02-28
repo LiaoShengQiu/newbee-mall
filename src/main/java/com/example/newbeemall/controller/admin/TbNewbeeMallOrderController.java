@@ -1,4 +1,4 @@
-package com.example.newbeemall.controller;
+package com.example.newbeemall.controller.admin;
 
 
 import com.example.newbeemall.entity.TbNewbeeMallOrder;
@@ -33,8 +33,9 @@ public class TbNewbeeMallOrderController {
     private TbNewbeeMallOrderService tbNewbeeMallOrderService;
     @RequestMapping("/orders")
     public String tbNewbeeMallObder(){
-        return "/admin/newbee_mall_order.html";
+        return "admin/newbee_mall_order";
     }
+
     @RequestMapping("/orders/list")
     @ResponseBody
     public Object orderList(@RequestParam Map<String,Object> map){

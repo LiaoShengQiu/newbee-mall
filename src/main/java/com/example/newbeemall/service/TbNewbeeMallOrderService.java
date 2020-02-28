@@ -23,6 +23,11 @@ public interface TbNewbeeMallOrderService extends IService<TbNewbeeMallOrder> {
     List<TbNewbeeMallOrder> findOrderByOrderId(Long userId);
 
     Long saveOrder(TbNewbeeMallUser user, List<TbNewbeeMallOrderItem> orderItem);
+
+    TbNewbeeMallOrder findOrderByOrderNo( String orderNo);
+
+    boolean updatePayType(TbNewbeeMallOrder order);
+
     public List<TbNewbeeMallOrder> order_list(Map<String,Object> map);
 
     public PageResult myordersItems_list(Long userId, PageQueryUtil pageQueryUtil);

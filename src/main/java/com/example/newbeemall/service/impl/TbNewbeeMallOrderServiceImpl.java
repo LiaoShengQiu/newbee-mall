@@ -82,6 +82,16 @@ public class TbNewbeeMallOrderServiceImpl extends ServiceImpl<TbNewbeeMallOrderM
     }
 
     @Override
+    public TbNewbeeMallOrder findOrderByOrderNo(String orderNo) {
+        return orderMapper.findOrderByOrderNo(orderNo);
+    }
+
+    @Override
+    public boolean updatePayType(TbNewbeeMallOrder order) {
+        return orderMapper.updatePayType(order)>0?true:false;
+    }
+
+    @Override
     public List<TbNewbeeMallOrder> order_list(Map<String,Object> map) {
         return orderMapper.order_list(map);
     }
