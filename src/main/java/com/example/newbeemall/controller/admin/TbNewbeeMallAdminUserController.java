@@ -44,18 +44,28 @@ public class TbNewbeeMallAdminUserController {
      * 后台登录
      */
     @RequestMapping("/login")
-    public String login(String userName, String password, HttpSession session){
+    public String login(String userName, String password,String verifyCode, HttpSession session){
         System.out.println("login...........................................................");
-        if(userName==null || password == null){
+        Object tu = session.getAttribute("text");
+        if(tu==null){
             return "admin/login";
         }
-        TbNewbeeMallAdminUser adminUser = adminUserService.login(userName,password);
-        if(adminUser == null) {
-            session.setAttribute("","用户名 或密码错误");
-            return "admin/login";
+        if(tu.toString().equalsIgnoreCase(verifyCode)){
+            if(userName==null || password == null){
+                return "admin/login";
+            }
+            TbNewbeeMallAdminUser adminUser = adminUserService.login(userName,password);
+            if(adminUser == null) {
+                session.setAttribute("errorMsg","用户名 或密码错误");
+                return "admin/login";
+            }
+            session.setAttribute("admin",adminUser);
+            return "admin/index";
+        } else{
+            session.setAttribute("errorMsg","验证码错误");
+            return "admin/index";
         }
-        session.setAttribute("admin",adminUser);
-        return "admin/index";
+
     }
 }
 

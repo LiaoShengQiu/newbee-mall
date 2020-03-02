@@ -68,8 +68,6 @@
 	WHERE category_id=#{categoryId}
 	</update>
 
-<<<<<<< HEAD
-
     <select id="findersanji" resultMap="BaseResultMap">
         SELECT
         <include refid="Base_Column_List" />
@@ -79,6 +77,4 @@
         </foreach>
     </select>
 
-=======
->>>>>>> e72931a5b748643b097a6ac7cfbb2675b8bd3df4
 </mapper>

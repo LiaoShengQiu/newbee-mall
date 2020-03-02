@@ -44,6 +44,15 @@ public class OrderController {
     @Resource
     private TbNewbeeMallOrderItemService itemService;
 
+    @PutMapping("/orders/{orderNo}/cancel")
+    public Object cancelOrder(@PathVariable("orderNo") String orderNo){
+        UpdateWrapper<TbNewbeeMallOrder> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.set("order_status",-1);
+        updateWrapper.eq("order_no",orderNo);
+        boolean b = orderService.update(updateWrapper);
+        return new ResultUtil(b);
+    }
+
     @GetMapping("/paySuccess")
     @ResponseBody
     public Object paySuccess(TbNewbeeMallOrder order,HttpServletRequest request){
