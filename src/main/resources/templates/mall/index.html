@@ -10,31 +10,6 @@
     <div id="banner">
         <div class="all-sort-list">
             <th:block th:each="category : ${categories}">
-<<<<<<< HEAD
-                            <div class="item">
-=======
-            <div class="item">
->>>>>>> e72931a5b748643b097a6ac7cfbb2675b8bd3df4
-                <h3><span>·</span><a href="##"><th:block th:text="${category.categoryName}"></th:block></a></h3>
-                <div class="item-list clearfix">
-                    <div class="subitem">
-                        <th:block th:each="secondLevelCategory : ${category.secondLevelCategoryVOS}">
-                        <dl class="fore1">
-                            <dt><a href="#"><th:block th:text="${secondLevelCategory.categoryName}"></th:block></a></dt>
-                            <dd>
-                                <th:block th:each="thirdLevelCategory : ${secondLevelCategory.thirdLevelCategoryVOS}">
-<<<<<<< HEAD
-                                <em><a href="#"th:href="@{'/admin/search?goodsCategoryId='+${thirdLevelCategory.categoryId}}">
-=======
-                                <em><a href="#"th:href="@{'/search?goodsCategoryId='+${thirdLevelCategory.categoryId}}">
->>>>>>> e72931a5b748643b097a6ac7cfbb2675b8bd3df4
-                                    <th:block th:text="${thirdLevelCategory.categoryName}"></th:block>
-                                </a></em>
-                                </th:block>
-                            </dd>
-                        </dl>
-                        </th:block>
-<<<<<<< HEAD
                 <div class="item">
                     <h3><span>·</span><a href="##"><th:block th:text="${category.categoryName}"></th:block></a></h3>
                     <div class="item-list clearfix">
@@ -44,7 +19,7 @@
                                     <dt><a href="#"><th:block th:text="${secondLevelCategory.categoryName}"></th:block></a></dt>
                                     <dd>
                                         <th:block th:each="thirdLevelCategory : ${secondLevelCategory.thirdLevelCategoryVOS}">
-                                            <em><a href="#"th:href="@{'/admin/search?goodsCategoryId='+${thirdLevelCategory.categoryId}}">
+                                            <em><a href="#"th:href="@{'/search?goodsCategoryId='+${thirdLevelCategory.categoryId}}">
                                                 <th:block th:text="${thirdLevelCategory.categoryName}"></th:block>
                                             </a></em>
                                         </th:block>
@@ -52,18 +27,11 @@
                                 </dl>
                             </th:block>
                         </div>
-=======
->>>>>>> e72931a5b748643b097a6ac7cfbb2675b8bd3df4
                     </div>
                 </div>
-            </div>
             </th:block>
         </div>
-<<<<<<< HEAD
         <!--中央轮播图-->
-
-=======
->>>>>>> e72931a5b748643b097a6ac7cfbb2675b8bd3df4
         <div class="swiper-container fl">
             <div class="swiper-wrapper">
                 <!-- 配置了轮播图则显示后台配置的轮播图 -->

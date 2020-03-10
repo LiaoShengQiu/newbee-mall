@@ -1,0 +1,16 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>付款</title>
+</head>
+<script>
+	window.onload=function () {
+        document.getElementById("content").innerHTML =  document.getElementById("result").value;
+    }
+</script>
+<body>
+<div id="content">
+<input type="hidden" th:value="${result}" id="result">
+</div>
+</body>
+</html>

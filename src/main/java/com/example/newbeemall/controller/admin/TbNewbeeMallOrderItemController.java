@@ -1,4 +1,4 @@
-package com.example.newbeemall.controller.mall;
+package com.example.newbeemall.controller.admin;
 
 import com.example.newbeemall.entity.TbNewbeeMallOrderItem;
 import com.example.newbeemall.service.TbNewbeeMallOrderItemService;

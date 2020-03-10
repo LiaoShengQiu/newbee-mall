@@ -1,4 +1,4 @@
-package com.example.newbeemall.controller.admin;
+package com.example.newbeemall.controller.mall;
 
 import com.example.newbeemall.entity.TbNewbeeMallAdminUser;
 import com.example.newbeemall.entity.TbNewbeeMallGoodsCategory;
@@ -29,7 +29,6 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
-@RequestMapping("/admin")
 public class TbNewbeeMallGoodsCategoryController {
 
 

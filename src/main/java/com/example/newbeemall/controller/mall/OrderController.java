@@ -69,7 +69,7 @@ public class OrderController {
         request.setAttribute("orderNo",orderByOrderNo.getOrderNo());
         request.setAttribute("totalPrice",orderByOrderNo.getTotalPrice());
         if(order.getPayType()==1){
-            return "mall/alipay";
+            return "redirect:alipay/web/index?orderNo="+orderByOrderNo.getOrderNo();
         }
         return "mall/wxpay";
     }
@@ -82,13 +82,15 @@ public class OrderController {
         return "mall/pay-select";
     }
 
+
     @RequestMapping("saveOrder")
     public Object toOrder(HttpSession session, HttpServletRequest request){
         TbNewbeeMallUser newBeeMallUser = (TbNewbeeMallUser) session.getAttribute("newBeeMallUser");
         List<TbNewbeeMallOrderItem> cartByUserId = shopCatService.getCartByUserId(newBeeMallUser.getUserId());
         Long orderId = orderService.saveOrder(newBeeMallUser,cartByUserId);
         if(orderId==0){
-
+            request.setAttribute("errorMsg","提交订单失败，商品数量不足");
+            return "mall/order-settle";
         }
         TbNewbeeMallOrder order = orderService.getById(orderId);
         order.setOrderItems(itemService.getOrderItemByOrderId(orderId));
