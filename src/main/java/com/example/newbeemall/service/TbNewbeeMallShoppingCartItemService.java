@@ -18,16 +18,14 @@ import java.util.Map;
 public interface TbNewbeeMallShoppingCartItemService extends IService<TbNewbeeMallShoppingCartItem> {
 
     public boolean saveCart(TbNewbeeMallShoppingCartItem cartItem);
+
     /**
      * 获取购物车的数量
-     * @param userId
-     * @return
      */
     public int getCartCountByUserId(Long userId);
+
     /**
      * 获取购物车商品
-     * @param userId
-     * @return
      */
     public List<TbNewbeeMallOrderItem> getCartByUserId(Long userId);
     public List<TbNewbeeMallOrderItem> getCartByUserId2(Long userId);
