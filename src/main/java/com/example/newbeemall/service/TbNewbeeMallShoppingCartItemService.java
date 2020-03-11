@@ -1,9 +1,8 @@
 package com.example.newbeemall.service;
 
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.newbeemall.entity.TbNewbeeMallOrderItem;
 import com.example.newbeemall.entity.TbNewbeeMallShoppingCartItem;
-import com.baomidou.mybatisplus.extension.service.IService;
-import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -31,6 +30,6 @@ public interface TbNewbeeMallShoppingCartItemService extends IService<TbNewbeeMa
      * @return
      */
     public List<TbNewbeeMallOrderItem> getCartByUserId(Long userId);
-
-    public boolean update(Map<String,Object> map);
+    public List<TbNewbeeMallOrderItem> getCartByUserId2(Long userId);
+    public boolean update(Map<String, Object> map);
 }

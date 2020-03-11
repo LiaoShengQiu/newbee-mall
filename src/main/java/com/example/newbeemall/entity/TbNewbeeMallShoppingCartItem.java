@@ -53,6 +53,15 @@ public class TbNewbeeMallShoppingCartItem implements Serializable {
      */
     private LocalDateTime updateTime;
 
+    private Integer isMiaos;
+
+    public Integer getIsMiaos() {
+        return isMiaos;
+    }
+
+    public void setIsMiaos(Integer isMiaos) {
+        this.isMiaos = isMiaos;
+    }
 
     public Long getCartItemId() {
         return cartItemId;

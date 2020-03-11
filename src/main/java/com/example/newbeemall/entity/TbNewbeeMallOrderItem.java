@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * <p>
@@ -58,83 +58,7 @@ public class TbNewbeeMallOrderItem implements Serializable {
     /**
      * 创建时间
      */
-    private LocalDateTime createTime;
-
-    //,o.order_status,o.pay_type,o.order_no  ,o.total_price
-
-    @TableField(exist = false)
-    private double totalPrice;
-    @TableField(exist = false)
-    private Integer orderStatus;
-    /**
-     * 订单号
-     */
-    @TableField(exist = false)
-    private String orderNo;
-    /**
-     * 支付方式
-     */
-    @TableField(exist = false)
-    private Integer payType;
-    /**
-     * 订单状态
-     */
-    @TableField(exist = false)
-    private String orderStatusString;
-
-    /**
-     * 支付状态
-     */
-    @TableField(exist = false)
-    private String payTypeString;
-
-    public double getTotalPrice() {
-        return totalPrice;
-    }
-
-    public void setTotalPrice(double totalPrice) {
-        this.totalPrice = totalPrice;
-    }
-
-    public Integer getOrderStatus() {
-        return orderStatus;
-    }
-
-    public void setOrderStatus(Integer orderStatus) {
-        this.orderStatus = orderStatus;
-    }
-
-    public String getOrderNo() {
-        return orderNo;
-    }
-
-    public void setOrderNo(String orderNo) {
-        this.orderNo = orderNo;
-    }
-
-    public Integer getPayType() {
-        return payType;
-    }
-
-    public void setPayType(Integer payType) {
-        this.payType = payType;
-    }
-
-    public String getOrderStatusString() {
-        return orderStatusString;
-    }
-
-    public void setOrderStatusString(String orderStatusString) {
-        this.orderStatusString = orderStatusString;
-    }
-
-    public String getPayTypeString() {
-        return payTypeString;
-    }
-
-    public void setPayTypeString(String payTypeString) {
-        this.payTypeString = payTypeString;
-    }
+    private Date createTime;
 
     /**
      * 购物车序号
@@ -142,8 +66,53 @@ public class TbNewbeeMallOrderItem implements Serializable {
     @TableField(exist = false)
     private Long cartItemId;
 
+    @TableField(exist = false)
+    private Integer isMiaos;
 
 
+    /**
+     * 结束时间
+     */
+    @TableField(exist = false)
+    private Date updateTime;
+
+    @TableField(exist = false)
+    private Integer isDeleted;
+
+    @TableField(exist = false)
+private String msg;  //提示信息
+
+    public String getMsg() {
+        return msg;
+    }
+
+    public void setMsg(String msg) {
+        this.msg = msg;
+    }
+
+    public Integer getIsDeleted() {
+        return isDeleted;
+    }
+
+    public void setIsDeleted(Integer isDeleted) {
+        this.isDeleted = isDeleted;
+    }
+
+    public Integer getIsMiaos() {
+        return isMiaos;
+    }
+
+    public void setIsMiaos(Integer isMiaos) {
+        this.isMiaos = isMiaos;
+    }
+
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
+    }
 
     public Long getCartItemId() {
         return cartItemId;
@@ -209,11 +178,11 @@ public class TbNewbeeMallOrderItem implements Serializable {
         this.goodsCount = goodsCount;
     }
 
-    public LocalDateTime getCreateTime() {
+    public Date getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(LocalDateTime createTime) {
+    public void setCreateTime(Date createTime) {
         this.createTime = createTime;
     }
 

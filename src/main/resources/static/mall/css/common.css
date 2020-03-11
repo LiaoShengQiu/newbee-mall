@@ -79,3 +79,41 @@ a {
   font-size: 22px;
   font-weight: bold;
 }
+.time-item{
+  position: relative;
+  top: -70px;
+  left: -48px;
+  color: red;
+}
+.djs{
+  position: relative;
+  color: red;
+  left: 300px;
+  top: -60px;
+  font-size: 18px;
+  font-weight: bold;
+}
+.secondkill{
+  position: relative;
+  color: red;
+  font-size: 14px;
+  left: 90px;
+}
+#isjs{
+  position: relative;
+  color: red;
+  left: 120px;
+  top: -30px;
+  font-size: 15px;
+  font-weight: bold;
+}
+
+#mesg{
+  position: relative;
+  color: red;
+  left: 220px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+

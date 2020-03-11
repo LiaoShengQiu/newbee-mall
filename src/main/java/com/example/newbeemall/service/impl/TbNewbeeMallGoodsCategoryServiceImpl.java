@@ -1,9 +1,11 @@
 package com.example.newbeemall.service.impl;
 
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.example.newbeemall.entity.TbNewbeeMallCarousel;
 import com.example.newbeemall.entity.TbNewbeeMallGoodsCategory;
 import com.example.newbeemall.mapper.TbNewbeeMallGoodsCategoryMapper;
 import com.example.newbeemall.service.TbNewbeeMallGoodsCategoryService;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -43,19 +45,5 @@ public class TbNewbeeMallGoodsCategoryServiceImpl extends ServiceImpl<TbNewbeeMa
 	public boolean delete(){
 		
 		return false;
-	}
-
-	@Override
-	public List<TbNewbeeMallGoodsCategory> findYiji() {
-		return goodsCategoryMapper.findYiji();
-	}
-
-
-
-	@Override
-	public List<TbNewbeeMallGoodsCategory> finderji(List<Long> ids) {
-		return goodsCategoryMapper.findersanji(ids);
-	}
-
-
+	};
 }

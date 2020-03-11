@@ -20,19 +20,25 @@
 
     <insert id="saveCart" parameterType="com.example.newbeemall.entity.TbNewbeeMallShoppingCartItem">
         INSERT INTO tb_newbee_mall_shopping_cart_item
-        (user_id,goods_id,goods_count)
+        (user_id,goods_id,goods_count,is_deleted)
         VALUE
-        (#{userId},#{goodsId},#{goodsCount})
+        (#{userId},#{goodsId},#{goodsCount},#{isDeleted})
     </insert>
 
     <select id="getCartCountByUserId" resultType="int" parameterType="long">
         SELECT COUNT(1)
         FROM tb_newbee_mall_shopping_cart_item
-        WHERE user_id = #{userId} AND is_deleted = 0
+        WHERE user_id = #{userId} AND is_deleted != 1
     </select>
 
     <select id="getCartByUserId" resultType="com.example.newbeemall.entity.TbNewbeeMallOrderItem" parameterType="long">
-        SELECT c.cart_item_id,c.goods_count,c.goods_id,g.goods_cover_img,g.goods_name,g.selling_price
+        SELECT c.cart_item_id,c.goods_count,c.goods_id,c.is_deleted,g.goods_cover_img,g.goods_name,g.selling_price,c.is_miaos,c.create_time,c.update_time
+        FROM tb_newbee_mall_shopping_cart_item c,tb_newbee_mall_goods_info g
+        WHERE c.goods_id=g.goods_id AND c.user_id = #{userId} AND c.is_deleted not in (1)
+    </select>
+
+    <select id="getCartByUserId2" resultType="com.example.newbeemall.entity.TbNewbeeMallOrderItem" parameterType="long">
+        SELECT c.cart_item_id,c.goods_count,c.goods_id,c.is_deleted,g.goods_cover_img,g.goods_name,g.selling_price,c.is_miaos,c.create_time,c.update_time
         FROM tb_newbee_mall_shopping_cart_item c,tb_newbee_mall_goods_info g
         WHERE c.goods_id=g.goods_id AND c.user_id = #{userId} AND c.is_deleted = 0
     </select>
@@ -40,6 +46,6 @@
     <update id="updateCartCount" parameterType="map">
         UPDATE tb_newbee_mall_shopping_cart_item
         SET goods_count=#{goodsCount},update_time=NOW()
-        WHERE cart_item_id=#{cartItemId}
+        WHERE cart_item_id=#{cartItemId} and is_miaos=0
     </update>
 </mapper>

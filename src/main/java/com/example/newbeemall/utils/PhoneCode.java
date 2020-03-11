@@ -54,7 +54,7 @@ public class PhoneCode {
             e1.printStackTrace();
         }
 
-        //获取验证码 0
+        //获取验证码
         code = vcode();
 
         IAcsClient acsClient = new DefaultAcsClient(profile);

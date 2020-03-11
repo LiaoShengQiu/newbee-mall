@@ -9,6 +9,7 @@ import com.example.newbeemall.service.TbNewbeeMallUserService;
 import com.example.newbeemall.utils.PageQueryUtil;
 import com.example.newbeemall.utils.PageResult;
 import com.example.newbeemall.utils.PhoneCode;
+import com.example.newbeemall.utils.ResultUtil;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -37,6 +38,7 @@ public class TbNewbeeMallUserController {
     private TbNewbeeMallUserService tbNewbeeMallUserService;
     @Resource
     private TbNewbeeMallShoppingCartItemService cartItemService;
+
     @Resource
     private TbNewbeeMallOrderService tbNewbeeMallOrderService;
     @GetMapping({"/login", "login.html"})
@@ -50,6 +52,15 @@ public class TbNewbeeMallUserController {
         return "/mall/index";
     }
 
+    /**
+     * 修改收货地址
+     * @return
+     */
+    @PostMapping("/personal/updateInfo")
+    public Object updateInfo(@RequestBody TbNewbeeMallUser user){
+        boolean b = tbNewbeeMallUserService.saveOrUpdate(user);
+        return new ResultUtil(b);
+    }
 
     /**
      *
@@ -154,7 +165,7 @@ if(request.getSession().getAttribute("code")!=null){
 
 
     /**
-     * 注册3
+     * 注册
      * @return
      */
     @GetMapping({"/register", "register.html"})
@@ -190,6 +201,7 @@ if(request.getSession().getAttribute("code")!=null){
         return map;
   }
 
+
     /**
      * 个人中心
      */
@@ -206,7 +218,7 @@ if(request.getSession().getAttribute("code")!=null){
      */
     @RequestMapping("/personal/updateInfo")
     @ResponseBody
-    public Object upPersonall(@RequestBody Map<String,Object> map, HttpServletRequest request){
+    public Object upPersonall(@RequestBody Map<String,Object> map,HttpServletRequest request){
         System.out.println(map.get("userId")+"/personal/updateInfo--address"+map.get("address"));
         TbNewbeeMallUser tbNewbeeMallUser = new TbNewbeeMallUser();
         tbNewbeeMallUser.setAddress(map.get("address").toString());
@@ -248,5 +260,6 @@ if(request.getSession().getAttribute("code")!=null){
         request.setAttribute("orderPageResult",pageResult);
         return "mall/my-orders";
     }
+
 }
 
