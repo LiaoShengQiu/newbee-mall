@@ -54,14 +54,14 @@ public class OrderController {
     }
 
     @GetMapping("/paySuccess")
-    @ResponseBody
     public Object paySuccess(TbNewbeeMallOrder order,HttpServletRequest request){
         UpdateWrapper<TbNewbeeMallOrder> updateWrapper = new UpdateWrapper<>();
         updateWrapper.set("order_status",1);
         updateWrapper.eq("order_no",order.getOrderNo());
         boolean b = orderService.update(updateWrapper);
-        return new ResultUtil(b);
+        return "redirect:orders/"+order.getOrderNo();
     }
+
     @RequestMapping("/payPage")
     public String payPage(TbNewbeeMallOrder order,HttpServletRequest request){
         boolean b = orderService.updatePayType(order);
@@ -223,7 +223,6 @@ public class OrderController {
     @RequestMapping("/orders/{orderNo}")
     public String ordersByNo(@PathVariable("orderNo") String orderNo,HttpServletRequest request){
         TbNewbeeMallUser newBeeMallUser = (TbNewbeeMallUser) request.getSession().getAttribute("newBeeMallUser");
-        System.out.println("/orders/{orderNo}"+orderNo+"newBeeMallUserId"+newBeeMallUser.getUserId());
        QueryWrapper<TbNewbeeMallOrder> query = new QueryWrapper<>();
         query.eq("order_no",orderNo);
         /* query.eq("user_id",newBeeMallUser.getUserId());
