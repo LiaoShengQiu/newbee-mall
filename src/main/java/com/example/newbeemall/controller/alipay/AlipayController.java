@@ -7,10 +7,7 @@ import com.alipay.api.domain.AlipayTradeCloseModel;
 import com.alipay.api.domain.AlipayTradeFastpayRefundQueryModel;
 import com.alipay.api.domain.AlipayTradeRefundModel;
 import com.alipay.api.internal.util.AlipaySignature;
-import com.alipay.api.request.AlipayTradeCloseRequest;
-import com.alipay.api.request.AlipayTradeFastpayRefundQueryRequest;
-import com.alipay.api.request.AlipayTradePagePayRequest;
-import com.alipay.api.request.AlipayTradeRefundRequest;
+import com.alipay.api.request.*;
 import com.alipay.api.response.AlipayTradeCloseResponse;
 import com.alipay.api.response.AlipayTradeFastpayRefundQueryResponse;
 import com.alipay.api.response.AlipayTradeQueryResponse;
@@ -132,38 +129,38 @@ import java.util.Map;
             return "fail";
         }
 
-        /**
+        /*
          * 订单查询(最主要用于查询订单的支付状态)
          * @param orderNo 商户订单号
          * @return
          */
-        /*@GetMapping("/query")
-        public String query(String orderNo){
+        @GetMapping("/query")
+        public void query(String orderNo){
 
-            AlipayTradeQueryRequestBuilder builder = new AlipayTradeQueryRequestBuilder()
-                    .setOutTradeNo(orderNo);
-            AlipayF2FQueryResult result = alipayTradeService.queryTradeResult(builder);
-            switch (result.getTradeStatus()) {
-                case SUCCESS:
-                    log.info("查询返回该订单支付成功: )");
-
-                    AlipayTradeQueryResponse resp = result.getResponse();
-                    log.info(resp.getTradeStatus());
-//                log.info(resp.getFundBillList());
-                    break;
-
-                case FAILED:
-                    log.error("查询返回该订单支付失败!!!");
-                    break;
-
-                case UNKNOWN:
-                    log.error("系统异常，订单支付状态未知!!!");
-                    break;
-
-                default:
-                    log.error("不支持的交易状态，交易返回异常!!!");
-                    break;
+            AlipayTradeQueryRequest request = new AlipayTradeQueryRequest();
+            request.setBizContent("{" + "   \"out_trade_no\":\"" + orderNo
+                    + "\"}");// 设置业务参数
+            AlipayTradeQueryResponse response;
+            try {
+                response = alipayClient.execute(request);
+                System.out.print(response.getBody());
+                Map<String, String> restmap = new HashMap<String, String>();// 返回提交支付宝订单交易查询信息
+                boolean flag = false; // 查询状态
+                if (response.isSuccess()) {
+                    // 调用成功，则处理业务逻辑
+                    if ("10000".equals(response.getCode())) {
+                        // 订单创建成功
+                        flag = true;
+                        restmap.put("order_no", response.getOutTradeNo());
+                        restmap.put("trade_no", response.getTradeNo());
+                        restmap.put("buyer_logon_id", response.getBuyerLogonId());
+                        restmap.put("trade_status", response.getTradeStatus());
+                    } else {
+                        
+                    }
+                }
+            } catch (AlipayApiException e) {
+                e.printStackTrace();
             }
-            return result.getResponse().getBody();
-        }*/
+        }
     }
