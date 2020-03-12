@@ -5,7 +5,7 @@ import com.example.newbeemall.entity.TbNewbeeMallAdminUser;
 import com.example.newbeemall.mapper.TbNewbeeMallAdminUserMapper;
 import com.example.newbeemall.service.TbNewbeeMallAdminUserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.example.newbeemall.mapper.utils.Md5;
+import com.example.newbeemall.utils.Md5;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;

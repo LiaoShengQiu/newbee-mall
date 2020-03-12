@@ -3,9 +3,8 @@ package com.example.newbeemall.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
-
+import java.time.LocalDateTime;
 import java.io.Serializable;
-import java.util.Date;
 
 /**
  * <p>
@@ -58,61 +57,13 @@ public class TbNewbeeMallOrderItem implements Serializable {
     /**
      * 创建时间
      */
-    private Date createTime;
+    private LocalDateTime createTime;
 
     /**
      * 购物车序号
      */
     @TableField(exist = false)
     private Long cartItemId;
-
-    @TableField(exist = false)
-    private Integer isMiaos;
-
-
-    /**
-     * 结束时间
-     */
-    @TableField(exist = false)
-    private Date updateTime;
-
-    @TableField(exist = false)
-    private Integer isDeleted;
-
-    @TableField(exist = false)
-private String msg;  //提示信息
-
-    public String getMsg() {
-        return msg;
-    }
-
-    public void setMsg(String msg) {
-        this.msg = msg;
-    }
-
-    public Integer getIsDeleted() {
-        return isDeleted;
-    }
-
-    public void setIsDeleted(Integer isDeleted) {
-        this.isDeleted = isDeleted;
-    }
-
-    public Integer getIsMiaos() {
-        return isMiaos;
-    }
-
-    public void setIsMiaos(Integer isMiaos) {
-        this.isMiaos = isMiaos;
-    }
-
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
-    }
 
     public Long getCartItemId() {
         return cartItemId;
@@ -178,11 +129,11 @@ private String msg;  //提示信息
         this.goodsCount = goodsCount;
     }
 
-    public Date getCreateTime() {
+    public LocalDateTime getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Date createTime) {
+    public void setCreateTime(LocalDateTime createTime) {
         this.createTime = createTime;
     }
 

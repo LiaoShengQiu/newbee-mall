@@ -1,9 +1,9 @@
 package com.example.newbeemall.service;
 
-import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.newbeemall.entity.TbNewbeeMallGoodsInfo;
-
-import java.util.List;
+import com.baomidou.mybatisplus.extension.service.IService;
+import com.example.newbeemall.utils.PageQueryUtil;
+import com.example.newbeemall.utils.PageResult;
 
 /**
  * <p>
@@ -14,8 +14,9 @@ import java.util.List;
  * @since 2020-02-07
  */
 public interface TbNewbeeMallGoodsInfoService extends IService<TbNewbeeMallGoodsInfo> {
-    public List<TbNewbeeMallGoodsInfo> listGoods(int start, int end);
-    public int count(int start, int end);
 
-    public TbNewbeeMallGoodsInfo findByid(long id);
+    /**
+     * 商品搜索
+     */
+    PageResult searchsp(PageQueryUtil pageUtil);
 }

@@ -287,11 +287,3 @@
 #cart .cart_bg .pre_order .order_div .order_button .order_button_c:hover {
   background: #aeadb2;
 }
-#msg{
-  color: red;
-  font-size: 20px;
-  display: inline-block;
-  position: relative;
-  left: 200px;
-  top: -30px;
-}

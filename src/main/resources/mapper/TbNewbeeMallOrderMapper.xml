@@ -45,11 +45,17 @@
             <result column="goods_count" property="goodsCount" />
         </collection>
     </resultMap>
-
+    
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
         order_id, order_no, user_id, total_price, pay_status, pay_type, pay_time, order_status, extra_info, user_name, user_phone, user_address, is_deleted, create_time, update_time
     </sql>
+    
+    <update id="updatePayType" parameterType="map">
+        UPDATE tb_newbee_mall_order
+        SET pay_status=#{payType}
+        WHERE order_no=#{orderNo}
+    </update>
 
     <select id="findOrderByOrderId" resultMap="ResultMapOneToMany" parameterType="int">
         SELECT
@@ -148,7 +154,12 @@
         </trim>
     </insert>
 
-
+    <select id="findOrderByOrderNo" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"></include>
+        FROM tb_newbee_mall_order
+        WHERE order_no = #{orderNo}
+    </select>
 
     <select id="order_list" resultMap="BaseResultMap" parameterType="map">
         SELECT
