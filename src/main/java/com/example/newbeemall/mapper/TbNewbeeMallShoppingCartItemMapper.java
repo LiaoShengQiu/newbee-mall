@@ -30,14 +30,16 @@ public interface TbNewbeeMallShoppingCartItemMapper extends BaseMapper<TbNewbeeM
      * @param userId
      * @return
      */
-    public int getCartCountByUserId(@Param("userId") Long userId);
+    public int getCartCountByUserId(@Param("userId") Long userId);  //isDeleted != 1
+
 
     /**
      * 获取购物车商品
      * @param userId
      * @return
      */
-    public List<TbNewbeeMallOrderItem> getCartByUserId(@Param("userId") Long userId);
-
+    public List<TbNewbeeMallOrderItem> getCartByUserId(@Param("userId") Long userId);//isDeleted != 1
+    public List<TbNewbeeMallOrderItem> getCartByUserId2(@Param("userId") Long userId);//isDeleted = 0
     public int updateCartCount(Map<String, Object> map);
+
 }

@@ -5,8 +5,6 @@ import com.example.newbeemall.entity.TbNewbeeMallOrderItem;
 
 import java.util.List;
 
-import java.util.List;
-
 /**
  * <p>
  *  服务类
@@ -17,9 +15,8 @@ import java.util.List;
  */
 public interface TbNewbeeMallOrderItemService extends IService<TbNewbeeMallOrderItem> {
 
-    public List<TbNewbeeMallOrderItem> tbListItems(Integer oid);
-
     List<TbNewbeeMallOrderItem> getOrderItemByOrderId(Long orderId);
 
+    public List<TbNewbeeMallOrderItem> tbListItems(Integer oid);
     public List<TbNewbeeMallOrderItem> findByUidList(Long userId);
 }

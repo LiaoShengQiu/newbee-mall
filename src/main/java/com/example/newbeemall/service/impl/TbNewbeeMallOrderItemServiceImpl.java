@@ -21,12 +21,8 @@ import java.util.List;
 @Service
 public class TbNewbeeMallOrderItemServiceImpl extends ServiceImpl<TbNewbeeMallOrderItemMapper, TbNewbeeMallOrderItem> implements TbNewbeeMallOrderItemService {
 
-
     @Resource
     private TbNewbeeMallOrderItemMapper itemMapper;
-
-
-
     @Override
     @Transactional
     public List<TbNewbeeMallOrderItem> getOrderItemByOrderId(Long orderId) {

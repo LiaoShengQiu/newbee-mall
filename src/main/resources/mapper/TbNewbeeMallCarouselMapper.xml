@@ -20,11 +20,4 @@
         carousel_id, carousel_url, redirect_url, carousel_rank, is_deleted, create_time, create_user, update_time, update_user
     </sql>
 
-    <select id="CarouselNum" parameterType="int" resultMap="BaseResultMap">
-        select <include refid="Base_Column_List"/>
-        from tb_newbee_mall_carousel
-        where is_deleted = 0 order by carousel_rank desc
-        limit #{number}
-    </select>
-
 </mapper>

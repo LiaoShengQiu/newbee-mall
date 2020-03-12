@@ -1,11 +1,14 @@
 package com.example.newbeemall.service.impl;
 
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.newbeemall.entity.TbNewbeeMallOrderItem;
 import com.example.newbeemall.entity.TbNewbeeMallShoppingCartItem;
 import com.example.newbeemall.mapper.TbNewbeeMallShoppingCartItemMapper;
 import com.example.newbeemall.service.TbNewbeeMallShoppingCartItemService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -20,13 +23,16 @@ import java.util.Map;
  * @since 2020-02-07
  */
 @Service
+@Transactional(propagation= Propagation.NESTED,isolation= Isolation.DEFAULT,readOnly = false,rollbackFor=Exception.class)
 public class TbNewbeeMallShoppingCartItemServiceImpl extends ServiceImpl<TbNewbeeMallShoppingCartItemMapper, TbNewbeeMallShoppingCartItem> implements TbNewbeeMallShoppingCartItemService {
 
     @Resource
     private TbNewbeeMallShoppingCartItemMapper mapper;
     @Override
+    @Transactional()
     public boolean saveCart(TbNewbeeMallShoppingCartItem cartItem) {
-        return mapper.saveCart(cartItem)==1;
+        boolean isok = mapper.saveCart(cartItem)==1;
+        return isok;
     }
 
     @Override
@@ -37,6 +43,11 @@ public class TbNewbeeMallShoppingCartItemServiceImpl extends ServiceImpl<TbNewbe
     @Override
     public List<TbNewbeeMallOrderItem> getCartByUserId(Long userId) {
         return mapper.getCartByUserId(userId);
+    }
+
+    @Override
+    public List<TbNewbeeMallOrderItem> getCartByUserId2(Long userId) {
+        return mapper.getCartByUserId2(userId);
     }
 
     @Override

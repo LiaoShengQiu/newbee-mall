@@ -1,9 +1,8 @@
 package com.example.newbeemall.service;
 
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.newbeemall.entity.TbNewbeeMallOrderItem;
 import com.example.newbeemall.entity.TbNewbeeMallShoppingCartItem;
-import com.baomidou.mybatisplus.extension.service.IService;
-import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -19,16 +18,18 @@ import java.util.Map;
 public interface TbNewbeeMallShoppingCartItemService extends IService<TbNewbeeMallShoppingCartItem> {
 
     public boolean saveCart(TbNewbeeMallShoppingCartItem cartItem);
-
     /**
      * 获取购物车的数量
+     * @param userId
+     * @return
      */
     public int getCartCountByUserId(Long userId);
-
     /**
      * 获取购物车商品
+     * @param userId
+     * @return
      */
     public List<TbNewbeeMallOrderItem> getCartByUserId(Long userId);
-
+    public List<TbNewbeeMallOrderItem> getCartByUserId2(Long userId);
     public boolean update(Map<String, Object> map);
 }

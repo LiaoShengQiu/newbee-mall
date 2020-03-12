@@ -1,6 +1,5 @@
 package com.example.newbeemall.controller.mall;
 
-import com.example.newbeemall.controller.admin.TbNewbeeMallGoodsInfoController;
 import com.example.newbeemall.entity.TbNewbeeMallGoodsInfo;
 import com.example.newbeemall.service.TbNewbeeMallGoodsInfoService;
 import org.springframework.stereotype.Controller;
@@ -25,4 +24,6 @@ public class GoodsController {
         request.setAttribute("goodsDetail",goods);
         return "mall/detail";
     }
+
+
 }

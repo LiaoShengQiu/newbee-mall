@@ -4,8 +4,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.newbeemall.entity.TbNewbeeMallOrder;
 import com.example.newbeemall.entity.TbNewbeeMallOrderItem;
 import com.example.newbeemall.entity.TbNewbeeMallUser;
-import com.example.newbeemall.utils.PageQueryUtil;
-import com.example.newbeemall.utils.PageResult;
+import com.example.newbeemall.mapper.utils.PageQueryUtil;
+import com.example.newbeemall.mapper.utils.PageResult;
 
 import java.util.List;
 import java.util.Map;
@@ -23,11 +23,6 @@ public interface TbNewbeeMallOrderService extends IService<TbNewbeeMallOrder> {
     List<TbNewbeeMallOrder> findOrderByOrderId(Long userId);
 
     Long saveOrder(TbNewbeeMallUser user, List<TbNewbeeMallOrderItem> orderItem);
-
-    TbNewbeeMallOrder findOrderByOrderNo(String orderNo);
-
-    boolean updatePayType(TbNewbeeMallOrder order);
-
     public List<TbNewbeeMallOrder> order_list(Map<String, Object> map);
 
     public PageResult myordersItems_list(Long userId, PageQueryUtil pageQueryUtil);
