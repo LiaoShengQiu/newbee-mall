@@ -17,10 +17,15 @@ public class TbNewbeeMallGoodsInfo implements Serializable {
 
     private static final long serialVersionUID=1L;
 
-    //商品表主键id
-    @TableId(value = "goods_id", type = IdType.AUTO)
+    /**
+     * 商品表主键id
+     */
+      @TableId(value = "goods_id", type = IdType.AUTO)
     private Long goodsId;
-    //商品名
+
+    /**
+     * 商品名
+     */
     private String goodsName;
 
     /**
@@ -92,9 +97,6 @@ public class TbNewbeeMallGoodsInfo implements Serializable {
      * 商品修改时间
      */
     private LocalDateTime updateTime;
-
-
-
 
 
     public Long getGoodsId() {

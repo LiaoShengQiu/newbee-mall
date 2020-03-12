@@ -3,13 +3,13 @@ package com.example.newbeemall.controller.mall;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.example.newbeemall.entity.TbNewbeeMallUser;
-import com.example.newbeemall.service.TbNewbeeMallOrderItemService;
 import com.example.newbeemall.service.TbNewbeeMallOrderService;
 import com.example.newbeemall.service.TbNewbeeMallShoppingCartItemService;
 import com.example.newbeemall.service.TbNewbeeMallUserService;
 import com.example.newbeemall.utils.PageQueryUtil;
 import com.example.newbeemall.utils.PageResult;
 import com.example.newbeemall.utils.PhoneCode;
+import com.example.newbeemall.utils.ResultUtil;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -38,11 +38,9 @@ public class TbNewbeeMallUserController {
     private TbNewbeeMallUserService tbNewbeeMallUserService;
     @Resource
     private TbNewbeeMallShoppingCartItemService cartItemService;
-    @Resource
-    private TbNewbeeMallOrderItemService tbNewbeeMallOrderItemService;
+
     @Resource
     private TbNewbeeMallOrderService tbNewbeeMallOrderService;
-
     @GetMapping({"/login", "login.html"})
     public String login(){
         System.out.println("/templates/mall/login");
@@ -54,6 +52,15 @@ public class TbNewbeeMallUserController {
         return "/mall/index";
     }
 
+    /**
+     * 修改收货地址
+     * @return
+     */
+    @PostMapping("/personal/updateInfo")
+    public Object updateInfo(@RequestBody TbNewbeeMallUser user){
+        boolean b = tbNewbeeMallUserService.saveOrUpdate(user);
+        return new ResultUtil(b);
+    }
 
     /**
      *
@@ -140,12 +147,15 @@ if(request.getSession().getAttribute("code")!=null){
                     request.getSession().setAttribute("newBeeMallUser",list.get(0));
                     System.out.println("登录成功！");
                 }else{
+                    System.out.println("密码错误！");
                     msg = "密码错误！";
                 }
             }else{
+                System.out.println("用户名不存在！");
                 msg = "用户名不存在！";
             }
         }else{
+            System.out.println("图片验证码不对！");
             msg = "图片验证码不对！";
         }
       map.put("msgs",msg);
@@ -191,6 +201,7 @@ if(request.getSession().getAttribute("code")!=null){
         return map;
   }
 
+
     /**
      * 个人中心
      */
@@ -230,11 +241,11 @@ if(request.getSession().getAttribute("code")!=null){
      * @return
      */
     @RequestMapping("/orders")
-    public String orders_Show(HttpServletRequest request, Model model,@RequestParam Map<String,Object> map){
+    public String orders_Show(HttpServletRequest request, Model model, @RequestParam Map<String,Object> map){
         Long userId = null;
-      if (request.getSession().getAttribute("userId") != null){
-          userId =  Long.parseLong(request.getSession().getAttribute("userId").toString());
-      }
+        if (request.getSession().getAttribute("userId") != null){
+            userId =  Long.parseLong(request.getSession().getAttribute("userId").toString());
+        }
 
         System.out.println("userId===================="+userId);
         if (StringUtils.isEmpty(map.get("page"))) {
@@ -246,9 +257,9 @@ if(request.getSession().getAttribute("code")!=null){
         PageQueryUtil pageUtil = new PageQueryUtil(map);
 
         PageResult pageResult = tbNewbeeMallOrderService.myordersItems_list(userId,pageUtil);
-     request.setAttribute("orderPageResult",pageResult);
+        request.setAttribute("orderPageResult",pageResult);
         return "mall/my-orders";
-  }
+    }
 
 }
 

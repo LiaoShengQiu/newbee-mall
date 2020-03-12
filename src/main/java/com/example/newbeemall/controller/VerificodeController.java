@@ -1,4 +1,4 @@
-package com.example.newbeemall.controller.mall;
+package com.example.newbeemall.controller;
 
 import com.example.newbeemall.utils.VerifiCode;
 import org.springframework.stereotype.Controller;
@@ -31,4 +31,5 @@ public class VerificodeController {
             v.output(image, response.getOutputStream());//将验证码图片响应给客户端
 
     }
+
 }

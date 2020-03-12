@@ -3,7 +3,14 @@ package com.example.newbeemall.utils;
 import java.io.Serializable;
 import java.util.List;
 
-
+/**
+ * 分页工具类
+ *
+ * @author 13
+ * @qq交流群 796794009
+ * @email 2449207463@qq.com
+ * @link https://github.com/newbee-ltd
+ */
 public class PageResult implements Serializable {
 
     //总记录数
@@ -19,6 +26,7 @@ public class PageResult implements Serializable {
 
     /**
      * 分页
+     *
      * @param list       列表数据
      * @param totalCount 总记录数
      * @param pageSize   每页记录数
