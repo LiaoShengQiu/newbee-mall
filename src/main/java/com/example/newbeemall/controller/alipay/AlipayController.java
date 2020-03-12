@@ -52,7 +52,7 @@ import java.util.Map;
 
         /**
          * 支付异步通知
-         *
+         * <p>
          * https://docs.open.alipay.com/194/103296
          */
         @RequestMapping("/notify")
@@ -60,14 +60,14 @@ import java.util.Map;
             // 一定要验签，防止黑客篡改参数
             Map<String, String[]> parameterMap = request.getParameterMap();
             StringBuilder notifyBuild = new StringBuilder("/****************************** alipay notify ******************************/\n");
-            parameterMap.forEach((key, value) -> notifyBuild.append(key + "=" + value[0] + "\n") );
+            parameterMap.forEach((key, value) -> notifyBuild.append(key + "=" + value[0] + "\n"));
             log.info(notifyBuild.toString());
 
             // https://docs.open.alipay.com/54/106370
             // 获取支付宝POST过来反馈信息
-            Map<String,String> params = new HashMap<>();
+            Map<String, String> params = new HashMap<>();
             Map requestParams = request.getParameterMap();
-            for (Iterator iter = requestParams.keySet().iterator(); iter.hasNext();) {
+            for (Iterator iter = requestParams.keySet().iterator(); iter.hasNext(); ) {
                 String name = (String) iter.next();
                 String[] values = (String[]) requestParams.get(name);
                 String valueStr = "";
@@ -97,11 +97,11 @@ import java.util.Map;
                  */
 
                 //交易状态
-                String tradeStatus = new String(request.getParameter("trade_status").getBytes("ISO-8859-1"),"UTF-8");
+                String tradeStatus = new String(request.getParameter("trade_status").getBytes("ISO-8859-1"), "UTF-8");
 
                 // TRADE_FINISHED(表示交易已经成功结束，并不能再对该交易做后续操作);
                 // TRADE_SUCCESS(表示交易已经成功结束，可以对该交易做后续操作，如：分润、退款等);
-                if(tradeStatus.equals("TRADE_FINISHED")){
+                if (tradeStatus.equals("TRADE_FINISHED")) {
                     //判断该笔订单是否在商户网站中已经做过处理
                     //如果没有做过处理，根据订单号（out_trade_no）在商户网站的订单系统中查到该笔订单的详细，
                     // 并判断total_amount是否确实为该订单的实际金额（即商户订单创建时的金额），并执行商户的业务程序
@@ -111,7 +111,7 @@ import java.util.Map;
                     //注意：
                     //如果签约的是可退款协议，退款日期超过可退款期限后（如三个月可退款），支付宝系统发送该交易状态通知
                     //如果没有签约可退款协议，那么付款完成后，支付宝系统发送该交易状态通知。
-                } else if (tradeStatus.equals("TRADE_SUCCESS")){
+                } else if (tradeStatus.equals("TRADE_SUCCESS")) {
                     //判断该笔订单是否在商户网站中已经做过处理
                     //如果没有做过处理，根据订单号（out_trade_no）在商户网站的订单系统中查到该笔订单的详细，
                     // 并判断total_amount是否确实为该订单的实际金额（即商户订单创建时的金额），并执行商户的业务程序
@@ -135,7 +135,7 @@ import java.util.Map;
          * @return
          */
         @GetMapping("/query")
-        public void query(String orderNo){
+        public void query(String orderNo) {
 
             AlipayTradeQueryRequest request = new AlipayTradeQueryRequest();
             request.setBizContent("{" + "   \"out_trade_no\":\"" + orderNo
@@ -156,7 +156,7 @@ import java.util.Map;
                         restmap.put("buyer_logon_id", response.getBuyerLogonId());
                         restmap.put("trade_status", response.getTradeStatus());
                     } else {
-                        
+
                     }
                 }
             } catch (AlipayApiException e) {
