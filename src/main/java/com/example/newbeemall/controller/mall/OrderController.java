@@ -2,6 +2,7 @@ package com.example.newbeemall.controller.mall;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.example.newbeemall.entity.TbNewbeeMallOrder;
 import com.example.newbeemall.entity.TbNewbeeMallOrderItem;
 import com.example.newbeemall.entity.TbNewbeeMallUser;
@@ -11,6 +12,7 @@ import com.example.newbeemall.service.TbNewbeeMallOrderItemService;
 import com.example.newbeemall.service.TbNewbeeMallOrderService;
 import com.example.newbeemall.service.TbNewbeeMallShoppingCartItemService;
 import com.example.newbeemall.utils.NewBeeMallOrderStatusEnum;
+import com.example.newbeemall.utils.ResultUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,8 +32,7 @@ import java.util.Map;
  * @since 2020-02-07
  */
 @Controller
-//@RequestMapping("/tbNewbeeMallOrder")
-public class TbNewbeeMallOrderController {
+public class OrderController {
     @Resource
     private TbNewbeeMallOrderMapper tbNewbeeMallOrderMapper;
     @Resource
@@ -43,13 +44,53 @@ public class TbNewbeeMallOrderController {
     @Resource
     private TbNewbeeMallOrderItemService itemService;
 
+    @PutMapping("/orders/{orderNo}/cancel")
+    public Object cancelOrder(@PathVariable("orderNo") String orderNo){
+        UpdateWrapper<TbNewbeeMallOrder> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.set("order_status",-1);
+        updateWrapper.eq("order_no",orderNo);
+        boolean b = orderService.update(updateWrapper);
+        return new ResultUtil(b);
+    }
+
+    @GetMapping("/paySuccess")
+    public Object paySuccess(TbNewbeeMallOrder order,HttpServletRequest request){
+        UpdateWrapper<TbNewbeeMallOrder> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.set("order_status",1);
+        updateWrapper.eq("order_no",order.getOrderNo());
+        boolean b = orderService.update(updateWrapper);
+        return "redirect:orders/"+order.getOrderNo();
+    }
+
+    @RequestMapping("/payPage")
+    public String payPage(TbNewbeeMallOrder order,HttpServletRequest request){
+        boolean b = orderService.updatePayType(order);
+        TbNewbeeMallOrder orderByOrderNo = orderService.findOrderByOrderNo(order.getOrderNo());
+        request.setAttribute("orderNo",orderByOrderNo.getOrderNo());
+        request.setAttribute("totalPrice",orderByOrderNo.getTotalPrice());
+        if(order.getPayType()==1){
+            return "redirect:alipay/web/index?orderNo="+orderByOrderNo.getOrderNo();
+        }
+        return "mall/wxpay";
+    }
+
+    @RequestMapping("/selectPayType")
+    public String toSelectPay(String c,HttpServletRequest request){
+        TbNewbeeMallOrder orderByOrderNo = orderService.findOrderByOrderNo(c);
+        request.setAttribute("orderNo",orderByOrderNo.getOrderNo());
+        request.setAttribute("totalPrice",orderByOrderNo.getTotalPrice());
+        return "mall/pay-select";
+    }
+
+
     @RequestMapping("saveOrder")
     public Object toOrder(HttpSession session, HttpServletRequest request){
         TbNewbeeMallUser newBeeMallUser = (TbNewbeeMallUser) session.getAttribute("newBeeMallUser");
         List<TbNewbeeMallOrderItem> cartByUserId = shopCatService.getCartByUserId(newBeeMallUser.getUserId());
         Long orderId = orderService.saveOrder(newBeeMallUser,cartByUserId);
         if(orderId==0){
-
+            request.setAttribute("errorMsg","提交订单失败，商品数量不足");
+            return "mall/order-settle";
         }
         TbNewbeeMallOrder order = orderService.getById(orderId);
         order.setOrderItems(itemService.getOrderItemByOrderId(orderId));
@@ -58,21 +99,6 @@ public class TbNewbeeMallOrderController {
         return "mall/order-detail";
     }
 
-    @RequestMapping("admin/orders/list")
-    @ResponseBody
-    public Object orderList(@RequestParam Map<String,Object> map){
-        int page = Integer.parseInt(map.get("page").toString());
-        int limit = Integer.parseInt(map.get("limit").toString());
-        map.put("start",(page-1)*limit);
-        //查询条件page=页数，limit=每页记录数，sidx=按什么排序，order=降序还是升序
-        List<TbNewbeeMallOrder> tbNewbeeMallOrders = orderService.order_list(map);
-        return tbNewbeeMallOrders;
-    }
-
-    @RequestMapping("/admin/orders")
-    public String adminOrders(){
-        return "admin/newbee_mall_order";
-    }
     /**
      * 修改订单
      */
@@ -197,7 +223,6 @@ public class TbNewbeeMallOrderController {
     @RequestMapping("/orders/{orderNo}")
     public String ordersByNo(@PathVariable("orderNo") String orderNo,HttpServletRequest request){
         TbNewbeeMallUser newBeeMallUser = (TbNewbeeMallUser) request.getSession().getAttribute("newBeeMallUser");
-        System.out.println("/orders/{orderNo}"+orderNo+"newBeeMallUserId"+newBeeMallUser.getUserId());
        QueryWrapper<TbNewbeeMallOrder> query = new QueryWrapper<>();
         query.eq("order_no",orderNo);
         /* query.eq("user_id",newBeeMallUser.getUserId());

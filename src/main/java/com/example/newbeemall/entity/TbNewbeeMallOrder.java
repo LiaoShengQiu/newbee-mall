@@ -83,7 +83,6 @@ public class TbNewbeeMallOrder implements Serializable {
      */
     private String userAddress;
 
-
     /**
      * 删除标识字段(0-未删除 1-已删除)
      */
@@ -128,7 +127,6 @@ public class TbNewbeeMallOrder implements Serializable {
         }
         return orderStatusString;
     }
-
 
 
     public void setOrderStatusString(String orderStatusString) {

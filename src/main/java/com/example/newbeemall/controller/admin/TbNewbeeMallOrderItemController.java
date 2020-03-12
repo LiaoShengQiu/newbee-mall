@@ -1,5 +1,4 @@
-package com.example.newbeemall.controller;
-
+package com.example.newbeemall.controller.admin;
 
 import com.example.newbeemall.entity.TbNewbeeMallOrderItem;
 import com.example.newbeemall.service.TbNewbeeMallOrderItemService;
@@ -26,13 +25,13 @@ import java.util.Map;
 @Controller
 @RequestMapping("/admin")
 public class TbNewbeeMallOrderItemController {
+
     @Resource
     private TbNewbeeMallOrderItemService tbNewbeeMallOrderItemService;
 
+
     /**
-     * 查看订单信息
-     * @param
-     * @return
+     * 查看订单
      */
     @GetMapping("/orderitems/{orderId}")
     @ResponseBody
@@ -47,6 +46,5 @@ public class TbNewbeeMallOrderItemController {
         }
         return  map;
     }
-
 }
 

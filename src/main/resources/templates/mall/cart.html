@@ -56,13 +56,11 @@
                                    th:value="${item.goodsCount}" step="1" min="1"
                                    max="5">
                         </div>
-
                         <div class="sub_content fl" th:text="${item.goodsCount*item.sellingPrice+'元'}">1299元</div>
                         <div class="sub_content fl"><a href="##" th:onclick="'deleteItem('+${item.cartItemId}+')'">×</a>
                         </div>
                         <div class="clear"></div>
                     </div>
-                    <span th:text="${item.msg}" id="msg"></span>
                 </th:block>
             </div>
         </th:block>
@@ -102,12 +100,6 @@
 <script th:src="@{/admin/plugins/jquery/jquery.min.js}"></script>
 <script th:src="@{/admin/plugins/sweetalert/sweetalert.min.js}"></script>
 <script type="text/javascript">
-    var isMiaos = $("#isMiaos").val();
-    var aaa = $("#isMiaos");
-    if(isMiaos == 0){
-       var bbb = aaa.parent().children().html();
-       alert(bbb);
-    }
 
     /**
      * 购物车中数量为0时提示
