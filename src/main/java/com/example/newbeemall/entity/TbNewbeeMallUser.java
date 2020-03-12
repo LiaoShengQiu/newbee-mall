@@ -3,11 +3,8 @@ package com.example.newbeemall.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
-
-import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.Serializable;
 
 /**
  * <p>
@@ -70,17 +67,6 @@ public class TbNewbeeMallUser implements Serializable {
 
     @TableField(exist = false)
     private int shopCartItemCount;
-
-    @TableField(exist = false)
-    private List<TbNewbeeMallOrder> userList = new ArrayList<TbNewbeeMallOrder>();
-
-    public List<TbNewbeeMallOrder> getUserList() {
-        return userList;
-    }
-
-    public void setUserList(List<TbNewbeeMallOrder> userList) {
-        this.userList = userList;
-    }
 
     public int getShopCartItemCount() {
         return shopCartItemCount;

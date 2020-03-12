@@ -1,14 +1,19 @@
 package com.example.newbeemall.controller.mall;
 
-
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.example.newbeemall.entity.TbNewbeeMallUser;
+import com.example.newbeemall.service.*;
+import com.example.newbeemall.utils.PhoneCode;
+import com.example.newbeemall.vo.NewBeeMallIndexCarouselVO;
+import com.example.newbeemall.vo.NewBeeMallIndexCategoryVO;
+import com.example.newbeemall.vo.NewBeeMallIndexConfigGoodsVO;
 import com.example.newbeemall.service.TbNewbeeMallOrderService;
 import com.example.newbeemall.service.TbNewbeeMallShoppingCartItemService;
 import com.example.newbeemall.service.TbNewbeeMallUserService;
 import com.example.newbeemall.utils.PageQueryUtil;
 import com.example.newbeemall.utils.PageResult;
 import com.example.newbeemall.utils.PhoneCode;
+import com.example.newbeemall.utils.ResultUtil;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,34 +27,54 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * <p>
- *  前端控制器
- * </p>
- *
- * @author ***
- * @since 2020-02-07
- */
 @Controller
-//@RequestMapping("/tbNewbeeMallUser")
 public class TbNewbeeMallUserController {
+
     @Resource
     private TbNewbeeMallUserService tbNewbeeMallUserService;
     @Resource
+    private TbNewbeeMallGoodsCategoryService newbeeMallGoodsCategoryService;
+    @Resource
+    private TbNewbeeMallIndexConfigService newbeeMallIndexConfigService;
+    @Resource
     private TbNewbeeMallShoppingCartItemService cartItemService;
+
     @Resource
     private TbNewbeeMallOrderService tbNewbeeMallOrderService;
+
     @GetMapping({"/login", "login.html"})
     public String login(){
         System.out.println("/templates/mall/login");
+
         return "/mall/login";
     }
 
-    @RequestMapping("/index")
-    public String index(){
-        return "/mall/index";
+    /**
+     * 首页
+     */
+    @GetMapping({"/index","index.html"})
+    public String index(HttpServletRequest request){
+        System.out.println("首页........................................");
+        List<NewBeeMallIndexCategoryVO> cVO = newbeeMallGoodsCategoryService.CategoryIndex();
+        List<NewBeeMallIndexConfigGoodsVO> hotVO = newbeeMallIndexConfigService.getIndex(3, 4);//3热销商品 4数量
+        List<NewBeeMallIndexConfigGoodsVO> newVO = newbeeMallIndexConfigService.getIndex(4, 5);//4新品上线 5数量
+        List<NewBeeMallIndexConfigGoodsVO> reVO = newbeeMallIndexConfigService.getIndex(5, 10);//5为你推荐 10数量
+        request.setAttribute("categories", cVO);
+        request.setAttribute("hotGoodses", hotVO);
+        request.setAttribute("newGoodses", newVO);
+        request.setAttribute("recommendGoodses", reVO);
+        return "mall/index";
     }
 
+    /**
+     * 修改收货地址
+     * @return
+     */
+    @PostMapping("/personal/updateInfo")
+    public Object updateInfo(@RequestBody TbNewbeeMallUser user){
+        boolean b = tbNewbeeMallUserService.saveOrUpdate(user);
+        return new ResultUtil(b);
+    }
 
     /**
      *
@@ -58,6 +83,7 @@ public class TbNewbeeMallUserController {
      */
     @RequestMapping("/dlogin")
     public String index2(){
+
         return "/mall/duanxin.html";
     }
 
@@ -68,7 +94,6 @@ public class TbNewbeeMallUserController {
         int seconds = Integer.parseInt(time)+1;
         try {
             PhoneCode.getPhonemsg(loginName,request);
-
             System.err.println("倒计时" + seconds + "秒,倒计时开始:");
             int i = seconds;
             while (i > 0) {
@@ -92,26 +117,27 @@ public class TbNewbeeMallUserController {
 
         return "";
     }
+
+
     @RequestMapping("/duanlogin")
     @ResponseBody
     public Object duaxLogin(String loginName,String yanz,String map,HttpServletRequest request){
-
         String code = "";
-
-if(request.getSession().getAttribute("code")!=null){
-    code = request.getSession().getAttribute("code").toString();
-}
+        if(request.getSession().getAttribute("code")!=null){
+            code = request.getSession().getAttribute("code").toString();
+        }
         System.out.println(code+"短信验证"+yanz);
-      if(yanz.equals(code)){
-          System.out.println("对了========================================");
-          map="200";
-
-      }else {
-          System.out.println("请正确输入短信校验码！");
-          map="请正确输入短信校验码！";
+        if(yanz.equals(code)){
+            System.out.println("对了========================================");
+            map="200";
+        }else {
+            System.out.println("请正确输入短信校验码！");
+            map="请正确输入短信校验码！";
       }
         return map;
     }
+
+
     @RequestMapping("/dologin")
     @ResponseBody
     public Object qtLogin(String loginName, String password, String params, String verfyCode, HttpServletRequest request, ModelMap model){
@@ -154,11 +180,12 @@ if(request.getSession().getAttribute("code")!=null){
 
 
     /**
-     * 注册3
+     * 注册
      * @return
      */
     @GetMapping({"/register", "register.html"})
     public String regist(){
+
         return "/mall/register";
     }
 
@@ -190,6 +217,7 @@ if(request.getSession().getAttribute("code")!=null){
         return map;
   }
 
+
     /**
      * 个人中心
      */
@@ -206,7 +234,7 @@ if(request.getSession().getAttribute("code")!=null){
      */
     @RequestMapping("/personal/updateInfo")
     @ResponseBody
-    public Object upPersonall(@RequestBody Map<String,Object> map, HttpServletRequest request){
+    public Object upPersonall(@RequestBody Map<String,Object> map,HttpServletRequest request){
         System.out.println(map.get("userId")+"/personal/updateInfo--address"+map.get("address"));
         TbNewbeeMallUser tbNewbeeMallUser = new TbNewbeeMallUser();
         tbNewbeeMallUser.setAddress(map.get("address").toString());
@@ -248,5 +276,6 @@ if(request.getSession().getAttribute("code")!=null){
         request.setAttribute("orderPageResult",pageResult);
         return "mall/my-orders";
     }
+
 }
 

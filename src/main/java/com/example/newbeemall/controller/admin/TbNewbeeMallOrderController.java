@@ -1,13 +1,9 @@
-package com.example.newbeemall.controller.mall;
+package com.example.newbeemall.controller.admin;
 
 
 import com.example.newbeemall.entity.TbNewbeeMallOrder;
-import com.example.newbeemall.entity.TbNewbeeMallOrderItem;
-import com.example.newbeemall.entity.TbNewbeeMallUser;
 import com.example.newbeemall.mapper.TbNewbeeMallOrderMapper;
-import com.example.newbeemall.service.TbNewbeeMallOrderItemService;
 import com.example.newbeemall.service.TbNewbeeMallOrderService;
-import com.example.newbeemall.service.TbNewbeeMallShoppingCartItemService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,8 +11,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -28,38 +22,20 @@ import java.util.Map;
  *
  * @author ***
  * @since 2020-02-07
+ * 订单管理
  */
 @Controller
-//@RequestMapping("/tbNewbeeMallOrder")
+@RequestMapping("/admin")
 public class TbNewbeeMallOrderController {
     @Resource
     private TbNewbeeMallOrderMapper tbNewbeeMallOrderMapper;
     @Resource
-    private TbNewbeeMallOrderService orderService;
-    @Resource
-    private TbNewbeeMallShoppingCartItemService shopCatService;
-    @Resource
-    private TbNewbeeMallOrderItemService itemService;
-
-    @RequestMapping("saveOrder")
-    public Object toOrder(HttpSession session, HttpServletRequest request){
-        TbNewbeeMallUser newBeeMallUser = (TbNewbeeMallUser) session.getAttribute("newBeeMallUser");
-        List<TbNewbeeMallOrderItem> cartByUserId = shopCatService.getCartByUserId(newBeeMallUser.getUserId());
-        Long orderId = orderService.saveOrder(newBeeMallUser,cartByUserId);
-        if(orderId==0){
-
-        }
-        TbNewbeeMallOrder order = orderService.getById(orderId);
-        order.setOrderItems(itemService.getOrderItemByOrderId(orderId));
-        System.out.println(order.getCreateTime());
-        request.setAttribute("orderDetail",order);
-        return "mall/order-detail";
+    private TbNewbeeMallOrderService tbNewbeeMallOrderService;
+    @RequestMapping("/orders")
+    public String tbNewbeeMallObder(){
+        return "admin/newbee_mall_order";
     }
 
-//    @RequestMapping("/orders")
-//    public String tbNewbeeMallObder(){
-//        return "/admin/newbee_mall_order.html";
-//    }
     @RequestMapping("/orders/list")
     @ResponseBody
     public Object orderList(@RequestParam Map<String,Object> map){
@@ -71,27 +47,27 @@ public class TbNewbeeMallOrderController {
         return tbNewbeeMallOrders;
     }
 
-    /**
+      /**
      * 修改订单
      */
-    @RequestMapping("/orders/update")
+  @RequestMapping("/orders/update")
     @ResponseBody
     public Object update(@RequestBody Map<String,Object> map){
-        System.out.println("id===="+map.get("orderId")+"价格"+map.get("totalPrice")+map.get("userAddress"));
-        TbNewbeeMallOrder tbNewbeeMallOrder = new TbNewbeeMallOrder();
-        tbNewbeeMallOrder.setOrderId(Long.parseLong(map.get("orderId").toString()));
-        tbNewbeeMallOrder.setTotalPrice(Integer.parseInt(map.get("totalPrice").toString()));
-        tbNewbeeMallOrder.setUserAddress(map.get("userAddress").toString());
-        boolean b = orderService.saveOrUpdate(tbNewbeeMallOrder);
-        /*  int num = orderService.updataOrder(map);*/
-        if (b){
-            System.out.println("修改成功！");
-            map.put("resultCode",200);
-        }else{
-            System.out.println("修改失败");
-        }
-        return  map;
-    }
+      System.out.println("id===="+map.get("orderId")+"价格"+map.get("totalPrice")+map.get("userAddress"));
+    TbNewbeeMallOrder tbNewbeeMallOrder = new TbNewbeeMallOrder();
+    tbNewbeeMallOrder.setOrderId(Long.parseLong(map.get("orderId").toString()));
+      tbNewbeeMallOrder.setTotalPrice(Integer.parseInt(map.get("totalPrice").toString()));
+      tbNewbeeMallOrder.setUserAddress(map.get("userAddress").toString());
+      boolean b = tbNewbeeMallOrderService.saveOrUpdate(tbNewbeeMallOrder);
+    /*  int num = tbNewbeeMallOrderService.updataOrder(map);*/
+      if (b){
+          System.out.println("修改成功！");
+          map.put("resultCode",200);
+      }else{
+          System.out.println("修改失败");
+      }
+      return  map;
+  }
 
     /**
      * 配货
@@ -99,7 +75,7 @@ public class TbNewbeeMallOrderController {
     @RequestMapping("/orders/checkDone")
     @ResponseBody
     public Object peihuo(@RequestBody Map<String,Object> map,String iids){
-        String str =  map.get("ids").toString().trim();
+         String str =  map.get("ids").toString().trim();
         String substr = str.substring(1, str.length() - 1).trim();
         System.out.println(substr.trim().length()+"================"+substr);
         String s1 = substr.replace(", ", ",");
@@ -113,7 +89,7 @@ public class TbNewbeeMallOrderController {
             tbNewbeeMallOrder.setOrderId(Long.parseLong(s));
             boolean isok = false;
             try{
-                isok =   orderService.saveOrUpdate(tbNewbeeMallOrder);  //2 为配货完成
+                isok =   tbNewbeeMallOrderService.saveOrUpdate(tbNewbeeMallOrder);  //2 为配货完成
                 if (isok){
                     map.put("resultCode",200);
                     System.out.println("配货成功！");
@@ -146,7 +122,7 @@ public class TbNewbeeMallOrderController {
             tbNewbeeMallOrder.setOrderId(Long.parseLong(s));
             boolean isok = false;
             try{
-                isok =   orderService.saveOrUpdate(tbNewbeeMallOrder);
+                isok =   tbNewbeeMallOrderService.saveOrUpdate(tbNewbeeMallOrder);
                 if (isok){
                     map.put("resultCode",200);
                     System.out.println("出库成功！");
@@ -177,7 +153,7 @@ public class TbNewbeeMallOrderController {
             tbNewbeeMallOrder.setOrderId(Long.parseLong(s));
             boolean isok = false;
             try{
-                isok =   orderService.saveOrUpdate(tbNewbeeMallOrder);
+                isok =   tbNewbeeMallOrderService.saveOrUpdate(tbNewbeeMallOrder);
                 if (isok){
                     map.put("resultCode",200);
                     System.out.println("关闭成功！");

@@ -1,5 +1,4 @@
-package com.example.newbeemall.controller;
-
+package com.example.newbeemall.controller.admin;
 
 import com.example.newbeemall.entity.TbNewbeeMallOrderItem;
 import com.example.newbeemall.service.TbNewbeeMallOrderItemService;
@@ -26,27 +25,26 @@ import java.util.Map;
 @Controller
 @RequestMapping("/admin")
 public class TbNewbeeMallOrderItemController {
+
     @Resource
     private TbNewbeeMallOrderItemService tbNewbeeMallOrderItemService;
 
-    /**
-     * 查看订单信息
-     * @param
-     * @return
-     */
-       @GetMapping("/orderitems/{orderId}")
-       @ResponseBody
-           public Object items(@PathVariable("orderId")Integer orderId){
-           System.out.println("idd========"+orderId);
-           Map<String, Object> map = new HashMap<String, Object>();
-           ArrayList<TbNewbeeMallOrderItem> tbNewbeeMallOrderItems = new ArrayList<>();
-           List<TbNewbeeMallOrderItem> orderIdss = tbNewbeeMallOrderItemService.tbListItems(orderId);
-                if(orderIdss != null){
-                    map.put("resultCode",200);
-                    map.put("data",orderIdss);
-                }
-                   return  map;
-           }
 
+    /**
+     * 查看订单
+     */
+    @GetMapping("/orderitems/{orderId}")
+    @ResponseBody
+    public Object items(@PathVariable("orderId")Integer orderId){
+        System.out.println("idd========"+orderId);
+        Map<String, Object> map = new HashMap<String, Object>();
+        ArrayList<TbNewbeeMallOrderItem> tbNewbeeMallOrderItems = new ArrayList<>();
+        List<TbNewbeeMallOrderItem> orderIdss = tbNewbeeMallOrderItemService.tbListItems(orderId);
+        if(orderIdss != null){
+            map.put("resultCode",200);
+            map.put("data",orderIdss);
+        }
+        return  map;
+    }
 }
 

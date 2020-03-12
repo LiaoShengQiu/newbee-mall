@@ -16,8 +16,11 @@ import java.util.Map;
 
 @Controller
 public class ShopCatController {
+
     @Resource
     private TbNewbeeMallShoppingCartItemService shopCatService;
+
+
     @GetMapping("/shop-cart")
     public Object toCart(HttpServletRequest request,HttpSession session) {
         TbNewbeeMallUser newBeeMallUser = (TbNewbeeMallUser) session.getAttribute("newBeeMallUser");
@@ -33,6 +36,7 @@ public class ShopCatController {
         request.setAttribute("myShoppingCartItems", cartByUserId);
         return "mall/cart";
     }
+
 
     @PutMapping("/shop-cart")
     @ResponseBody
@@ -54,6 +58,7 @@ public class ShopCatController {
         return resultUtil;
 
     }
+
 
     /**
      * 删除购物车商品
@@ -83,6 +88,5 @@ public class ShopCatController {
         request.setAttribute("priceTotal",priceTotal);
         request.setAttribute("myShoppingCartItems",cartByUserId);
         return "mall/order-settle";
-
     }
 }

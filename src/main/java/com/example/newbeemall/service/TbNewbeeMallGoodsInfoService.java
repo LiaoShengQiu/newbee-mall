@@ -2,6 +2,8 @@ package com.example.newbeemall.service;
 
 import com.example.newbeemall.entity.TbNewbeeMallGoodsInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.example.newbeemall.utils.PageQueryUtil;
+import com.example.newbeemall.utils.PageResult;
 
 /**
  * <p>
@@ -13,4 +15,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface TbNewbeeMallGoodsInfoService extends IService<TbNewbeeMallGoodsInfo> {
 
+    /**
+     * 商品搜索
+     */
+    PageResult searchsp(PageQueryUtil pageUtil);
 }

@@ -113,12 +113,10 @@ function reload() {
  */
 function openOrderItems(orderId) {
     $('.modal-title').html('订单详情');
-    var date = {"orderId2":orderId};
     $.ajax({
         type: 'GET',//方法类型
-        url: '/admin/orderitems/' + orderId,
+        url: '/admin/order-items/' + orderId,
         contentType: 'application/json',
-        data: "orderId2="+orderId,
         success: function (result) {
             if (result.resultCode == 200) {
                 $('#orderItemModal').modal('show');
@@ -197,7 +195,7 @@ $('#saveButton').click(function () {
                 swal("保存成功", {
                     icon: "success",
                 });
-                location.reload(true);
+                reload();
             } else {
                 $('#orderInfoModal').modal('hide');
                 swal(result.message, {
@@ -241,7 +239,6 @@ function orderCheckDone() {
         });
         return;
     }
-    alert(ids);
     swal({
         title: "确认弹框",
         text: "确认要执行配货完成操作吗?",
@@ -250,14 +247,11 @@ function orderCheckDone() {
         dangerMode: true,
     }).then((flag) => {
             if (flag) {
-                var date = {
-                    "ids": ids
-                }
                 $.ajax({
                     type: "POST",
                     url: "/admin/orders/checkDone",
                     contentType: "application/json",
-                    data: JSON.stringify(date),
+                    data: JSON.stringify(ids),
                     success: function (r) {
                         if (r.resultCode == 200) {
                             swal("配货完成", {
@@ -312,12 +306,11 @@ function orderCheckOut() {
         dangerMode: true,
     }).then((flag) => {
             if (flag) {
-                var date = {"ids": ids}
                 $.ajax({
                     type: "POST",
                     url: "/admin/orders/checkOut",
                     contentType: "application/json",
-                    data: JSON.stringify(date),
+                    data: JSON.stringify(ids),
                     success: function (r) {
                         if (r.resultCode == 200) {
                             swal("出库成功", {
@@ -350,14 +343,11 @@ function closeOrder() {
         dangerMode: true,
     }).then((flag) => {
             if (flag) {
-                var date = {
-                    "ids":ids
-                }
                 $.ajax({
                     type: "POST",
                     url: "/admin/orders/close",
                     contentType: "application/json",
-                    data: JSON.stringify(date),
+                    data: JSON.stringify(ids),
                     success: function (r) {
                         if (r.resultCode == 200) {
                             swal("关闭成功", {

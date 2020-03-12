@@ -4,7 +4,9 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -61,20 +63,6 @@ public class TbNewbeeMallOrder implements Serializable {
      */
     private Integer orderStatus;
 
-    @TableField(exist = false)
-    private String orderStatusString;
-
-    public String getOrderStatusString() {
-        if(this.orderStatusString==null){
-            this.orderStatusString= this.orderStatus==0?"待支付":this.orderStatus==1?"已支付":this.orderStatus==2?"配货完成":this.orderStatus==3?"出库成功":this.orderStatus==4?"交易成功":this.orderStatus==-1?"手动关闭":this.orderStatus==-2?"超时关闭":"商家关闭";
-        }
-        return orderStatusString;
-    }
-
-    public void setOrderStatusString(String orderStatusString) {
-        this.orderStatusString = orderStatusString;
-    }
-
     /**
      * 订单body
      */
@@ -100,6 +88,22 @@ public class TbNewbeeMallOrder implements Serializable {
      */
     private Integer isDeleted;
 
+
+
+    @TableField(exist = false)
+    private List<TbNewbeeMallOrderItem> orderItems;
+    /**
+     * 0.无 1.支付宝支付 2.微信支付
+     */
+    @TableField(exist = false)
+    private String payTypeString;
+
+    /**
+     * 订单状态
+     */
+    @TableField(exist = false)
+    private String orderStatusString;
+
     /**
      * 创建时间
      */
@@ -113,14 +117,29 @@ public class TbNewbeeMallOrder implements Serializable {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date updateTime;
 
-    @TableField(exist = false)
-    private List<TbNewbeeMallOrderItem> orderItems;
 
-    /**
-     * 0.无 1.支付宝支付 2.微信支付
-     */
     @TableField(exist = false)
-    private String payTypeString;
+    private List<TbNewbeeMallOrder> userList = new ArrayList<TbNewbeeMallOrder>();
+
+    public String getOrderStatusString() {
+        if(this.orderStatusString==null){
+            this.orderStatusString= this.orderStatus==0?"待支付":this.orderStatus==1?"已支付":this.orderStatus==2?"配货完成":this.orderStatus==3?"出库成功":this.orderStatus==4?"交易成功":this.orderStatus==-1?"手动关闭":this.orderStatus==-2?"超时关闭":"商家关闭";
+        }
+        return orderStatusString;
+    }
+
+
+    public void setOrderStatusString(String orderStatusString) {
+        this.orderStatusString = orderStatusString;
+    }
+
+    public List<TbNewbeeMallOrder> getUserList() {
+        return userList;
+    }
+
+    public void setUserList(List<TbNewbeeMallOrder> userList) {
+        this.userList = userList;
+    }
 
     public String getPayTypeString() {
         return payTypeString;
@@ -137,6 +156,7 @@ public class TbNewbeeMallOrder implements Serializable {
     public void setOrderItems(List<TbNewbeeMallOrderItem> orderItems) {
         this.orderItems = orderItems;
     }
+
 
     public Long getOrderId() {
         return orderId;
@@ -186,13 +206,6 @@ public class TbNewbeeMallOrder implements Serializable {
         this.payType = payType;
     }
 
-    public Date getPayTime() {
-        return payTime;
-    }
-
-    public void setPayTime(Date payTime) {
-        this.payTime = payTime;
-    }
 
     public Integer getOrderStatus() {
         return orderStatus;
@@ -240,6 +253,14 @@ public class TbNewbeeMallOrder implements Serializable {
 
     public void setIsDeleted(Integer isDeleted) {
         this.isDeleted = isDeleted;
+    }
+
+    public Date getPayTime() {
+        return payTime;
+    }
+
+    public void setPayTime(Date payTime) {
+        this.payTime = payTime;
     }
 
     public Date getCreateTime() {

@@ -21,6 +21,27 @@
         category_id, category_level, parent_id, category_name, category_rank, is_deleted, create_time, create_user, update_time, update_user
     </sql>
 
+
+
+    <select id="selectGoodsCategory" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/>
+        from tb_newbee_mall_goods_category where parent_id in
+        <foreach item="parentId" collection="parentIds" open="(" separator="," close=")">
+           #{parentId}
+        </foreach>
+        and category_level = #{categoryLevel} and is_deleted = 0 order by category_rank desc
+    </select>
+
+
+    <select id="getById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from tb_newbee_mall_goods_category
+        where category_id = #{categoryId} and is_deleted=0
+    </select>
+
+
+
     <select id="findGoodsCategoryPage" resultMap="BaseResultMap" parameterType="map">
         SELECT
         <include refid="Base_Column_List"></include>
@@ -32,6 +53,9 @@
         <if test="sidx != null and sidx != ''"> ORDER BY ${sidx} ${order}</if>
         <if test="start != null and limit != null"> limit ${start},${limit}</if>
     </select>
+
+
+
 	
 	<insert id="add" parameterType="map">
 	INSERT INTO tb_newbee_mall_goods_category(parent_id,category_name,category_rank,category_level,create_user,create_time)
@@ -44,8 +68,6 @@
 	WHERE category_id=#{categoryId}
 	</update>
 
-
-
     <select id="findersanji" resultMap="BaseResultMap">
         SELECT
         <include refid="Base_Column_List" />
@@ -54,6 +76,5 @@
             #{id}
         </foreach>
     </select>
-
 
 </mapper>

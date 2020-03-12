@@ -39,5 +39,5 @@ public interface TbNewbeeMallShoppingCartItemMapper extends BaseMapper<TbNewbeeM
      */
     public List<TbNewbeeMallOrderItem> getCartByUserId(@Param("userId") Long userId);
 
-    public int updateCartCount(Map<String,Object> map);
+    public int updateCartCount(Map<String, Object> map);
 }
