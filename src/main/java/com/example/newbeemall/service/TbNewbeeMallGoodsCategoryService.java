@@ -1,11 +1,11 @@
 package com.example.newbeemall.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.example.newbeemall.entity.TbNewbeeMallGoodsCategory;
 import com.example.newbeemall.vo.NewBeeMallIndexCategoryVO;
 import com.example.newbeemall.vo.SearchPageCategoryVO;
 
 import java.util.List;
-import com.example.newbeemall.entity.TbNewbeeMallGoodsCategory;
 import java.util.Map;
 
 public interface TbNewbeeMallGoodsCategoryService extends IService<TbNewbeeMallGoodsCategory> {

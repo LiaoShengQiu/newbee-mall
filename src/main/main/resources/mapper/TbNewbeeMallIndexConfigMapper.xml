@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.newbeemall.mapper.TbNewbeeMallIndexConfigMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.example.newbeemall.entity.TbNewbeeMallIndexConfig">
+        <id column="config_id" property="configId" />
+        <result column="config_name" property="configName" />
+        <result column="config_type" property="configType" />
+        <result column="goods_id" property="goodsId" />
+        <result column="redirect_url" property="redirectUrl" />
+        <result column="config_rank" property="configRank" />
+        <result column="is_deleted" property="isDeleted" />
+        <result column="create_time" property="createTime" />
+        <result column="create_user" property="createUser" />
+        <result column="update_time" property="updateTime" />
+        <result column="update_user" property="updateUser" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        config_id, config_name, config_type, goods_id, redirect_url, config_rank, is_deleted, create_time, create_user, update_time, update_user
+    </sql>
+
+
+    <select id="getIndex" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/>
+        from tb_newbee_mall_index_config
+        where config_type = #{configType} and is_deleted = 0 order by config_rank desc
+        limit #{number}
+    </select>
+
+
+
+</mapper>

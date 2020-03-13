@@ -5,26 +5,18 @@ import com.example.newbeemall.entity.TbNewbeeMallGoodsCategory;
 import com.example.newbeemall.service.TbNewbeeMallGoodsCategoryService;
 import com.example.newbeemall.service.TbNewbeeMallGoodsInfoService;
 import com.example.newbeemall.utils.PageQueryUtil;
-import com.example.newbeemall.vo.SearchPageCategoryVO;
-import org.springframework.util.CollectionUtils;
-
-import com.example.newbeemall.entity.TbNewbeeMallAdminUser;
 import com.example.newbeemall.utils.ResultUtil;
-import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.*;
-
+import com.example.newbeemall.vo.SearchPageCategoryVO;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
-import java.util.Collections;
-import java.util.HashMap;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 

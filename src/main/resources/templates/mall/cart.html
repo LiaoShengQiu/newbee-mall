@@ -56,11 +56,13 @@
                                    th:value="${item.goodsCount}" step="1" min="1"
                                    max="5">
                         </div>
+
                         <div class="sub_content fl" th:text="${item.goodsCount*item.sellingPrice+'元'}">1299元</div>
                         <div class="sub_content fl"><a href="##" th:onclick="'deleteItem('+${item.cartItemId}+')'">×</a>
                         </div>
                         <div class="clear"></div>
                     </div>
+                    <span th:text="${item.msg}" id="msg"></span>
                 </th:block>
             </div>
         </th:block>
@@ -94,17 +96,24 @@
     </div>
 </div>
 <div th:replace="mall/footer::footer-fragment"></div>
-
+<input type="text" id="isdelete" th:value="${isDelete}">
 </body>
 <!-- jQuery -->
 <script th:src="@{/admin/plugins/jquery/jquery.min.js}"></script>
 <script th:src="@{/admin/plugins/sweetalert/sweetalert.min.js}"></script>
 <script type="text/javascript">
+    var isMiaos = $("#isMiaos").val();
+    var aaa = $("#isMiaos");
+    if(isMiaos == 0){
+        var bbb = aaa.parent().children().html();
+        alert(bbb);
+    }
 
     /**
      * 购物车中数量为0时提示
      */
     function tip() {
+
         swal("购物车中无数据，无法结算", {
             icon: "error",
         });
@@ -114,7 +123,15 @@
      * 跳转至结算页面
      */
     function settle() {
-        window.location.href = '/shop-cart/settle'
+        var isdelete = $("#isdelete").val();
+        if (isdelete == -1){
+            swal("该商品已过期！请重新添加购物车！", {
+                icon: "error",
+            });
+        }else{
+            window.location.href = '/shop-cart/settle'
+        }
+
     }
 
     /**

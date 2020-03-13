@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.time.LocalDateTime;
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * <p>
@@ -51,8 +52,17 @@ public class TbNewbeeMallShoppingCartItem implements Serializable {
     /**
      * 最新修改时间
      */
-    private LocalDateTime updateTime;
+    private Date updateTime;
 
+   private Integer isMiaos;
+
+    public Integer getIsMiaos() {
+        return isMiaos;
+    }
+
+    public void setIsMiaos(Integer isMiaos) {
+        this.isMiaos = isMiaos;
+    }
 
     public Long getCartItemId() {
         return cartItemId;
@@ -102,11 +112,11 @@ public class TbNewbeeMallShoppingCartItem implements Serializable {
         this.createTime = createTime;
     }
 
-    public LocalDateTime getUpdateTime() {
+    public Date getUpdateTime() {
         return updateTime;
     }
 
-    public void setUpdateTime(LocalDateTime updateTime) {
+    public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
     }
 

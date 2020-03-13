@@ -40,6 +40,11 @@ public class TbNewbeeMallShoppingCartItemServiceImpl extends ServiceImpl<TbNewbe
     }
 
     @Override
+    public List<TbNewbeeMallOrderItem> getCartByUserId2(Long userId) {
+        return mapper.getCartByUserId2(userId);
+    }
+
+    @Override
     public boolean update(Map<String,Object> map) {
         return mapper.updateCartCount(map)>0;
     }
