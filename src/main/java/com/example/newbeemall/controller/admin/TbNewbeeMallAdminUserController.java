@@ -1,36 +1,20 @@
 package com.example.newbeemall.controller.admin;
 
-import com.example.newbeemall.service.TbNewbeeMallCarouselService;
-import com.example.newbeemall.service.TbNewbeeMallGoodsCategoryService;
-import com.example.newbeemall.service.TbNewbeeMallIndexConfigService;
-import com.example.newbeemall.vo.NewBeeMallIndexCarouselVO;
-import com.example.newbeemall.vo.NewBeeMallIndexCategoryVO;
-import com.example.newbeemall.vo.NewBeeMallIndexConfigGoodsVO;
-import org.mybatis.spring.annotation.MapperScan;
-import org.springframework.util.CollectionUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.example.newbeemall.service.*;
+import com.example.newbeemall.utils.PageQueryUtil;
+import com.example.newbeemall.utils.Result;
+import com.example.newbeemall.utils.ResultGenerator;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.*;
 import com.example.newbeemall.entity.TbNewbeeMallAdminUser;
-import com.example.newbeemall.entity.TbNewbeeMallCarousel;
-import com.example.newbeemall.entity.TbNewbeeMallGoodsCategory;
-import com.example.newbeemall.mapper.TbNewbeeMallAdminUserMapper;
-import com.example.newbeemall.mapper.TbNewbeeMallCarouselMapper;
-import com.example.newbeemall.service.TbNewbeeMallAdminUserService;
-import com.example.newbeemall.service.TbNewbeeMallCarouselService;
-import com.example.newbeemall.service.TbNewbeeMallGoodsCategoryService;
-import com.example.newbeemall.utils.Md5;
-import org.springframework.web.bind.annotation.RequestMapping;
+
 
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
-
-import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
-import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/admin")
@@ -38,6 +22,9 @@ public class TbNewbeeMallAdminUserController {
 
     @Resource
     private TbNewbeeMallAdminUserService adminUserService;
+
+    @Resource
+    private TbNewbeeMallUserService userService;
 
 
     /**
@@ -47,7 +34,7 @@ public class TbNewbeeMallAdminUserController {
     public String login(String userName, String password,String verifyCode, HttpSession session){
         System.out.println("login...........................................................");
         Object tu = session.getAttribute("text");
-        if(tu==null){
+        if(verifyCode==null || verifyCode==""){
             return "admin/login";
         }
         if(tu.toString().equalsIgnoreCase(verifyCode)){
@@ -66,6 +53,52 @@ public class TbNewbeeMallAdminUserController {
             return "admin/index";
         }
 
+    }
+
+    /**
+     * 会员管理
+     */
+    @GetMapping("/users")
+    public String users(HttpServletRequest request) {
+        System.out.println("会员管理*******************************");
+        request.setAttribute("path", "users");
+        return "admin/newbee_mall_user";
+    }
+
+
+
+    /**
+     * 列表
+     */
+    @RequestMapping(value = "/users/list", method = RequestMethod.GET)
+    @ResponseBody
+    public Result list(@RequestParam Map<String, Object> params) {
+        if (StringUtils.isEmpty(params.get("page")) || StringUtils.isEmpty(params.get("limit"))) {
+            return ResultGenerator.genFailResult("参数异常！");
+        }
+        PageQueryUtil pageUtil = new PageQueryUtil(params);
+        return ResultGenerator.genSuccessResult(userService.getNewBeeMallUsersPage(pageUtil));
+    }
+
+
+    /**
+     * 用户禁用与解除禁用
+     */
+    @RequestMapping(value = "/users/lock/{lockStatus}", method = RequestMethod.POST)
+    @ResponseBody
+    public Result delete(@RequestBody Integer[] ids, @PathVariable int lockStatus) {
+        System.out.println("用户禁用与解除禁用...........................................");
+        if (ids.length < 1) {
+            return ResultGenerator.genFailResult("参数异常！");
+        }
+        if (lockStatus != 0 && lockStatus != 1) {
+            return ResultGenerator.genFailResult("操作非法！");
+        }
+        if (userService.lockUsers(ids, lockStatus)) {
+            return ResultGenerator.genSuccessResult();
+        } else {
+            return ResultGenerator.genFailResult("禁用失败");
+        }
     }
 }
 

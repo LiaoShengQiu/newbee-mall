@@ -32,4 +32,37 @@
         WHERE user_id=#{userId}
     </update>-->
 
+    <select id="findMallUserList" parameterType="Map" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from tb_newbee_mall_user
+        where 1=1
+        <if test="loginName!=null and loginName!=''">
+            and login_name = #{loginName}
+        </if>
+        order by create_time desc
+        <if test="start!=null and limit!=null">
+            limit #{start},#{limit}
+        </if>
+    </select>
+
+
+
+    <select id="getTotalMallUsers" parameterType="Map" resultType="int">
+        select count(*) from tb_newbee_mall_user
+        where 1=1
+        <if test="loginName!=null and loginName!=''">
+            and login_name = #{loginName}
+        </if>
+    </select>
+
+
+    <update id="lockUserBatch">
+        update tb_newbee_mall_user
+        set locked_flag=#{lockStatus} where user_id in
+        <foreach item="id" collection="ids" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+
 </mapper>

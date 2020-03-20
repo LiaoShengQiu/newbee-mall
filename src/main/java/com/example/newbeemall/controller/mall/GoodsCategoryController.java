@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
-public class TbNewbeeMallGoodsCategoryController {
+public class GoodsCategoryController {
 
 
     @Resource
@@ -54,61 +54,6 @@ public class TbNewbeeMallGoodsCategoryController {
         PageQueryUtil pageUtil = new PageQueryUtil(map);
         request.setAttribute("pageResult", goodsInfoService.searchsp(pageUtil));
         return "mall/search";
-    }
-
-
-
-
-
-
-
-    @RequestMapping("/categories/save")
-    @ResponseBody
-    public Object save(@RequestBody Map<String,Object> map,HttpSession session){
-		TbNewbeeMallAdminUser user = (TbNewbeeMallAdminUser)session.getAttribute("admin");
-        System.out.println(map.toString());
-		map.put("createUser",user.getAdminUserId());
-		boolean isok = goodsCategoryService.save(map);
-	    ResultUtil resultObject = new ResultUtil(isok);
-        return resultObject;
-    }
-	
-	@RequestMapping("/categories/delete")
-    @ResponseBody
-    public Object delete(@RequestParam Map<String,Object> map){
-		
-        return null;
-    }
-	
-	@RequestMapping("/categories/update")
-    @ResponseBody
-    public Object update(@RequestBody Map<String,Object> map,HttpSession session){
-		TbNewbeeMallAdminUser user = (TbNewbeeMallAdminUser)session.getAttribute("admin");
-		map.put("updateUser",user.getAdminUserId());
-		boolean isok = goodsCategoryService.update(map);
-	    ResultUtil resultObject = new ResultUtil(isok);
-        return resultObject;
-    }
-
-
-
-    @RequestMapping("/categories/list")
-    @ResponseBody
-    public Object list(@RequestParam Map<String,Object> map){
-        int page = Integer.parseInt(map.get("page").toString());
-        int limit = Integer.parseInt(map.get("limit").toString());
-        map.put("start",(page-1)*limit);
-        //查询条件parentId=父级，categoryLevel=分类等级, page=页数，limit=每页记录数，sidx=按什么排序，order=降序还是升序
-        List<TbNewbeeMallGoodsCategory> goodsCategorys = goodsCategoryService.findGoodsCategory(map);
-        return goodsCategorys;
-    }
-
-    @RequestMapping("/categories")
-    public String categories(int parentId, int categoryLevel, int backParentId, HttpServletRequest request){
-        request.setAttribute("parentId",parentId);
-        request.setAttribute("categoryLevel",categoryLevel);
-        request.setAttribute("backParentId",backParentId);
-        return "admin/newbee_mall_category";
     }
 
 }
