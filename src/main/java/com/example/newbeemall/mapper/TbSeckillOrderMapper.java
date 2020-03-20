@@ -6,6 +6,6 @@ import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Param;
 
 public interface TbSeckillOrderMapper extends BaseMapper<tb_seckill_order> {
-    @Delete("DELETE FROM tb_seckill_order WHERE user_id = #{userId} AND seckill_id=(SELECT g.id FROM tb_seckill_goods g WHERE goods_id=#{goodsId})")
+    @Delete("DELETE FROM tb_seckill_order WHERE user_id = #{userId} AND seckill_id=(SELECT g.id FROM tb_seckill_goods g WHERE goods_id=(select goods_id from tb_newbee_mall_shopping_cart_item where cart_item_id=#{goodsId}))")
     public int deleteSeckill(@Param("userId") long userId, @Param("goodsId") long goodsId);
 }

@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -52,7 +51,6 @@ public class miaoshaController {
 
     @RequestMapping("/goods/miaosha/{goodsId}")
     public String toDetailMiaosha(@PathVariable("goodsId") Long goodsId, HttpServletRequest request){
-
         if(goodsId < 1){
             return "error/error_5xx";
         }
@@ -71,13 +69,14 @@ public class miaoshaController {
         System.out.println("tbSeckillGoods.get(0)"+tbSeckillGoods.get(0));
         request.setAttribute("goodsDetail",goods);
         request.setAttribute("tbSGoods",tbSeckillGoods.get(0));
-        System.out.println("mall/miaosha=============="+goods.toString());
+        System.out.println("mall/miaosha=============="+tbSeckillGoods.get(0).getEndTime());
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         String format = simpleDateFormat.format(tbSeckillGoods.get(0).getEndTime());
         request.getSession().setAttribute("tbNewbeeMallGoodsInfo",goods);
+        System.out.println("tbSeckillGoods"+tbSeckillGoods.toString());
         request.getSession().setAttribute("tbSeckillGoods",tbSeckillGoods.get(0));   //这里主要是传结束时间
         request.setAttribute("shijian",format);
-        System.out.println("结束时间"+tbSeckillGoods.get(0).getEndTime().getTime());
+        System.out.println(format+"format"+tbSeckillGoods.get(0).getEndTime()+"结束时间"+tbSeckillGoods.get(0).getEndTime().getTime());
        return "mall/miaos";
     }
 
@@ -97,12 +96,26 @@ public class miaoshaController {
         int end = 10;  //页大小
         int start = (page-1)*end;
         int count = tbNewbeeMallGoodsInfoMapper.count(start,end);
+
+        System.out.println("向上取整"+(int)count/end+1);
+        long sum = count%end == 0 ? count/end : count/end+1;
         List<TbNewbeeMallGoodsInfo> tbNewbeeMallGoodsInfos = tbNewbeeMallGoodsInfoMapper.listGoods(start,end);
         request.setAttribute("pageResult",tbNewbeeMallGoodsInfos);
+        System.out.println("总记录数========"+count+"总页数"+sum);
         request.setAttribute("page",page);
-        request.setAttribute("count",count);
+        request.setAttribute("count",sum);
         return "mall/miaoshadetail.html";
     }
+
+    @RequestMapping("/miaoshafenye")
+    @ResponseBody
+    public Object miaoshafy(HttpServletRequest request, @RequestParam Map<String,Object> map){
+
+        return map;
+    }
+
+
+
 
     /**
      * 使用redis+消息队列进行秒杀实现
@@ -210,7 +223,7 @@ public class miaoshaController {
                 resultCode = 200;
                 message = "用户" + username + "秒杀" + stockName + "成功";
                 TbNewbeeMallShoppingCartItem cartItem2 = new TbNewbeeMallShoppingCartItem();
-              shuaxin(request,cartItem2,goodsId,1,request.getSession());   //加入购物车
+              shuaxin(cartItem2,goodsId,1,request);   //加入购物车
             }else {
               /**
                * 说明该商品的库存量没有剩余，直接返回秒杀失败的消息给用户
@@ -295,18 +308,19 @@ public class miaoshaController {
     /**
      * 秒杀那边过来的  加入购物车
      * @param cartItem
-     * @param session
+     * @param
      * @return
      */
-    public boolean addShopCart2(TbNewbeeMallShoppingCartItem cartItem,long goodsId,int goodsCount, HttpSession session) {
+    public boolean addShopCart2(TbNewbeeMallShoppingCartItem cartItem,long goodsId,int goodsCount, HttpServletRequest request) {
 
-        TbSeckillGoods tbSeckillGoods = (TbSeckillGoods) session.getAttribute("tbSeckillGoods");
+        TbSeckillGoods tbSeckillGoods = (TbSeckillGoods) request.getSession().getAttribute("tbSeckillGoods");
+        long guoqi = 2*60*60*1000;    //两个小时自动过期
+        long shicha = 8*60*60*1000;  //8个小时的时差
         long endTime = tbSeckillGoods.getEndTime().getTime();  //获取时间戳
+        System.out.println(tbSeckillGoods.getEndTime()+"活动结束时间"+endTime);
         Date now = new Date();
         System.out.println(now.getTime()+"当前时间"+now);
  //       Long timestamp = LocalDateTime.now().toInstant(ZoneOffset.of("+8")).toEpochMilli();
-        long guoqi = 2*60*60*1000;    //两个小时自动过期
-        long shicha = 8*60*60*1000;  //8个小时的时差
         long time = now.getTime()+guoqi+shicha;  //过期时间的时间戳
         long to = 0;
         if(endTime - now.getTime() > 0){
@@ -314,15 +328,15 @@ public class miaoshaController {
         }
         System.out.println(to+"/shop-cart"+endTime);
         int isDeleted = 0;   //0显示 1删除
-        if (to <= 0){
+       /* if (to <= 0){
             isDeleted = 1;  //删除  过期
-        }
+        }*/
 
        //结束时间
         Date time2 = new Date(time);
   //      LocalDateTime time2 =LocalDateTime.ofEpochSecond(time/1000,0,ZoneOffset.ofHours(8));
         System.out.println("结束时间======="+time2);
-        TbNewbeeMallUser newBeeMallUser = (TbNewbeeMallUser) session.getAttribute("newBeeMallUser");
+        TbNewbeeMallUser newBeeMallUser = (TbNewbeeMallUser)  request.getSession().getAttribute("newBeeMallUser");
         cartItem.setUserId(newBeeMallUser.getUserId());
         cartItem.setIsDeleted(isDeleted);
         cartItem.setGoodsId(goodsId);
@@ -340,11 +354,11 @@ public class miaoshaController {
         return isok;
     }
 
-    public void shuaxin(HttpServletRequest request,TbNewbeeMallShoppingCartItem cartItem,long goodsId,int goodsCount, HttpSession session){
-        boolean o = addShopCart2(cartItem, goodsId, 1, request.getSession());
+    public void shuaxin(TbNewbeeMallShoppingCartItem cartItem,long goodsId,int goodsCount, HttpServletRequest request){
+        boolean o = addShopCart2(cartItem, goodsId, 1, request);
         TbNewbeeMallUser newBeeMallUser = (TbNewbeeMallUser) request.getSession().getAttribute("newBeeMallUser");
         int count = tbNewbeeMallShoppingCartItemService.getCartCountByUserId(newBeeMallUser.getUserId());
         newBeeMallUser.setShopCartItemCount(count);
-        session.setAttribute("newBeeMallUser",newBeeMallUser);
+        request.getSession().setAttribute("newBeeMallUser",newBeeMallUser);
     }
 }
