@@ -53,7 +53,6 @@ public class ShopCatController {
                     tbNewbeeMallShoppingCartItem.setIsDeleted(-1); //-1为过期
                     tbNewbeeMallShoppingCartItemMapper.updateById(tbNewbeeMallShoppingCartItem);
                     item.setMsg("该商品已过期！请重新添加购物车！");
-                    priceTotal -= item.getSellingPrice();
                     request.setAttribute("isDelete",-1);
                 }
             }
@@ -66,6 +65,7 @@ public class ShopCatController {
         System.out.println(cartByUserId.toString());
         request.setAttribute("itemsTotal",itemsTotal);
         request.setAttribute("priceTotal",priceTotal);
+
         request.setAttribute("myShoppingCartItems", cartByUserId);
         return "mall/cart";
     }
@@ -118,9 +118,9 @@ public class ShopCatController {
         TbNewbeeMallUser newBeeMallUser = (TbNewbeeMallUser) session.getAttribute("newBeeMallUser");
         QueryWrapper<TbNewbeeMallShoppingCartItem> queryWrapper = new QueryWrapper<>();
         List<TbNewbeeMallShoppingCartItem> list = shopCatService.list(queryWrapper);
-        long goodsId = list.get(0).getGoodsId();
+
         long uid = newBeeMallUser.getUserId();
-        int i = tbSeckillOrderService.deleteSeckill(uid, goodsId);  //删除秒杀成功标的数据
+        int i = tbSeckillOrderService.deleteSeckill(uid, id);  //删除秒杀成功标的数据
 
         ResultUtil resultUtil = new ResultUtil(shopCatService.removeById(id));
         int count = shopCatService.getCartCountByUserId(newBeeMallUser.getUserId());

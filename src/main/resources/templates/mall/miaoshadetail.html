@@ -77,7 +77,8 @@
         <div class="page_wrap">
             <th:block th:if="${null != pageResult}">
             <span class="page_span1">
-                 <a th:href="@{${page==1}?'##':'/search?keyword='+${keyword==null?'':keyword}+'&page=' + ${page-1}+'&goodsCategoryId='+${goodsCategoryId==null?'':goodsCategoryId}}">
+
+                   <a th:href="@{${page==1}?'##':'/search?keyword='+${keyword==null?'':keyword}+'&page=' + ${page-1}+'&goodsCategoryId='+${goodsCategoryId==null?'':goodsCategoryId}}">
                                     < 上一页
                                 </a>
                 <th:block th:if="${page-2 >=1}"><a
