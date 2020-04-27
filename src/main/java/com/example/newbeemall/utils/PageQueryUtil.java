@@ -11,6 +11,7 @@ public class PageQueryUtil extends LinkedHashMap<String, Object> {
 
     public PageQueryUtil(Map<String, Object> params) {
         this.putAll(params);
+        System.out.println(this.values());
         //分页参数
         this.page = Integer.parseInt(params.get("page").toString());
         this.limit = Integer.parseInt(params.get("limit").toString());
@@ -35,11 +36,4 @@ public class PageQueryUtil extends LinkedHashMap<String, Object> {
         this.limit = limit;
     }
 
-    @Override
-    public String toString() {
-        return "PageUtil{" +
-                "page=" + page +
-                ", limit=" + limit +
-                '}';
-    }
 }

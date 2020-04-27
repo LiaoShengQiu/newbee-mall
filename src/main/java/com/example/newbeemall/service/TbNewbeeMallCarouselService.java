@@ -1,7 +1,10 @@
 package com.example.newbeemall.service;
 
+import com.baomidou.mybatisplus.extension.api.R;
 import com.example.newbeemall.entity.TbNewbeeMallCarousel;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.example.newbeemall.utils.PageQueryUtil;
+import com.example.newbeemall.utils.PageResult;
 import com.example.newbeemall.vo.NewBeeMallIndexCarouselVO;
 
 import java.util.List;
@@ -21,4 +24,7 @@ public interface TbNewbeeMallCarouselService extends IService<TbNewbeeMallCarous
      */
     List<NewBeeMallIndexCarouselVO> getCarouselsForIndex(int number);
 
+    PageResult getCarouselPage(PageQueryUtil pageUtil);
+
+    boolean deleteIds(Integer[] ids);
 }

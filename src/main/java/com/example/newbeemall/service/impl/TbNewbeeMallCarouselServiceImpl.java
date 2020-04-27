@@ -6,6 +6,8 @@ import com.example.newbeemall.mapper.TbNewbeeMallCarouselMapper;
 import com.example.newbeemall.service.TbNewbeeMallCarouselService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.newbeemall.utils.BeanUtil;
+import com.example.newbeemall.utils.PageQueryUtil;
+import com.example.newbeemall.utils.PageResult;
 import com.example.newbeemall.vo.NewBeeMallIndexCarouselVO;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -40,5 +42,17 @@ public class TbNewbeeMallCarouselServiceImpl extends ServiceImpl<TbNewbeeMallCar
             cVO = BeanUtil.copyList(carousel, NewBeeMallIndexCarouselVO.class);
         }
         return cVO;
+    }
+
+    @Override
+    public PageResult getCarouselPage(PageQueryUtil pageUtil) {
+        List<TbNewbeeMallCarousel> carousel = carouselMapper.getCarouselPage(pageUtil);
+        int total = carouselMapper.getCarouselCount();
+        return new PageResult(carousel,total,pageUtil.getLimit(),pageUtil.getPage());
+    }
+
+    @Override
+    public boolean deleteIds(Integer[] ids) {
+        return carouselMapper.deleteIds(ids) > 0?true:false;
     }
 }

@@ -9,6 +9,8 @@ import com.example.newbeemall.mapper.TbNewbeeMallIndexConfigMapper;
 import com.example.newbeemall.service.TbNewbeeMallIndexConfigService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.newbeemall.utils.BeanUtil;
+import com.example.newbeemall.utils.PageQueryUtil;
+import com.example.newbeemall.utils.PageResult;
 import com.example.newbeemall.vo.NewBeeMallIndexConfigGoodsVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -39,5 +41,21 @@ public class TbNewbeeMallIndexConfigServiceImpl extends ServiceImpl<TbNewbeeMall
             icgVO = BeanUtil.copyList(newBeeMallGoods, NewBeeMallIndexConfigGoodsVO.class);
         }
         return icgVO;
+    }
+
+    @Override
+    public PageResult getConfigsPage(PageQueryUtil pageUtil) {
+        List<TbNewbeeMallIndexConfig> indexConfigs = indexConfigMapper.findIndexConfigList(pageUtil);
+        int total = indexConfigMapper.getTotalIndexConfigs(pageUtil);
+        PageResult pageResult = new PageResult(indexConfigs, total, pageUtil.getLimit(), pageUtil.getPage());
+        return pageResult;
+    }
+
+    @Override
+    public boolean deleteIds(Integer[] ids) {
+        if(indexConfigMapper.deleteIds(ids) > 0){
+            return true;
+        }
+        return false;
     }
 }

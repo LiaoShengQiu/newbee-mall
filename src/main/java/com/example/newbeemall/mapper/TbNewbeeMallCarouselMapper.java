@@ -2,6 +2,7 @@ package com.example.newbeemall.mapper;
 
 import com.example.newbeemall.entity.TbNewbeeMallCarousel;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.example.newbeemall.utils.PageQueryUtil;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -18,4 +19,9 @@ public interface TbNewbeeMallCarouselMapper extends BaseMapper<TbNewbeeMallCarou
 
     List<TbNewbeeMallCarousel> CarouselNum(@Param("number") int number);
 
+    List<TbNewbeeMallCarousel> getCarouselPage(PageQueryUtil pageUtil);
+
+    int getCarouselCount();
+
+    int deleteIds(@Param("ids")Integer[] ids);
 }

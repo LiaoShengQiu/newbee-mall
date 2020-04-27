@@ -30,6 +30,22 @@
         limit #{number}
     </select>
 
+    <select id="getTotalIndexConfigs" resultType="int">
+        select COUNT(1)
+        from tb_newbee_mall_index_config
+        where config_type = #{configType} and is_deleted = 0 order by config_rank desc
+    </select>
 
+    <select id="findIndexConfigList" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/>
+        from tb_newbee_mall_index_config
+        where config_type = #{configType} and is_deleted = 0 order by config_rank desc
+        limit #{limit}
+    </select>
 
+    <update id="deleteIds">
+        update tb_newbee_mall_index_config set is_deleted=1 where config_id in
+        <foreach collection="ids"  item="id" open="(" separator=","  close=")">#{id}
+        </foreach>
+    </update>
 </mapper>
