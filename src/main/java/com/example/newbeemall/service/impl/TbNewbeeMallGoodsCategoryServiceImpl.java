@@ -1,5 +1,6 @@
 package com.example.newbeemall.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.example.newbeemall.entity.TbNewbeeMallGoodsCategory;
 import com.example.newbeemall.mapper.TbNewbeeMallGoodsCategoryMapper;
 import com.example.newbeemall.service.TbNewbeeMallGoodsCategoryService;
@@ -112,17 +113,8 @@ public class TbNewbeeMallGoodsCategoryServiceImpl extends ServiceImpl<TbNewbeeMa
         return null;
     }
 
-
-
-
-
-
-
-
-
-
     @Override
-    public List<TbNewbeeMallGoodsCategory> GoodsList(List<Long> parentIds, int categoryLevel) {
+    public List<TbNewbeeMallGoodsCategory> goodsList(List<Long> parentIds, int categoryLevel) {
         return goodsCategoryMapper.selectGoodsCategory(parentIds, categoryLevel, 0);//0代表查询所有
     }
 
@@ -131,26 +123,16 @@ public class TbNewbeeMallGoodsCategoryServiceImpl extends ServiceImpl<TbNewbeeMa
         return goodsCategoryMapper.findGoodsCategoryPage(map);
     }
 
-    ;
-
-
-    ;
-
-
 	@Override
 	public List<TbNewbeeMallGoodsCategory> findYiji() {
 		return goodsCategoryService.findYiji();
 	}
-
-
 
 	@Override
 	public List<TbNewbeeMallGoodsCategory> finderji(List<Long> ids) {
 		return goodsCategoryService.finderji(ids);
 	}
 
-
-	
 	@Override
 	public boolean save(Map<String,Object> map){
 	    return goodsCategoryMapper.add(map)==1;
@@ -163,7 +145,28 @@ public class TbNewbeeMallGoodsCategoryServiceImpl extends ServiceImpl<TbNewbeeMa
 	
 	@Override
 	public boolean delete(){
-		
 		return false;
 	};
+
+    @Override
+    public List<TbNewbeeMallGoodsCategory> getFirstLevelCate() {
+        QueryWrapper<TbNewbeeMallGoodsCategory> wrapper = new QueryWrapper<TbNewbeeMallGoodsCategory>();
+        wrapper.eq("category_level",1);
+        return goodsCategoryMapper.selectList(wrapper);
+    }
+
+    @Override
+    public List<TbNewbeeMallGoodsCategory> getlistForSelect(Integer id) {
+        QueryWrapper<TbNewbeeMallGoodsCategory> wrapper = new QueryWrapper<TbNewbeeMallGoodsCategory>();
+        wrapper.eq("parent_id",id);
+        return goodsCategoryMapper.selectList(wrapper);
+    }
+
+    @Override
+    public boolean isLevelTwo(int id) {
+        QueryWrapper<TbNewbeeMallGoodsCategory> wrapper = new QueryWrapper<TbNewbeeMallGoodsCategory>();
+        wrapper.eq("category_id",id);
+        wrapper.eq("category_level",1);
+        return goodsCategoryMapper.selectOne(wrapper) != null;
+    }
 }

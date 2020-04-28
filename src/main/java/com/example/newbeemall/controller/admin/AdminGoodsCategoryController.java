@@ -22,7 +22,7 @@ import java.util.Map;
 
 @Controller
 @RequestMapping("admin")
-public class TbNewbeeMallGoodsCategoryController {
+public class AdminGoodsCategoryController {
 
 
     @Resource

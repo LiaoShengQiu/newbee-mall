@@ -18,7 +18,7 @@ import java.util.Map;
 @Slf4j
 @Controller
 @RequestMapping("/admin")
-public class CarouselController {
+public class AdminCarouselController {
 
     @Resource
     private TbNewbeeMallCarouselService carouselService;

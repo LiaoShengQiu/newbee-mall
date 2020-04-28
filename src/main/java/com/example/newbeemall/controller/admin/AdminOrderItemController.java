@@ -24,7 +24,7 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping("/admin")
-public class TbNewbeeMallOrderItemController {
+public class AdminOrderItemController {
 
     @Resource
     private TbNewbeeMallOrderItemService tbNewbeeMallOrderItemService;

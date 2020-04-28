@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
-public class TbNewbeeMallUserController {
+public class UserController {
 
     @Resource
     private TbNewbeeMallUserService tbNewbeeMallUserService;

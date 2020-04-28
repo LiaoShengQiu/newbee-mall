@@ -27,7 +27,7 @@ import java.util.Map;
 @Controller
 @Slf4j
 @RequestMapping("/admin")
-public class GoodsConfigController {
+public class AdminGoodsConfigController {
 
     @Resource
     private TbNewbeeMallIndexConfigService indexConfigService;

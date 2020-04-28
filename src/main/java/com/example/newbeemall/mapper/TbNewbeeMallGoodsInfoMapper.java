@@ -5,6 +5,7 @@ import com.example.newbeemall.entity.TbNewbeeMallGoodsInfo;
 import com.example.newbeemall.utils.PageQueryUtil;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -22,5 +23,22 @@ public interface TbNewbeeMallGoodsInfoMapper extends BaseMapper<TbNewbeeMallGood
     //总记录
     @Select("SELECT count(1) FROM tb_newbee_mall_goods_info WHERE goods_id IN (10037,10038) limit #{start},#{end}")
     public int count(@Param("start") int start,@Param("end") int end);
+
+    @Update({"<script>update tb_newbee_mall_goods_info " +
+            "set goods_sell_status = 0 " +
+            "where goods_id in " +
+            "<foreach collection ='ids' item ='id' separator=',' open='(' close=')'  > " +
+            " #{id} " +
+            "</foreach></script>"})
+    public void upGoods(@Param("ids") Integer[] ids);
+
+
+    @Update({"<script>update tb_newbee_mall_goods_info " +
+            "set goods_sell_status = 1 " +
+            "where goods_id in " +
+            "<foreach collection ='ids' item ='id' separator=',' open='(' close=')'  > " +
+            " #{id} " +
+            "</foreach></script>"})
+    public void downGoods(@Param("ids") Integer[] ids);
 
 }

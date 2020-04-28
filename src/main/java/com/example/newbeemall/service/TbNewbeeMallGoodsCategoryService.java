@@ -26,7 +26,7 @@ public interface TbNewbeeMallGoodsCategoryService extends IService<TbNewbeeMallG
     /**
      * 根据parentId和level获取分类列表
      */
-    List<TbNewbeeMallGoodsCategory> GoodsList(List<Long> parentIds, int categoryLevel);
+    List<TbNewbeeMallGoodsCategory> goodsList(List<Long> parentIds, int categoryLevel);
 
     List<TbNewbeeMallGoodsCategory> findGoodsCategory(Map<String,Object> map);
 	
@@ -39,4 +39,10 @@ public interface TbNewbeeMallGoodsCategoryService extends IService<TbNewbeeMallG
 	List<TbNewbeeMallGoodsCategory> findYiji();
 
 	List<TbNewbeeMallGoodsCategory> finderji(List<Long> ids);
+
+    List<TbNewbeeMallGoodsCategory> getFirstLevelCate();
+
+    List<TbNewbeeMallGoodsCategory> getlistForSelect(Integer id);
+
+    public boolean isLevelTwo(int id);
 }
