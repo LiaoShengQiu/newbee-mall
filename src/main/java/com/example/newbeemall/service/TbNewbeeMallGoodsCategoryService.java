@@ -42,7 +42,9 @@ public interface TbNewbeeMallGoodsCategoryService extends IService<TbNewbeeMallG
 
     List<TbNewbeeMallGoodsCategory> getFirstLevelCate();
 
-    List<TbNewbeeMallGoodsCategory> getlistForSelect(Integer id);
+    List<TbNewbeeMallGoodsCategory> getlistForSelect(Long id);
 
-    public boolean isLevelTwo(int id);
+    public boolean isLevelTwo(Long id);
+
+    Long findParentId(Long categoryId);
 }

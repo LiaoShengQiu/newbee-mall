@@ -5,12 +5,10 @@ import com.example.newbeemall.entity.TbNewbeeMallGoodsCategory;
 import com.example.newbeemall.entity.TbNewbeeMallGoodsInfo;
 import com.example.newbeemall.service.TbNewbeeMallGoodsCategoryService;
 import com.example.newbeemall.service.TbNewbeeMallGoodsInfoService;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import com.example.newbeemall.utils.ResultUtil;
+import org.springframework.web.bind.annotation.*;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -45,15 +43,24 @@ public class AdminGoodsInfoController {
         return "admin/newbee_mall_goods.html";
     }
 
-/*    @RequestMapping("/goods/edit")
-    public String toGoodsEdit(){
+    @RequestMapping("/goods/edit")
+    public String toGoodsEdit(HttpServletRequest request){
+        //商品分类-一级分类
+        List<TbNewbeeMallGoodsCategory> firstLevelCate = goodsCategoryService.getFirstLevelCate();
+        //第一个一级分类下面的二级分类
+        List<TbNewbeeMallGoodsCategory> secondLevelCategories = goodsCategoryService.getlistForSelect(firstLevelCate.get(0).getCategoryId());
+        //第一个二级分类下的三级分类
+        List<TbNewbeeMallGoodsCategory> thirdLevelCategories = goodsCategoryService.getlistForSelect(secondLevelCategories.get(0).getCategoryId());
+        request.setAttribute("firstLevelCategories",firstLevelCate);
+        request.setAttribute("secondLevelCategories",secondLevelCategories);
+        request.setAttribute("thirdLevelCategories",thirdLevelCategories);
         return "admin/newbee_mall_goods_edit";
-    }*/
+    }
 
+    //异步返回所有商品数据-分页查询
     @RequestMapping("/goods/list")
     @ResponseBody
     public Object goodsList(@RequestParam Map<String,Object> map, HttpSession session){
-        System.out.println("进入list++++++++++++++++++++++++++++++++++++++++++++++++++++");
         Integer page = Integer.parseInt(map.get("page").toString());
         Integer limit = Integer.parseInt(map.get("limit").toString());
 
@@ -68,19 +75,36 @@ public class AdminGoodsInfoController {
 //                goodsInfoService.getList(page,limit);
         return data;
     }
-
-    @RequestMapping("/goods/edit")
-    public String goodsEdit(HttpServletRequest request){
-        List<TbNewbeeMallGoodsCategory> firstLevelCategories = new ArrayList();
-        firstLevelCategories = goodsCategoryService.getFirstLevelCate();
-        request.setAttribute("firstLevelCategories",firstLevelCategories);
-        System.out.println(firstLevelCategories.toString());
+    //修改商品-查询商品信息到页面
+    @RequestMapping("/goods/edit/{goodsId}")
+    public String goodsEdit(@PathVariable("goodsId")Integer goodsId,HttpServletRequest request){
+        //商品分类-一级分类
+        List<TbNewbeeMallGoodsCategory> firstLevelCate = goodsCategoryService.getFirstLevelCate();
+        //要修改的商品
+        TbNewbeeMallGoodsInfo info = goodsInfoService.getById(goodsId);
+        //所属2级分类
+        Long three = info.getGoodsCategoryId();
+        //所属2级分类
+        Long two = goodsCategoryService.findParentId(three);
+        //所属1级分类
+        Long one = goodsCategoryService.findParentId(two);
+        //查询所属一级分类下的二级分类
+        List<TbNewbeeMallGoodsCategory> secondLevelCategories = goodsCategoryService.getlistForSelect(one);
+        //查询所属二级分类下的三级分类
+        List<TbNewbeeMallGoodsCategory> thirdLevelCategories = goodsCategoryService.getlistForSelect(two);
+        request.setAttribute("firstLevelCategoryId",one);
+        request.setAttribute("secondLevelCategoryId",two);
+        request.setAttribute("thirdLevelCategoryId",three);
+        request.setAttribute("firstLevelCategories",firstLevelCate);
+        request.setAttribute("secondLevelCategories",secondLevelCategories);
+        request.setAttribute("thirdLevelCategories",thirdLevelCategories);
+        request.setAttribute("goods",info);
         return "admin/newbee_mall_goods_edit.html";
     }
 
     @RequestMapping("/categories/listForSelect")
     @ResponseBody
-    public Object listForSelect(@RequestParam("categoryId") Integer id, HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public Object listForSelect(@RequestParam("categoryId") Long id, HttpServletRequest request, HttpServletResponse response) throws IOException {
         List<TbNewbeeMallGoodsCategory> list = new ArrayList<TbNewbeeMallGoodsCategory>();
         list = goodsCategoryService.getlistForSelect(id);
         System.out.println(list.toString());
@@ -129,24 +153,18 @@ public class AdminGoodsInfoController {
         return map;
     }
 
+    @RequestMapping("goods/update")
+    @ResponseBody
+    public Object update(@RequestParam TbNewbeeMallGoodsInfo entity){
+        boolean save = goodsInfoService.updateById(entity);
+        return new ResultUtil(save,save?"修改成功":"修改失败");
+    }
     @RequestMapping("goods/save")
     @ResponseBody
-    public Object save(HttpServletRequest request, HttpServletResponse response
+    public Object save(@RequestParam TbNewbeeMallGoodsInfo entity
     ) throws IOException {
-        System.out.println("进入保存");
-        Map<String, String[]> params = new HashMap<String, String[]>();
-        params = (Map<String, String[]>) request.getParameterMap();
-        System.out.println(request.getParameter("goodsName"));
-
-
-        String path="C:\\Users\\25600\\Desktop\\结业项目\\newbee-mall\\src\\main\\resources\\static\\goods-img";
-
-        //创建文件
-        File dir=new File(path);
-        if(!dir.exists()){
-            dir.mkdirs();
-        }
-
+        boolean save = goodsInfoService.save(entity);
+        return new ResultUtil(save,save?"保存成功":"保存失败");
 //        String id = SysUtil.getUUID();
 
 
@@ -251,7 +269,6 @@ public class AdminGoodsInfoController {
          }
          -------------------------------------------------------------------------------------
          **/
-        return null;
     }
 }
 

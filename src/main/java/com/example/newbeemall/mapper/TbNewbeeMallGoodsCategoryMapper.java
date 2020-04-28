@@ -24,5 +24,7 @@ public interface TbNewbeeMallGoodsCategoryMapper extends BaseMapper<TbNewbeeMall
     List<TbNewbeeMallGoodsCategory> findersanji(List<Long> ids);
 
     List<TbNewbeeMallGoodsCategory> findYiji();
+    //根据分类id查询上级分类
+    Long findParentId(@Param("categoryId")Long categoryId);
 
 }

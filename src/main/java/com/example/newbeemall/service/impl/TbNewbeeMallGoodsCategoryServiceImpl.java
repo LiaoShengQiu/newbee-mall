@@ -156,17 +156,22 @@ public class TbNewbeeMallGoodsCategoryServiceImpl extends ServiceImpl<TbNewbeeMa
     }
 
     @Override
-    public List<TbNewbeeMallGoodsCategory> getlistForSelect(Integer id) {
+    public List<TbNewbeeMallGoodsCategory> getlistForSelect(Long id) {
         QueryWrapper<TbNewbeeMallGoodsCategory> wrapper = new QueryWrapper<TbNewbeeMallGoodsCategory>();
         wrapper.eq("parent_id",id);
         return goodsCategoryMapper.selectList(wrapper);
     }
 
     @Override
-    public boolean isLevelTwo(int id) {
+    public boolean isLevelTwo(Long id) {
         QueryWrapper<TbNewbeeMallGoodsCategory> wrapper = new QueryWrapper<TbNewbeeMallGoodsCategory>();
         wrapper.eq("category_id",id);
         wrapper.eq("category_level",1);
         return goodsCategoryMapper.selectOne(wrapper) != null;
+    }
+
+    @Override
+    public Long findParentId(Long categoryId) {
+        return goodsCategoryMapper.findParentId(categoryId);
     }
 }

@@ -50,7 +50,7 @@ public class AdminUserController {
             return "admin/index";
         } else{
             session.setAttribute("errorMsg","验证码错误");
-            return "admin/index";
+            return "admin/login";
         }
 
     }
