@@ -37,17 +37,23 @@ public class ShopCatController {
         int priceTotal = 0;
         for (TbNewbeeMallOrderItem item:cartByUserId) {
             itemsTotal+=item.getGoodsCount();
-            priceTotal+=item.getGoodsCount()*item.getSellingPrice();
+            if(item.getIsDeleted() == 0){
+                priceTotal+=item.getGoodsCount()*item.getSellingPrice();
+            }
+
             if (item.getIsMiaos() == 1){
                 Date createTime = item.getCreateTime();
                 Date updateTime = item.getUpdateTime(); //过期时间
-                System.out.println("过期时间和创建时间"+updateTime+"====================="+createTime);
+                Date date = new Date();  //当前时间
+                //8个小时的时间差
+                long shicha = 8*60*60*1000;  //8个小时的时差
+                System.out.println("过期时间和创建时间"+updateTime+"====================="+createTime+"当前时间" +date);
                 long time = updateTime.getTime() - createTime.getTime();
                 System.out.println("========"+time);
                 if (item.getIsMiaos() == 1){
                     item.setMsg("限时秒杀");
                 }
-                if(time < 0){
+                if(updateTime.getTime() < new Date().getTime()+shicha){
                     TbNewbeeMallShoppingCartItem tbNewbeeMallShoppingCartItem =new TbNewbeeMallShoppingCartItem();
                     tbNewbeeMallShoppingCartItem.setCartItemId(item.getCartItemId());
                     tbNewbeeMallShoppingCartItem.setIsDeleted(-1); //-1为过期

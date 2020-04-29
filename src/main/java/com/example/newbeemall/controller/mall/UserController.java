@@ -3,18 +3,12 @@ package com.example.newbeemall.controller.mall;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.example.newbeemall.entity.TbNewbeeMallUser;
 import com.example.newbeemall.service.*;
-import com.example.newbeemall.utils.PhoneCode;
-import com.example.newbeemall.vo.NewBeeMallIndexCarouselVO;
-import com.example.newbeemall.vo.NewBeeMallIndexCategoryVO;
-import com.example.newbeemall.vo.NewBeeMallIndexConfigGoodsVO;
-import com.example.newbeemall.service.TbNewbeeMallOrderService;
-import com.example.newbeemall.service.TbNewbeeMallShoppingCartItemService;
-import com.example.newbeemall.service.TbNewbeeMallUserService;
 import com.example.newbeemall.utils.PageQueryUtil;
 import com.example.newbeemall.utils.PageResult;
 import com.example.newbeemall.utils.PhoneCode;
 import com.example.newbeemall.utils.ResultUtil;
-import org.apache.commons.codec.digest.DigestUtils;
+import com.example.newbeemall.vo.NewBeeMallIndexCategoryVO;
+import com.example.newbeemall.vo.NewBeeMallIndexConfigGoodsVO;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -41,11 +35,14 @@ public class UserController {
 
     @Resource
     private TbNewbeeMallOrderService tbNewbeeMallOrderService;
-
+    @GetMapping("/meiqia")
+    @ResponseBody
+    public String meiqia(){
+        return "meiqia";
+    }
     @GetMapping({"/login", "login.html"})
     public String login(){
         System.out.println("/templates/mall/login");
-
         return "/mall/login";
     }
 

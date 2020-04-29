@@ -88,5 +88,11 @@
     </select>
 
 
-
+   <select id="selectByMap2" resultMap="BaseResultMap" parameterType="map">
+       select
+        <include refid="Base_Column_List"/>
+       from tb_newbee_mall_goods_info
+       <if test="sidx != null and sidx != ''"> ORDER BY ${sidx} ${order}</if>
+       <if test="start != null and limit != null"> limit ${start},${limit}</if>
+   </select>
 </mapper>

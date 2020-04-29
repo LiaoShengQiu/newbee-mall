@@ -317,7 +317,7 @@ public class miaoshaController {
         long guoqi = 2*60*60*1000;    //两个小时自动过期
         long shicha = 8*60*60*1000;  //8个小时的时差
         long endTime = tbSeckillGoods.getEndTime().getTime();  //获取时间戳
-        System.out.println(tbSeckillGoods.getEndTime()+"活动结束时间"+endTime);
+        System.out.println(tbSeckillGoods.getEndTime()+"活动结束时间"+endTime+"\taaaa"+tbSeckillGoods.getEndTime());
         Date now = new Date();
         System.out.println(now.getTime()+"当前时间"+now);
  //       Long timestamp = LocalDateTime.now().toInstant(ZoneOffset.of("+8")).toEpochMilli();

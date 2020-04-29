@@ -3,18 +3,20 @@ package com.example.newbeemall.controller.admin;
 
 import com.example.newbeemall.entity.TbNewbeeMallGoodsCategory;
 import com.example.newbeemall.entity.TbNewbeeMallGoodsInfo;
+import com.example.newbeemall.mapper.TbNewbeeMallGoodsInfoMapper;
 import com.example.newbeemall.service.TbNewbeeMallGoodsCategoryService;
 import com.example.newbeemall.service.TbNewbeeMallGoodsInfoService;
+import com.example.newbeemall.utils.PageQueryUtil;
+import com.example.newbeemall.utils.PageResult;
+import com.example.newbeemall.utils.ResultGenerator;
 import com.example.newbeemall.utils.ResultUtil;
-import org.springframework.web.bind.annotation.*;
-
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,6 +39,8 @@ public class AdminGoodsInfoController {
     private TbNewbeeMallGoodsInfoService goodsInfoService;
     @Resource
     private TbNewbeeMallGoodsCategoryService goodsCategoryService;
+    @Resource
+    private TbNewbeeMallGoodsInfoMapper tbNewbeeMallGoodsInfoMapper;
 
     @RequestMapping("/goods")
     public String goodsInfo(){
@@ -61,19 +65,28 @@ public class AdminGoodsInfoController {
     @RequestMapping("/goods/list")
     @ResponseBody
     public Object goodsList(@RequestParam Map<String,Object> map, HttpSession session){
+        System.out.println(map.toString()+"===========");
         Integer page = Integer.parseInt(map.get("page").toString());
         Integer limit = Integer.parseInt(map.get("limit").toString());
 
+       /* System.out.println(page+"\t aaa"+limit);
         Map mp = new HashMap();
         mp = goodsInfoService.getList(page,limit);
-
+        System.out.println("============="+mp.size());
         List<TbNewbeeMallGoodsInfo> data = new ArrayList<TbNewbeeMallGoodsInfo>();
         data = (List<TbNewbeeMallGoodsInfo>) mp.get("list");
         map.put("totalPage",mp.get("totalPage"));
         map.put("currPage",mp.get("currPage"));
         map.put("totalCount",mp.get("totalCount"));
 //                goodsInfoService.getList(page,limit);
-        return data;
+        return data;*/
+
+        map.put("start",(page-1)*limit);
+        PageQueryUtil pageUtil = new PageQueryUtil(map);
+        //查询条件page=页数，limit=每页记录数，sidx=按什么排序，order=降序还是升序
+        PageResult data = goodsInfoService.searchsp(pageUtil);
+        System.out.println("=="+data.getTotalCount()+"总记录=======");
+        return ResultGenerator.genSuccessResult(data);
     }
     //修改商品-查询商品信息到页面
     @RequestMapping("/goods/edit/{goodsId}")

@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
+import java.util.Map;
 
 public interface TbNewbeeMallGoodsInfoMapper extends BaseMapper<TbNewbeeMallGoodsInfo> {
 
@@ -41,4 +42,10 @@ public interface TbNewbeeMallGoodsInfoMapper extends BaseMapper<TbNewbeeMallGood
             "</foreach></script>"})
     public void downGoods(@Param("ids") Integer[] ids);
 
+    /**
+     * 后面修改田荣的
+     * @param map
+     * @return
+     */
+    public List<TbNewbeeMallGoodsInfo> selectByMap2(Map<String,Object> map);
 }
