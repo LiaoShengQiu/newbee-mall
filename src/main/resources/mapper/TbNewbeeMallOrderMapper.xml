@@ -169,6 +169,12 @@
         <if test="start != null and limit != null"> limit ${start},${limit}</if>
     </select>
 
+    <select id="order_count" resultType="int">
+        SELECT count(1)
+        FROM tb_newbee_mall_order
+    </select>
+
+
     <select id="findNewBeeMallOrderList" parameterType="Map" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
@@ -201,6 +207,7 @@
             limit #{start},#{limit}
         </if>
     </select>
+
     <select id="count" parameterType="Map" resultType="int">
         select count(*) from tb_newbee_mall_order
         <where>

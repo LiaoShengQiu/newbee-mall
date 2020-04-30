@@ -1,7 +1,9 @@
 package com.example.newbeemall.controller.admin;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.example.newbeemall.entity.TbNewbeeMallOrderItem;
 import com.example.newbeemall.service.TbNewbeeMallOrderItemService;
+import com.example.newbeemall.utils.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,10 +35,20 @@ public class AdminOrderItemController {
     /**
      * 查看订单
      */
-    @GetMapping("/orderitems/{orderId}")
+    @GetMapping("/order-items/{orderId}")
     @ResponseBody
-    public Object items(@PathVariable("orderId")Integer orderId){
+    public Object order_items(@PathVariable("orderId")Long orderId){
         System.out.println("idd========"+orderId);
+        QueryWrapper<TbNewbeeMallOrderItem> wrapper = new QueryWrapper<TbNewbeeMallOrderItem>();
+        wrapper.eq("order_id",orderId);
+        List<TbNewbeeMallOrderItem> byId = tbNewbeeMallOrderItemService.list(wrapper);
+        ResultUtil resultUtil = new ResultUtil(byId);
+        return  resultUtil;
+    }
+
+    @RequestMapping("/orderitems/{orderId}")
+    @ResponseBody
+    public Object items(@PathVariable("orderId") Integer orderId){
         Map<String, Object> map = new HashMap<String, Object>();
         ArrayList<TbNewbeeMallOrderItem> tbNewbeeMallOrderItems = new ArrayList<>();
         List<TbNewbeeMallOrderItem> orderIdss = tbNewbeeMallOrderItemService.tbListItems(orderId);

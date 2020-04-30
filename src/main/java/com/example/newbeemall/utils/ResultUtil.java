@@ -21,7 +21,13 @@ public class ResultUtil {
 	}
 	
 	public ResultUtil(Object data){
-	    this.data=data;
+		if(data==null) {
+			this.resultCode=500;
+		}else{
+			this.resultCode = 200;
+			this.data=data;
+		}
+
 	}
 	
 	public ResultUtil(Object data,boolean bool){
@@ -36,6 +42,5 @@ public class ResultUtil {
 
 	public ResultUtil(boolean bool,Object data){
 		this(bool);
-		this.data=data;
 	}
 }

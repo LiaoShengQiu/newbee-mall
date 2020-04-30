@@ -9,6 +9,12 @@ import java.net.URI;
  */
 public class NewBeeMallUtils {
 
+    public static String zh(String str){
+        str=str.replaceAll("(.)([A-Z])", "$1_$2").toLowerCase();
+
+        return str;
+    }
+
     public static URI getHost(URI uri) {
         URI effectiveURI = null;
         try {

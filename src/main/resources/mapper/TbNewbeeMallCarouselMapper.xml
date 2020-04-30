@@ -41,7 +41,7 @@
     </select>
 
     <update id="deleteIds">
-        update tb_newbee_mall_carousel set is_deleted=1 where carousel in
+        update tb_newbee_mall_carousel set is_deleted=1 where carousel_id in
         <foreach collection="ids" item="id" open="(" separator="," close=")">#{id}</foreach>
     </update>
 

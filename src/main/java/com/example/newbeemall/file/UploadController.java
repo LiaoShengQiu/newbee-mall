@@ -4,6 +4,7 @@ import com.example.newbeemall.common.Constants;
 import com.example.newbeemall.utils.NewBeeMallUtils;
 import com.example.newbeemall.utils.Result;
 import com.example.newbeemall.utils.ResultGenerator;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,6 +28,7 @@ import java.util.Random;
  * @link https://github.com/newbee-ltd
  */
 @Controller
+@Slf4j
 @RequestMapping("/admin")
 public class UploadController {
 
@@ -43,16 +45,15 @@ public class UploadController {
         String newFileName = tempName.toString();
         File fileDirectory = new File(Constants.FILE_UPLOAD_DIC);
         //创建文件
-        File destFile = new File(Constants.FILE_UPLOAD_DIC + newFileName);
+        File destFile = new File(Constants.FILE_UPLOAD_DIC +newFileName);
         try {
-            if (!fileDirectory.exists()) {
-                if (!fileDirectory.mkdir()) {
-                    throw new IOException("文件夹创建失败,路径为：" + fileDirectory);
-                }
+            if(!fileDirectory.exists()){
+                fileDirectory.mkdirs();
             }
             file.transferTo(destFile);
             Result resultSuccess = ResultGenerator.genSuccessResult();
-            resultSuccess.setData(NewBeeMallUtils.getHost(new URI(httpServletRequest.getRequestURL() + "")) + "/static/goods-img/" + newFileName);
+            resultSuccess.setData(Constants.FILE_UPLOAD_DIC.substring(2)+ newFileName);
+            //.setData(Constants.FILE_UPLOAD_DIC+ newFileName);
             return resultSuccess;
         } catch (IOException e) {
             e.printStackTrace();

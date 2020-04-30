@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * 后台系统身份验证拦截器
  */
-
 public class AdminLoginInterceptor implements HandlerInterceptor {
 
     @Override

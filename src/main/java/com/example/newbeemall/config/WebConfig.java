@@ -25,6 +25,11 @@ public class WebConfig implements WebMvcConfigurer {
         registration.addPathPatterns("/admin/**");
     }
 
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/static/goods-img2/**").addResourceLocations("file:///D:/static/goods-img2/");
+    }
+
     @Bean
     public HandlerInterceptor getInterceptor(){
         return new AdminLoginInterceptor();

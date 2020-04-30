@@ -28,7 +28,7 @@ public interface TbNewbeeMallOrderService extends IService<TbNewbeeMallOrder> {
 
     boolean updatePayType(TbNewbeeMallOrder order);
 
-    public List<TbNewbeeMallOrder> order_list(Map<String,Object> map);
+    public PageResult order_list(PageQueryUtil map);
 
     public PageResult myordersItems_list(Long userId, PageQueryUtil pageQueryUtil);
     public List<TbNewbeeMallOrder> findNewBeeMallOrderList(PageQueryUtil pageQueryUtil);

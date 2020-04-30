@@ -103,8 +103,11 @@ public class TbNewbeeMallOrderServiceImpl extends ServiceImpl<TbNewbeeMallOrderM
     }
 
     @Override
-    public List<TbNewbeeMallOrder> order_list(Map<String,Object> map) {
-        return orderMapper.order_list(map);
+    public PageResult order_list(PageQueryUtil pageQueryUtil) {
+        List<TbNewbeeMallOrder> tbNewbeeMallOrders = orderMapper.order_list(pageQueryUtil);
+        int count = orderMapper.order_count();
+        PageResult result = new PageResult(tbNewbeeMallOrders,count,pageQueryUtil.getLimit(),pageQueryUtil.getPage());
+        return result;
     }
 
     @Override

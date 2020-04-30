@@ -42,6 +42,7 @@ public interface TbNewbeeMallOrderMapper extends BaseMapper<TbNewbeeMallOrder> {
     public List<Long> findbyUid_order_ids(@Param("userId") Long userId);
     //修改
     public int updataOrder(@Param("map") Map<String,Object> map);
+    int order_count();
 
     //2 配货 、 3出库
     public int updateStatus(List<Integer> list,@Param("status") Integer status);

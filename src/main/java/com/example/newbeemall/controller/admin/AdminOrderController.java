@@ -1,14 +1,17 @@
 package com.example.newbeemall.controller.admin;
 
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.newbeemall.entity.TbNewbeeMallOrder;
 import com.example.newbeemall.mapper.TbNewbeeMallOrderMapper;
 import com.example.newbeemall.service.TbNewbeeMallOrderService;
+import com.example.newbeemall.utils.NewBeeMallUtils;
+import com.example.newbeemall.utils.PageQueryUtil;
+import com.example.newbeemall.utils.PageResult;
+import com.example.newbeemall.utils.ResultGenerator;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -27,8 +30,7 @@ import java.util.Map;
 @Controller
 @RequestMapping("/admin")
 public class AdminOrderController {
-    @Resource
-    private TbNewbeeMallOrderMapper tbNewbeeMallOrderMapper;
+
     @Resource
     private TbNewbeeMallOrderService tbNewbeeMallOrderService;
     @RequestMapping("/orders")
@@ -39,12 +41,13 @@ public class AdminOrderController {
     @RequestMapping("/orders/list")
     @ResponseBody
     public Object orderList(@RequestParam Map<String,Object> map){
-        int page = Integer.parseInt(map.get("page").toString());
-        int limit = Integer.parseInt(map.get("limit").toString());
-        map.put("start",(page-1)*limit);
+        if(map.get("sidx")!=null){
+            map.put("sidx", NewBeeMallUtils.zh(map.get("sidx").toString()));
+        }
         //查询条件page=页数，limit=每页记录数，sidx=按什么排序，order=降序还是升序
-        List<TbNewbeeMallOrder> tbNewbeeMallOrders = tbNewbeeMallOrderMapper.order_list(map);
-        return tbNewbeeMallOrders;
+        PageQueryUtil pageQueryUtil = new PageQueryUtil(map);
+        PageResult pageResult = tbNewbeeMallOrderService.order_list(pageQueryUtil);
+        return ResultGenerator.genSuccessResult(pageResult);
     }
 
       /**
