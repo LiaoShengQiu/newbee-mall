@@ -1,6 +1,7 @@
 package com.example.newbeemall.controller.mall;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.example.newbeemall.entity.TbNewbeeMallCarousel;
 import com.example.newbeemall.entity.TbNewbeeMallUser;
 import com.example.newbeemall.service.*;
 import com.example.newbeemall.utils.PageQueryUtil;
@@ -32,6 +33,8 @@ public class UserController {
     private TbNewbeeMallIndexConfigService newbeeMallIndexConfigService;
     @Resource
     private TbNewbeeMallShoppingCartItemService cartItemService;
+    @Resource
+    private TbNewbeeMallCarouselService carouselService;
 
     @Resource
     private TbNewbeeMallOrderService tbNewbeeMallOrderService;
@@ -42,7 +45,6 @@ public class UserController {
     }
     @GetMapping({"/login", "login.html"})
     public String login(){
-        System.out.println("/templates/mall/login");
         return "/mall/login";
     }
 
@@ -56,7 +58,9 @@ public class UserController {
         List<NewBeeMallIndexConfigGoodsVO> hotVO = newbeeMallIndexConfigService.getIndex(3, 4);//3热销商品 4数量
         List<NewBeeMallIndexConfigGoodsVO> newVO = newbeeMallIndexConfigService.getIndex(4, 5);//4新品上线 5数量
         List<NewBeeMallIndexConfigGoodsVO> reVO = newbeeMallIndexConfigService.getIndex(5, 10);//5为你推荐 10数量
+        List<TbNewbeeMallCarousel> carousels = carouselService.indexList();
         request.setAttribute("categories", cVO);
+        request.setAttribute("carousels",carousels);
         request.setAttribute("hotGoodses", hotVO);
         request.setAttribute("newGoodses", newVO);
         request.setAttribute("recommendGoodses", reVO);

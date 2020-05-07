@@ -27,4 +27,6 @@ public interface TbNewbeeMallCarouselService extends IService<TbNewbeeMallCarous
     PageResult getCarouselPage(PageQueryUtil pageUtil);
 
     boolean deleteIds(Integer[] ids);
+
+    List<TbNewbeeMallCarousel> indexList();
 }

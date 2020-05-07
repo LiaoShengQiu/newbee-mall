@@ -27,4 +27,6 @@ public interface TbNewbeeMallGoodsCategoryMapper extends BaseMapper<TbNewbeeMall
     //根据分类id查询上级分类
     Long findParentId(@Param("categoryId")Long categoryId);
 
+    int nodeCount(Map<String,Object> map);
+
 }

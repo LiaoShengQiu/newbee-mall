@@ -2,6 +2,8 @@ package com.example.newbeemall.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.newbeemall.entity.TbNewbeeMallGoodsCategory;
+import com.example.newbeemall.utils.PageQueryUtil;
+import com.example.newbeemall.utils.PageResult;
 import com.example.newbeemall.vo.NewBeeMallIndexCategoryVO;
 import com.example.newbeemall.vo.SearchPageCategoryVO;
 
@@ -28,7 +30,7 @@ public interface TbNewbeeMallGoodsCategoryService extends IService<TbNewbeeMallG
      */
     List<TbNewbeeMallGoodsCategory> goodsList(List<Long> parentIds, int categoryLevel);
 
-    List<TbNewbeeMallGoodsCategory> findGoodsCategory(Map<String,Object> map);
+    PageResult findGoodsCategory(PageQueryUtil map);
 	
 	boolean save(Map<String,Object> map);
 	
@@ -47,4 +49,6 @@ public interface TbNewbeeMallGoodsCategoryService extends IService<TbNewbeeMallG
     public boolean isLevelTwo(Long id);
 
     Long findParentId(Long categoryId);
+
+    int nodeCount(Map<String,Object> map);
 }

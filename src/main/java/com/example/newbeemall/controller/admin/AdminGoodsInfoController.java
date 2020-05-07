@@ -140,7 +140,7 @@ public class AdminGoodsInfoController {
 
     @RequestMapping("goods/status/0")
     @ResponseBody
-    public Object upGoods(@RequestParam Integer[] ids, HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public Object upGoods(@RequestBody Integer[] ids, HttpServletRequest request, HttpServletResponse response) throws IOException {
         Map map = new HashMap();
         try{
             goodsInfoService.upGoods(ids);

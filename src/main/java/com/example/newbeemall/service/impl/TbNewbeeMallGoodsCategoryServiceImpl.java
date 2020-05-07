@@ -5,6 +5,9 @@ import com.example.newbeemall.entity.TbNewbeeMallGoodsCategory;
 import com.example.newbeemall.mapper.TbNewbeeMallGoodsCategoryMapper;
 import com.example.newbeemall.service.TbNewbeeMallGoodsCategoryService;
 import com.example.newbeemall.utils.BeanUtil;
+import com.example.newbeemall.utils.PageQueryUtil;
+import com.example.newbeemall.utils.PageResult;
+import com.example.newbeemall.utils.ResultUtil;
 import com.example.newbeemall.vo.NewBeeMallIndexCategoryVO;
 import com.example.newbeemall.vo.SearchPageCategoryVO;
 import com.example.newbeemall.vo.SecondLevelCategoryVO;
@@ -119,8 +122,10 @@ public class TbNewbeeMallGoodsCategoryServiceImpl extends ServiceImpl<TbNewbeeMa
     }
 
     @Override
-    public List<TbNewbeeMallGoodsCategory> findGoodsCategory(Map<String, Object> map) {
-        return goodsCategoryMapper.findGoodsCategoryPage(map);
+    public PageResult findGoodsCategory(PageQueryUtil map) {
+        int count = goodsCategoryMapper.nodeCount(map);
+        PageResult result = new PageResult(goodsCategoryMapper.findGoodsCategoryPage(map),map.getLimit(),count,map.getPage());
+        return result;
     }
 
 	@Override
@@ -173,5 +178,10 @@ public class TbNewbeeMallGoodsCategoryServiceImpl extends ServiceImpl<TbNewbeeMa
     @Override
     public Long findParentId(Long categoryId) {
         return goodsCategoryMapper.findParentId(categoryId);
+    }
+
+    @Override
+    public int nodeCount(Map<String, Object> map) {
+        return goodsCategoryMapper.nodeCount(map);
     }
 }

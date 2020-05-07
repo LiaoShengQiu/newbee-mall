@@ -55,4 +55,9 @@ public class TbNewbeeMallCarouselServiceImpl extends ServiceImpl<TbNewbeeMallCar
     public boolean deleteIds(Integer[] ids) {
         return carouselMapper.deleteIds(ids) > 0?true:false;
     }
+
+    @Override
+    public List<TbNewbeeMallCarousel> indexList() {
+        return carouselMapper.indexList();
+    }
 }

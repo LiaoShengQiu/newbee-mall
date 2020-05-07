@@ -5,6 +5,8 @@ import com.example.newbeemall.entity.TbNewbeeMallGoodsCategory;
 import com.example.newbeemall.service.TbNewbeeMallGoodsCategoryService;
 import com.example.newbeemall.service.TbNewbeeMallGoodsInfoService;
 import com.example.newbeemall.utils.PageQueryUtil;
+import com.example.newbeemall.utils.PageResult;
+import com.example.newbeemall.utils.ResultGenerator;
 import com.example.newbeemall.utils.ResultUtil;
 import com.example.newbeemall.vo.SearchPageCategoryVO;
 import org.springframework.stereotype.Controller;
@@ -91,13 +93,10 @@ public class AdminGoodsCategoryController {
     @RequestMapping("/categories/list")
     @ResponseBody
     public Object list(@RequestParam Map<String,Object> map){
-        int page = Integer.parseInt(map.get("page").toString());
-        int limit = Integer.parseInt(map.get("limit").toString());
-        map.put("start",(page-1)*limit);
-        System.out.println("map+++++++++============"+map.toString());
+        PageQueryUtil queryUtil = new PageQueryUtil(map);
         //查询条件parentId=父级，categoryLevel=分类等级, page=页数，limit=每页记录数，sidx=按什么排序，order=降序还是升序
-        List<TbNewbeeMallGoodsCategory> goodsCategorys = goodsCategoryService.findGoodsCategory(map);
-        return goodsCategorys;
+        PageResult goodsCategory = goodsCategoryService.findGoodsCategory(queryUtil);
+        return ResultGenerator.genSuccessResult(goodsCategory);
     }
 
     @RequestMapping("/categories")

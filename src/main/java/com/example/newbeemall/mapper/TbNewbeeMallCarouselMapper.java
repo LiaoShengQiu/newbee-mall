@@ -24,4 +24,6 @@ public interface TbNewbeeMallCarouselMapper extends BaseMapper<TbNewbeeMallCarou
     int getCarouselCount();
 
     int deleteIds(@Param("ids")Integer[] ids);
+
+    List<TbNewbeeMallCarousel> indexList();
 }
