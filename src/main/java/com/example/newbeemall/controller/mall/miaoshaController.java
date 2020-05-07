@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -126,6 +127,7 @@ public class miaoshaController {
      */
     @RequestMapping("/sec")
     @ResponseBody
+    @Transactional
    // public Object sec(@RequestParam(value = "username") String username, @RequestParam(value = "stockName") String stockName, HttpServletRequest request,@RequestParam("goodsId")Integer goodsId,@RequestParam(value = "sgId")Integer sgId,@RequestParam(value = "orderId") Long orderId,HttpSession session) {
         public Object seccc(String username, String stockName,@RequestBody TbNewbeeMallShoppingCartItem cartItem,HttpServletRequest request,Long goodsId,Long orderId){
  //       redisService.put("username", 7999,20);
@@ -214,7 +216,6 @@ public class miaoshaController {
                 tb_seckill_order.setReceiverAdd(tbNewbeeMallOrder.getUserAddress());  //收获人地址
                 tb_seckill_order.setReceiverMob(tbNewbeeMallOrder.getUserPhone());  //收货人电话
                 tb_seckill_order.setReceiver(tbNewbeeMallOrder.getUserName());
-
                 //状态 0失败 1成功
                 tb_seckill_order.setStatus("1");
                 tb_seckill_order.setTransactionId(sgId+liusui);
@@ -239,7 +240,6 @@ public class miaoshaController {
             map.put("massag",message);
             request.setAttribute("mesg",message);
         }
-
         log.info(message);
         map.put("resultCode",resultCode);
         return map;
@@ -299,6 +299,7 @@ public class miaoshaController {
       //       rabbitAdmin.removeBinding(MyRabbitMQConfig.noargs);  //解除绑定
         }
         log.info(message);
+
         return message;
     }
 
@@ -355,6 +356,7 @@ public class miaoshaController {
     }
 
     public void shuaxin(TbNewbeeMallShoppingCartItem cartItem,long goodsId,int goodsCount, HttpServletRequest request){
+        System.out.println("刷新购物车===========");
         boolean o = addShopCart2(cartItem, goodsId, 1, request);
         TbNewbeeMallUser newBeeMallUser = (TbNewbeeMallUser) request.getSession().getAttribute("newBeeMallUser");
         int count = tbNewbeeMallShoppingCartItemService.getCartCountByUserId(newBeeMallUser.getUserId());

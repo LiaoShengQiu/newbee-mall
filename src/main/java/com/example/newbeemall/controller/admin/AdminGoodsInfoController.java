@@ -84,7 +84,7 @@ public class AdminGoodsInfoController {
         map.put("start",(page-1)*limit);
         PageQueryUtil pageUtil = new PageQueryUtil(map);
         //查询条件page=页数，limit=每页记录数，sidx=按什么排序，order=降序还是升序
-        PageResult data = goodsInfoService.searchsp(pageUtil);
+        PageResult data = goodsInfoService.searchsp2(pageUtil);
         System.out.println("=="+data.getTotalCount()+"总记录=======");
         return ResultGenerator.genSuccessResult(data);
     }
@@ -140,8 +140,7 @@ public class AdminGoodsInfoController {
 
     @RequestMapping("goods/status/0")
     @ResponseBody
-    public Object upGoods(@RequestBody Integer[] ids, HttpServletRequest request, HttpServletResponse response) throws IOException {
-        System.out.println("显示+++++++++" + ids[0].toString());
+    public Object upGoods(@RequestParam Integer[] ids, HttpServletRequest request, HttpServletResponse response) throws IOException {
         Map map = new HashMap();
         try{
             goodsInfoService.upGoods(ids);

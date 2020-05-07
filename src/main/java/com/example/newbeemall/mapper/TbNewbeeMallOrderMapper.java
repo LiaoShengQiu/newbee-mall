@@ -34,7 +34,7 @@ public interface TbNewbeeMallOrderMapper extends BaseMapper<TbNewbeeMallOrder> {
     int updatePayType(TbNewbeeMallOrder order);
 
     //查询条件 page=页数，limit=每页记录数，sidx=按什么排序，order=降序还是升序
-    public List<TbNewbeeMallOrder> order_list(Map<String,Object> map);
+    public List<TbNewbeeMallOrder> order_list(PageQueryUtil pageUtil);
     public PageResult myordersItems_list(Long userId, PageQueryUtil pageQueryUtil);
     public List<TbNewbeeMallOrder> findNewBeeMallOrderList(PageQueryUtil pageQueryUtil);
     public int count(PageQueryUtil pageQueryUtil);
@@ -45,5 +45,6 @@ public interface TbNewbeeMallOrderMapper extends BaseMapper<TbNewbeeMallOrder> {
     int order_count();
 
     //2 配货 、 3出库
-    public int updateStatus(List<Integer> list,@Param("status") Integer status);
+    public int updateStatus(@Param("ids") Integer[] ids,@Param("status") Integer status);
+
 }

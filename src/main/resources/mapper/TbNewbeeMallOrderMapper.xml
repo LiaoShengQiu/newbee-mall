@@ -165,6 +165,7 @@
         SELECT
         <include refid="Base_Column_List"></include>
         FROM tb_newbee_mall_order
+
         <if test="sidx != null and sidx != ''"> ORDER BY ${sidx} ${order}</if>
         <if test="start != null and limit != null"> limit ${start},${limit}</if>
     </select>
@@ -236,12 +237,11 @@
     </select>
 
     <!--配货-->
-    <update id="updateoByIds" parameterType="list">
+    <update id="updateStatus">
         UPDATE tb_newbee_mall_order
         SET order_status = #{status}  where  order_id in
-        <foreach item = "item" index = "index" collection = "ids" open = "(" separator = "," close = ")">
-            #{item}
-             </foreach>
-
+        <foreach item="id" collection="ids" open="(" separator="," close=")">
+            #{id}
+        </foreach>
     </update>
 </mapper>

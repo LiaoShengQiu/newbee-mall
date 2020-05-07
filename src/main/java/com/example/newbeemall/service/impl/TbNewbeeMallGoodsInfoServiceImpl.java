@@ -36,6 +36,18 @@ public class TbNewbeeMallGoodsInfoServiceImpl extends ServiceImpl<TbNewbeeMallGo
         return pageResult;
     }
 
+    @Override
+    public PageResult searchsp2(PageQueryUtil pageUtil) {
+        List<TbNewbeeMallGoodsInfo> goodsList = goodsInfoMapper.findGoodsInfo(pageUtil);
+        int total = goodsInfoMapper.getCount(pageUtil);
+//        List<NewBeeMallSearchGoodsVO> gVO = new ArrayList<>();
+//        if (goodsList != null) {
+//            gVO = BeanUtil.copyList(goodsList, NewBeeMallSearchGoodsVO.class);
+//        }
+        PageResult pageResult = new PageResult(goodsList, total, pageUtil.getLimit(), pageUtil.getPage());
+        return pageResult;
+    }
+
     //    @Override
 //    public List<TbNewbeeMallGoodsInfo> getList(Integer page, Integer limit) {
 //        Page<TbNewbeeMallGoodsInfo> cupage = new Page<TbNewbeeMallGoodsInfo>(page,limit);

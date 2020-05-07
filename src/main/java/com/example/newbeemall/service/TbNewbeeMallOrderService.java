@@ -37,5 +37,5 @@ public interface TbNewbeeMallOrderService extends IService<TbNewbeeMallOrder> {
     //修改
     public int updataOrder(Map<String,Object> map);
     //2 配货 、 3出库
-    public int updateStatus(List<Integer> list, Integer status);
+    public int updateStatus(Integer[] ids, Integer status);
 }

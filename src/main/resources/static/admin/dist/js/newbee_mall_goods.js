@@ -3,12 +3,12 @@ $(function () {
         url: '/admin/goods/list',
         datatype: "json",
         colModel: [
-            {label: '商品编号', name: 'goodsId', index: 'goodsId', width: 60, key: true},
-            {label: '商品名', name: 'goodsName', index: 'goodsName', width: 120},
-            {label: '商品简介', name: 'goodsIntro', index: 'goodsIntro', width: 120},
-            {label: '商品图片', name: 'goodsCoverImg', index: 'goodsCoverImg', width: 120, formatter: coverImageFormatter},
-            {label: '商品库存', name: 'stockNum', index: 'stockNum', width: 60},
-            {label: '商品售价', name: 'sellingPrice', index: 'sellingPrice', width: 60},
+            {label: '商品编号', name: 'goodsId', index: 'goods_id', width: 60, key: true},
+            {label: '商品名', name: 'goodsName', index: 'goods_name', width: 120},
+            {label: '商品简介', name: 'goodsIntro', index: 'goods_intro', width: 120},
+            {label: '商品图片', name: 'goodsCoverImg', index: 'goods_coverImg', width: 120, formatter: coverImageFormatter},
+            {label: '商品库存', name: 'stockNum', index: 'stock_num', width: 60},
+            {label: '商品售价', name: 'sellingPrice', index: 'selling_price', width: 60},
             {
                 label: '上架状态',
                 name: 'goodsSellStatus',
@@ -116,6 +116,7 @@ function putUpGoods() {
                     contentType: "application/json",
                     data: JSON.stringify(ids),
                     success: function (r) {
+                        alert(r.toString());
                         if (r.resultCode == 200) {
                             swal("上架成功", {
                                 icon: "success",

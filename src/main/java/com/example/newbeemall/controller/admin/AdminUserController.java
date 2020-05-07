@@ -1,15 +1,16 @@
 package com.example.newbeemall.controller.admin;
 
-import com.example.newbeemall.service.*;
+import com.example.newbeemall.entity.TbNewbeeMallAdminUser;
+import com.example.newbeemall.mapper.TbNewbeeMallAdminUserMapper;
+import com.example.newbeemall.service.TbNewbeeMallAdminUserService;
+import com.example.newbeemall.service.TbNewbeeMallUserService;
 import com.example.newbeemall.utils.PageQueryUtil;
 import com.example.newbeemall.utils.Result;
 import com.example.newbeemall.utils.ResultGenerator;
+import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
-import com.example.newbeemall.entity.TbNewbeeMallAdminUser;
-
-
-import org.springframework.stereotype.Controller;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -22,9 +23,12 @@ public class AdminUserController {
 
     @Resource
     private TbNewbeeMallAdminUserService adminUserService;
+    @Resource
+    private TbNewbeeMallAdminUserMapper tbNewbeeMallAdminUserMapper;
 
     @Resource
     private TbNewbeeMallUserService userService;
+
 
 
     /**
@@ -99,6 +103,45 @@ public class AdminUserController {
         } else {
             return ResultGenerator.genFailResult("禁用失败");
         }
+    }
+
+    /**
+     * 测试下全局事务
+     * @return
+     */
+  @RequestMapping("/test")
+  @ResponseBody
+@Transactional
+  public Object test(){
+      dele();
+      select();
+      return 0;
+  }
+
+    //删除
+    public void dele(){
+     tbNewbeeMallAdminUserMapper.deleteById(4);
+
+
+    }
+    //查询
+
+    public Object select(){
+        int num = 0/0;
+        TbNewbeeMallAdminUser tbNewbeeMallAdminUser = tbNewbeeMallAdminUserMapper.selectById(10);
+        return tbNewbeeMallAdminUser;
+    }
+//添加操作
+
+    public int add1(){
+        TbNewbeeMallAdminUser tbNewbeeMallAdminUser = new TbNewbeeMallAdminUser();
+        tbNewbeeMallAdminUser.setLocked(0);
+    //    tbNewbeeMallAdminUser.setLoginPassword("123456");
+        tbNewbeeMallAdminUser.setLoginUserName("xiaobin");
+    //    tbNewbeeMallAdminUser.setNickName("小斌");
+        tbNewbeeMallAdminUser.setAdminUserId(4);
+        int insert = tbNewbeeMallAdminUserMapper.insert(tbNewbeeMallAdminUser);
+        return insert;
     }
 }
 

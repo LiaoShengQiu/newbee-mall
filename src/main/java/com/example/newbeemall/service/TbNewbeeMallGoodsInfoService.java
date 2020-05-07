@@ -21,6 +21,7 @@ public interface TbNewbeeMallGoodsInfoService extends IService<TbNewbeeMallGoods
      * 商品搜索
      */
     PageResult searchsp(PageQueryUtil pageUtil);
+    PageResult searchsp2(PageQueryUtil pageUtil);
 
 
     //以下是后台的

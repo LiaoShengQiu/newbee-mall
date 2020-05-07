@@ -166,7 +166,7 @@ public class TbNewbeeMallOrderServiceImpl extends ServiceImpl<TbNewbeeMallOrderM
     }
 
     @Override
-    public int updateStatus(List<Integer> list, Integer status) {
+    public int updateStatus(Integer[] list, Integer status) {
         return orderMapper.updateStatus(list,status);
     }
 }

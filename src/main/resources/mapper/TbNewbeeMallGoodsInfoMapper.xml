@@ -56,7 +56,8 @@
                 and goods_category_id = #{goodsCategoryId}
             </if>
         </where>
-        <if test="orderBy!=null and orderBy!=''">
+        
+        <!--<if test="orderBy!=null and orderBy!=''">
             <choose>
                 <when test="orderBy == 'new'">
                     order by goods_id desc
@@ -68,7 +69,8 @@
                     order by stock_num desc
                 </otherwise>
             </choose>
-        </if>
+        </if>-->
+        <if test="sidx != null and sidx != ''"> ORDER BY ${sidx} ${order}</if>
         <if test="start!=null and limit!=null">
             limit #{start},#{limit}
         </if>

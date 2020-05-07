@@ -52,16 +52,11 @@ public class AdminGoodsCategoryController {
         }
         request.setAttribute("keyword", keyword);
         map.put("keyword", keyword);
+
         PageQueryUtil pageUtil = new PageQueryUtil(map);
         request.setAttribute("pageResult", goodsInfoService.searchsp(pageUtil));
         return "mall/search";
     }
-
-
-
-
-
-
 
     @RequestMapping("/categories/save")
     @ResponseBody
@@ -99,6 +94,7 @@ public class AdminGoodsCategoryController {
         int page = Integer.parseInt(map.get("page").toString());
         int limit = Integer.parseInt(map.get("limit").toString());
         map.put("start",(page-1)*limit);
+        System.out.println("map+++++++++============"+map.toString());
         //查询条件parentId=父级，categoryLevel=分类等级, page=页数，limit=每页记录数，sidx=按什么排序，order=降序还是升序
         List<TbNewbeeMallGoodsCategory> goodsCategorys = goodsCategoryService.findGoodsCategory(map);
         return goodsCategorys;

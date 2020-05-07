@@ -3,13 +3,13 @@ $(function () {
         url: '/admin/orders/list',
         datatype: "json",
         colModel: [
-            {label: 'id', name: 'orderId', index: 'orderId', width: 50, key: true, hidden: true},
-            {label: '订单号', name: 'orderNo', index: 'orderNo', width: 120},
-            {label: '订单总价', name: 'totalPrice', index: 'totalPrice', width: 60},
-            {label: '订单状态', name: 'orderStatus', index: 'orderStatus', width: 80, formatter: orderStatusFormatter},
-            {label: '支付方式', name: 'payType', index: 'payType', width: 80,formatter:payTypeFormatter},
-            {label: '收件人地址', name: 'userAddress', index: 'userAddress', width: 10, hidden: true},
-            {label: '创建时间', name: 'createTime', index: 'createTime', width: 120},
+            {label: 'id', name: 'orderId', index: 'order_id', width: 50, key: true, hidden: true},
+            {label: '订单号', name: 'orderNo', index: 'order_no', width: 120},
+            {label: '订单总价', name: 'totalPrice', index: 'total_price', width: 60},
+            {label: '订单状态', name: 'orderStatus', index: 'order_status', width: 80, formatter: orderStatusFormatter},
+            {label: '支付方式', name: 'payType', index: 'pay_type', width: 80,formatter:payTypeFormatter},
+            {label: '收件人地址', name: 'userAddress', index: 'user_address', width: 10, hidden: true},
+            {label: '创建时间', name: 'createTime', index: 'create_time', width: 120},
             {label: '操作', name: 'createTime', index: 'createTime', width: 120, formatter: operateFormatter}
         ],
         height: 760,
@@ -247,12 +247,14 @@ function orderCheckDone() {
         dangerMode: true,
     }).then((flag) => {
             if (flag) {
+
                 $.ajax({
-                    type: "POST",
+                    type: "PUT",
                     url: "/admin/orders/checkDone",
                     contentType: "application/json",
                     data: JSON.stringify(ids),
                     success: function (r) {
+                        alert(r.toString());
                         if (r.resultCode == 200) {
                             swal("配货完成", {
                                 icon: "success",
@@ -342,6 +344,7 @@ function closeOrder() {
         buttons: true,
         dangerMode: true,
     }).then((flag) => {
+
             if (flag) {
                 $.ajax({
                     type: "POST",

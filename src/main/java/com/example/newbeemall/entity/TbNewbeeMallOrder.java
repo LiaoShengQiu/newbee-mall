@@ -129,6 +129,7 @@ public class TbNewbeeMallOrder implements Serializable {
     }
 
 
+
     public void setOrderStatusString(String orderStatusString) {
         this.orderStatusString = orderStatusString;
     }
