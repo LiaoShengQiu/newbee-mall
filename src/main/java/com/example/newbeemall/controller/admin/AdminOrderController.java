@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -75,30 +75,19 @@ public class AdminOrderController {
      */
     @RequestMapping("/orders/checkDone")
     @ResponseBody
-    public Object peihuo(@RequestBody Map<String,Object> map,String iids){
-         String str =  map.get("ids").toString().trim();
-        String substr = str.substring(1, str.length() - 1).trim();
-        System.out.println(substr.trim().length()+"================"+substr);
-        String s1 = substr.replace(", ", ",");
-        System.out.println(s1+"==============");
-        String[] split = s1.split(",");
-        ArrayList<Integer> list = new ArrayList<>();
-        TbNewbeeMallOrder tbNewbeeMallOrder = new TbNewbeeMallOrder();
-        for (String s :split){
-            System.out.println(Integer.parseInt(s));
-            tbNewbeeMallOrder.setOrderStatus(2);     //2 为配货完成
-            tbNewbeeMallOrder.setOrderId(Long.parseLong(s));
-            boolean isok = false;
-            try{
-                isok =   tbNewbeeMallOrderService.saveOrUpdate(tbNewbeeMallOrder);  //2 为配货完成
-                if (isok){
-                    map.put("resultCode",200);
+    public Object peihuo(@RequestBody Integer[] ids){
+
+        int num = 0;
+        HashMap<String, Object> map = new HashMap<>();
+        try{
+           num = tbNewbeeMallOrderService.updateStatus(ids, 2);
+            map.put("resultCode",200);
                     System.out.println("配货成功！");
-                }
-            }catch (Exception e){
-                map.put("message","系统开小差了,配货失败！");
-            }
+        }catch (Exception e){
+            map.put("resultCode",500);
+            map.put("message","系统开小差了,配货失败！");
         }
+
 
         return map;
     }
@@ -108,29 +97,16 @@ public class AdminOrderController {
      */
     @RequestMapping("/orders/checkOut")
     @ResponseBody
-    public Object cheOut(@RequestBody Map<String,Object> map){
-        String str =  map.get("ids").toString().trim();
-        String substr = str.substring(1, str.length() - 1).trim();
-        System.out.println(substr.trim().length()+"================"+substr);
-        String s1 = substr.replace(", ", ",");
-        System.out.println(s1+"==============");
-        String[] split = s1.split(",");
-        ArrayList<Integer> list = new ArrayList<>();
-        TbNewbeeMallOrder tbNewbeeMallOrder = new TbNewbeeMallOrder();
-        for (String s :split){
-            System.out.println(Integer.parseInt(s));
-            tbNewbeeMallOrder.setOrderStatus(3);     //2 为配货完成,3为出库
-            tbNewbeeMallOrder.setOrderId(Long.parseLong(s));
-            boolean isok = false;
-            try{
-                isok =   tbNewbeeMallOrderService.saveOrUpdate(tbNewbeeMallOrder);
-                if (isok){
-                    map.put("resultCode",200);
-                    System.out.println("出库成功！");
-                }
-            }catch (Exception e){
-                map.put("message","系统开小差了,出库失败！");
-            }
+    public Object cheOut(@RequestBody Integer[] ids){
+        int num = 0;
+        HashMap<String, Object> map = new HashMap<>();
+        try{
+            num = tbNewbeeMallOrderService.updateStatus(ids, 3);
+            map.put("resultCode",200);
+            System.out.println("出库成功！");
+        }catch (Exception e){
+            map.put("resultCode",500);
+            map.put("message","系统开小差了,出库失败！");
         }
         return map;
     }
@@ -139,29 +115,16 @@ public class AdminOrderController {
      */
     @RequestMapping("/orders/close")
     @ResponseBody
-    public Object close(@RequestBody Map<String,Object> map){
-        String str =  map.get("ids").toString().trim();
-        String substr = str.substring(1, str.length() - 1).trim();
-        System.out.println(substr.trim().length()+"================"+substr);
-        String s1 = substr.replace(", ", ",");
-        System.out.println(s1+"==============");
-        String[] split = s1.split(",");
-        ArrayList<Integer> list = new ArrayList<>();
-        TbNewbeeMallOrder tbNewbeeMallOrder = new TbNewbeeMallOrder();
-        for (String s :split){
-            System.out.println(Integer.parseInt(s));
-            tbNewbeeMallOrder.setOrderStatus(-3);     //2 为配货完成,3为出库，-3商家关闭
-            tbNewbeeMallOrder.setOrderId(Long.parseLong(s));
-            boolean isok = false;
-            try{
-                isok =   tbNewbeeMallOrderService.saveOrUpdate(tbNewbeeMallOrder);
-                if (isok){
-                    map.put("resultCode",200);
-                    System.out.println("关闭成功！");
-                }
-            }catch (Exception e){
-                map.put("message","系统开小差了,关闭失败！");
-            }
+    public Object close(@RequestBody Integer[] ids){
+        int num = 0;
+        HashMap<String, Object> map = new HashMap<>();
+        try{
+            num = tbNewbeeMallOrderService.updateStatus(ids, -3);
+            map.put("resultCode",200);
+            System.out.println("关闭成功！");
+        }catch (Exception e){
+            map.put("resultCode",500);
+            map.put("message","系统开小差了,关闭失败！");
         }
         return map;
     }

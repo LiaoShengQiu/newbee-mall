@@ -32,6 +32,7 @@ import java.util.Map;
  * @since 2020-02-07
  */
 @Controller
+
 public class OrderController {
     @Resource
     private TbNewbeeMallOrderMapper tbNewbeeMallOrderMapper;
