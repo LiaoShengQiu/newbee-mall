@@ -150,12 +150,20 @@ public class UserController {
         if(tu.equalsIgnoreCase(verfyCode)){   //忽略大小写判断图片验证码
             QueryWrapper queryWrapper = new QueryWrapper<TbNewbeeMallUser>();
             queryWrapper.eq("login_name",loginName);
+           // queryWrapper.eq("locked_flag",0);
             List<TbNewbeeMallUser> list = tbNewbeeMallUserService.list(queryWrapper);
             if(list.size()>0){
+
                 String md5Text = org.apache.commons.codec.digest.DigestUtils.md5Hex(password);
                 System.out.println("加密后的密码"+md5Text);
                 System.out.println("数据库的密码"+list.get(0).getPasswordMd5());
                 if(list.get(0).getPasswordMd5().equals(md5Text)){
+                    if(list.get(0).getLockedFlag() == 1){
+                        msg = "该用户已被禁用！";
+                        map.put("msgs",msg);
+                        map.put("resultCode",501);
+                        return map;
+                    }
                     map.put("resultCode",200);
                     int count = cartItemService.getCartCountByUserId(list.get(0).getUserId());
                     list.get(0).setShopCartItemCount(count);
@@ -278,5 +286,12 @@ public class UserController {
         return "mall/my-orders";
     }
 
+
+    @RequestMapping("/logout")
+    public String logout(HttpServletRequest request){
+        request.getSession().removeAttribute("newBeeMallUser");
+        request.getSession().removeAttribute("userId");
+        return "redirect:/index";
+    }
 }
 

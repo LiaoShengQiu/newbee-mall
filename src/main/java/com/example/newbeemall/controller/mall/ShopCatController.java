@@ -98,8 +98,15 @@ public class ShopCatController {
         if (to <= 0){
             isDeleted = 1;  //删除
         }*/
+
         int isDeleted = 0;
         TbNewbeeMallUser newBeeMallUser = (TbNewbeeMallUser) session.getAttribute("newBeeMallUser");
+        if(newBeeMallUser == null){
+            ResultUtil resultUtil = new ResultUtil(newBeeMallUser);
+            resultUtil.setMessage("请先登录！！！");
+            System.out.println("请先登录");
+            return resultUtil;
+        }
         cartItem.setUserId(newBeeMallUser.getUserId());
         cartItem.setIsDeleted(isDeleted);
         ResultUtil resultUtil = new ResultUtil(shopCatService.saveCart(cartItem));
