@@ -45,7 +45,7 @@ public class UserController {
     }
     @GetMapping({"/login", "login.html"})
     public String login(){
-        return "/mall/login";
+        return "mall/login";
     }
 
     /**
@@ -85,7 +85,7 @@ public class UserController {
     @RequestMapping("/dlogin")
     public String index2(){
 
-        return "/mall/duanxin.html";
+        return "mall/duanxin.html";
     }
 
     @RequestMapping("/huoqud")
