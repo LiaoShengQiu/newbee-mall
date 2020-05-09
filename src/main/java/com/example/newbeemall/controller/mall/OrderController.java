@@ -46,6 +46,7 @@ public class OrderController {
     private TbNewbeeMallOrderItemService itemService;
 
     @PutMapping("/orders/{orderNo}/cancel")
+    @ResponseBody
     public Object cancelOrder(@PathVariable("orderNo") String orderNo){
         UpdateWrapper<TbNewbeeMallOrder> updateWrapper = new UpdateWrapper<>();
         updateWrapper.set("order_status",-1);
@@ -53,20 +54,27 @@ public class OrderController {
         boolean b = orderService.update(updateWrapper);
         ResultUtil resultUtil = new ResultUtil(b);
         if(b){
-            resultUtil.setMassage();
+            resultUtil.setMessage("订单取消成功");
         } else {
-
+            resultUtil.setMessage("订单取消失败");
         }
         return resultUtil;
     }
 
     @PutMapping("/orders/{orderNo}/finish")
+    @ResponseBody
     public Object finishOrder(@PathVariable("orderNo") String orderNo){
         UpdateWrapper<TbNewbeeMallOrder> updateWrapper = new UpdateWrapper<>();
         updateWrapper.set("order_status",4);
         updateWrapper.eq("order_no",orderNo);
         boolean b = orderService.update(updateWrapper);
-        return new ResultUtil(b);
+        ResultUtil resultUtil = new ResultUtil(b);
+        if(b){
+            resultUtil.setMessage("确认收货成功");
+        } else {
+            resultUtil.setMessage("确认收货失败");
+        }
+        return resultUtil;
     }
 
     @GetMapping("/paySuccess")
