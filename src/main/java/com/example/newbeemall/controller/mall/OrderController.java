@@ -51,6 +51,21 @@ public class OrderController {
         updateWrapper.set("order_status",-1);
         updateWrapper.eq("order_no",orderNo);
         boolean b = orderService.update(updateWrapper);
+        ResultUtil resultUtil = new ResultUtil(b);
+        if(b){
+            resultUtil.setMassage();
+        } else {
+
+        }
+        return resultUtil;
+    }
+
+    @PutMapping("/orders/{orderNo}/finish")
+    public Object finishOrder(@PathVariable("orderNo") String orderNo){
+        UpdateWrapper<TbNewbeeMallOrder> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.set("order_status",4);
+        updateWrapper.eq("order_no",orderNo);
+        boolean b = orderService.update(updateWrapper);
         return new ResultUtil(b);
     }
 

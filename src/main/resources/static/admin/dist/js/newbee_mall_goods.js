@@ -116,7 +116,6 @@ function putUpGoods() {
                     contentType: "application/json",
                     data: JSON.stringify(ids),
                     success: function (r) {
-                        alert(r.toString());
                         if (r.resultCode == 200) {
                             swal("上架成功", {
                                 icon: "success",
