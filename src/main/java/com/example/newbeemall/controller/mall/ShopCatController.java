@@ -53,7 +53,11 @@ public class ShopCatController {
                 if (item.getIsMiaos() == 1){
                     item.setMsg("限时秒杀");
                 }
-                if(updateTime.getTime() < new Date().getTime()+shicha){
+                long guoqi = updateTime.getTime()+2*60*60*1000;
+                System.out.println(new Date()+"====当前时间搓"+new Date().getTime());
+                System.out.println(updateTime+"====过期时间搓"+guoqi);
+
+                if(guoqi < new Date().getTime()){
                     TbNewbeeMallShoppingCartItem tbNewbeeMallShoppingCartItem =new TbNewbeeMallShoppingCartItem();
                     tbNewbeeMallShoppingCartItem.setCartItemId(item.getCartItemId());
                     tbNewbeeMallShoppingCartItem.setIsDeleted(-1); //-1为过期

@@ -255,10 +255,9 @@ public class miaoshaController {
      */
     @RequestMapping("/seccc")
     @ResponseBody
+    @Transactional
     public String secu(@RequestParam(value = "username") String username, String stockName, @RequestParam(value = "gid") int gid) throws Exception{
 
-        //调用redis给相应商品库存量加一
-        Long count = redisService.addBy("username");
         //发消息给库存消息队列，将库存数据加一
      //   rabbitTemplate.convertAndSend(MyRabbitMQConfig.USER_EXCHANGE, MyRabbitMQConfig.USER_EN_KEY, "username");
         TbNewbeeMallGoodsInfo tbNewbeeMallGoodsInfo = tbNewbeeMallGoodsInfoMapper.selectById(gid);
@@ -273,8 +272,14 @@ public class miaoshaController {
 
        log.info("参加秒杀的用户是：{}，秒杀的商品是：{}", username, stockName);
         String message = null;
+        //调用redis给相应访问量加一
+        Long count = redisService.addBy("username");
         //调用redis给相应商品库存量减一
         Long decrByResult = redisService.decrBy(stockName);
+        if(count > 8000){
+            message = "当前参与的人员较多请稍后重试！";
+            //       rabbitAdmin.removeBinding(MyRabbitMQConfig.noargs);  //解除绑定
+        }
         if (decrByResult >= 0) {
             /**
              * 说明该商品的库存量有剩余，可以进行下订单操作
@@ -294,10 +299,7 @@ public class miaoshaController {
             message = "用户："+ username + "商品的库存量没有剩余,秒杀结束";
         }
 //        log.info(message);
-        if(count > 8000){
-            message = "当前参与的人员较多请稍后重试！";
-      //       rabbitAdmin.removeBinding(MyRabbitMQConfig.noargs);  //解除绑定
-        }
+
         log.info(message);
 
         return message;

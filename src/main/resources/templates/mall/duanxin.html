@@ -118,7 +118,7 @@
             return false;
         }
         var yanz = $("#yanz").val();
-        if (!validDuanx(yanz)) {
+        if (yanz.length != 6) {
             swal('请输入正确的验证码格式(6位数字)', {
                 icon: "error",
             });

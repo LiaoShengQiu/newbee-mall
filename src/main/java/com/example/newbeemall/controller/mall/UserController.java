@@ -74,6 +74,7 @@ public class UserController {
     @PostMapping("/personal/updateInfo")
     @ResponseBody
     public Object updateInfo(@RequestBody TbNewbeeMallUser user){
+        System.out.println("修改收货地址");
         boolean b = tbNewbeeMallUserService.saveOrUpdate(user);
         return new ResultUtil(b);
     }
@@ -99,7 +100,7 @@ public class UserController {
             System.err.println("倒计时" + seconds + "秒,倒计时开始:");
             int i = seconds;
             while (i > 0) {
-                System.err.println(i);
+//                System.err.println(i);
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
@@ -108,7 +109,7 @@ public class UserController {
                 }
                 i--;
             }
-         //   System.err.println(i);
+//            System.err.println(i);
             if(i<1){
                 request.getSession().removeAttribute("code");
             }
@@ -131,6 +132,20 @@ public class UserController {
         System.out.println(code+"短信验证"+yanz);
         if(yanz.equals(code)){
             System.out.println("对了========================================");
+            QueryWrapper queryWrapper = new QueryWrapper<TbNewbeeMallUser>();
+            queryWrapper.eq("login_name",loginName);
+            // queryWrapper.eq("locked_flag",0);
+            List<TbNewbeeMallUser> list = tbNewbeeMallUserService.list(queryWrapper);
+            if(list.size() > 0){
+                request.getSession().setAttribute("newBeeMallUser",list.get(0));
+            }else{
+                TbNewbeeMallUser user = new TbNewbeeMallUser();
+                user.setLoginName(loginName);
+                user.setNickName(loginName);
+                tbNewbeeMallUserService.addUser(user);
+                request.getSession().setAttribute("newBeeMallUser",user);
+            }
+
             map="200";
         }else {
             System.out.println("请正确输入短信校验码！");
@@ -242,22 +257,26 @@ public class UserController {
      * @param request
      * @return
      */
-    @RequestMapping("/personal/updateInfo")
+    @RequestMapping("/personal/updateInfo2")
     @ResponseBody
     public Object upPersonall(@RequestBody Map<String,Object> map,HttpServletRequest request){
-        System.out.println(map.get("userId")+"/personal/updateInfo--address"+map.get("address"));
+        System.out.println("/personal/updateInfo==========");
         TbNewbeeMallUser tbNewbeeMallUser = new TbNewbeeMallUser();
         tbNewbeeMallUser.setAddress(map.get("address").toString());
         tbNewbeeMallUser.setUserId(Long.parseLong(map.get("userId").toString()));
         tbNewbeeMallUser.setNickName(map.get("nickName").toString());
         tbNewbeeMallUser.setIntroduceSign(map.get("introduceSign").toString());
         boolean b = tbNewbeeMallUserService.saveOrUpdate(tbNewbeeMallUser);
+        System.out.println("成功与否"+b);
         QueryWrapper<TbNewbeeMallUser> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("user_id",Long.parseLong(map.get("userId").toString()));
         if (b){
             map.put("resultCode",200);
             List<TbNewbeeMallUser> list = tbNewbeeMallUserService.list(queryWrapper);
             request.getSession().setAttribute("newBeeMallUser",list.get(0));  //刷新会话
+        }else{
+            map.put("resultCode",500);
+            map.put("message","出错了");
         }
         return map;
     }

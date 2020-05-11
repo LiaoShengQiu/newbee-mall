@@ -21,4 +21,9 @@ public interface TbNewbeeMallUserService extends IService<TbNewbeeMallUser> {
      * 用户禁用与解除禁用(0-未锁定 1-已锁定)
      */
     Boolean lockUsers(Integer[] ids, int lockStatus);
+
+    /**
+     * 短信登录  插入到数据库
+     */
+    public int addUser(TbNewbeeMallUser tbNewbeeMallUser);
 }

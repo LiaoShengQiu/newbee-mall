@@ -51,8 +51,10 @@
                         <div class="sub_content fl ft20" th:text="${item.goodsName}">商品名称</div>
                         <div class="sub_content fl" th:text="${item.sellingPrice+'元'}">1299元</div>
                         <div class="sub_content fl">
+
+
                             <input class="goods_count" th:id="${'goodsCount'+item.cartItemId}" type="number"
-                                   th:onblur="'updateItem('+${item.cartItemId}+')'"
+                                   th:onblur="'updateItem('+${item.cartItemId}+','+${item.isMiaos}+')'"
                                    th:value="${item.goodsCount}" step="1" min="1"
                                    max="5">
                         </div>
@@ -139,9 +141,22 @@
      *
      * todo 判断是否与原值相同
      */
-    function updateItem(id) {
+
+
+    function updateItem(id,isMiaos) {
         var domId = 'goodsCount' + id;
         var goodsCount = $("#" + domId).val();
+        var msg = $("#msg").text();
+        if(isMiaos>0){
+          if ($("#goodsCount"+id).val() > 1){
+            swal("该商品最多可购买1个", {
+              icon: "error",
+            });
+            return;
+          }
+
+
+        }
         if (goodsCount > 5) {
             swal("单个商品最多可购买5个", {
                 icon: "error",

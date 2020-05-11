@@ -43,4 +43,9 @@ public class TbNewbeeMallUserServiceImpl extends ServiceImpl<TbNewbeeMallUserMap
         }
         return userMapper.lockUserBatch(ids, lockStatus) > 0;
     }
+
+    @Override
+    public int addUser(TbNewbeeMallUser tbNewbeeMallUser) {
+        return userMapper.insert(tbNewbeeMallUser);
+    }
 }
