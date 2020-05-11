@@ -72,6 +72,7 @@ public class UserController {
      * @return
      */
     @PostMapping("/personal/updateInfo")
+    @ResponseBody
     public Object updateInfo(@RequestBody TbNewbeeMallUser user){
         boolean b = tbNewbeeMallUserService.saveOrUpdate(user);
         return new ResultUtil(b);

@@ -88,7 +88,7 @@ public class ShopCatController {
     @ResponseBody
     public Object addShopCart(@RequestBody TbNewbeeMallShoppingCartItem cartItem,HttpServletRequest request,HttpSession session){
         System.out.println("post-----------/shop-cart"+cartItem.toString());
-        TbSeckillGoods tbSeckillGoods = (TbSeckillGoods) session.getAttribute("tbSeckillGoods");
+        //TbSeckillGoods tbSeckillGoods = (TbSeckillGoods) session.getAttribute("tbSeckillGoods");
  /*       long endTime = tbSeckillGoods.getEndTime().getTime();  //活动结束时间 获取时间戳
         Date now = new Date();
         now.getTime();  //当前时间的时间戳
