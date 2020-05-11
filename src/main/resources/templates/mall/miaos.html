@@ -111,8 +111,7 @@
         var shicha = 8*60*60*1000;
         var  aaa =  convertDateFromString(aa).getTime();
         // 剩余时间：设定的-当前的
-
-        var leftTime = aaa - (new Date().getTime());
+        var leftTime = (aaa+12*60*60*1000) - (new Date().getTime());
         // parseInt()返回一个整数。得出剩余的时分秒
         var days = parseInt(leftTime / 1000 / 60 / 60 / 24, 10);
         var hours = parseInt(leftTime / 1000 / 60 / 60 % 24, 10);
