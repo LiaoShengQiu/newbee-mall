@@ -1,14 +1,16 @@
 package com.example.newbeemall.controller.mall;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.example.newbeemall.config.MyRabbitMQConfig;
 import com.example.newbeemall.entity.*;
 import com.example.newbeemall.mapper.*;
-import com.example.newbeemall.service.RedisService;
-import com.example.newbeemall.service.TbNewbeeMallGoodsInfoService;
-import com.example.newbeemall.service.TbNewbeeMallShoppingCartItemService;
-import com.example.newbeemall.service.TbSeckillOrderService;
+import com.example.newbeemall.service.*;
+import com.example.newbeemall.utils.Result;
+import com.rabbitmq.client.Channel;
+import com.rabbitmq.client.Connection;
+import com.rabbitmq.client.ConnectionFactory;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,8 +20,10 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.TimeoutException;
 
 
 @Controller
@@ -49,7 +53,10 @@ public class miaoshaController {
     @Resource
     private TbNewbeeMallShoppingCartItemService tbNewbeeMallShoppingCartItemService;
 
+    @Resource
+    private Sender sender;
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(miaoshaController.class);
     @RequestMapping("/goods/miaosha/{goodsId}")
     public String toDetailMiaosha(@PathVariable("goodsId") Long goodsId, HttpServletRequest request){
         if(goodsId < 1){
@@ -128,8 +135,7 @@ public class miaoshaController {
     @RequestMapping("/sec")
     @ResponseBody
     @Transactional
-   // public Object sec(@RequestParam(value = "username") String username, @RequestParam(value = "stockName") String stockName, HttpServletRequest request,@RequestParam("goodsId")Integer goodsId,@RequestParam(value = "sgId")Integer sgId,@RequestParam(value = "orderId") Long orderId,HttpSession session) {
-        public Object seccc(String username, String stockName,@RequestBody TbNewbeeMallShoppingCartItem cartItem,HttpServletRequest request,Long goodsId,Long orderId){
+         public Object seccc(String username, String stockName,@RequestBody TbNewbeeMallShoppingCartItem cartItem,HttpServletRequest request,Long goodsId,Long orderId){
  //       redisService.put("username", 7999,20);
         int resultCode = 0;
         //调用redis给相应商品库存量加一
@@ -170,13 +176,13 @@ public class miaoshaController {
                num2 = tbNewbeeMallGoodsInfo.getStockNum(); //商品数量
            }
 
-      /*    redisService.put(stockName, num, 20);*/
+    //      redisService.put(stockName, num, 20);
         log.info("参加秒杀的用户是：{}，秒杀的商品是：{}", username, stockName);
         String message = null;
         /**
          * 1.创建订单之前判断用户是否已经参加秒杀过该商品  一个用户只可以秒杀一次！
          * 2.说明该商品的库存量有剩余，可以进行下订单操作
-         */
+*/
         QueryWrapper queryWrapper =  new QueryWrapper<tb_seckill_order>();
         queryWrapper.eq("seckill_id",sgId);
         queryWrapper.eq("user_id",uid);
@@ -207,7 +213,8 @@ public class miaoshaController {
                 TbNewbeeMallOrder tbNewbeeMallOrder = tbNewbeeMallOrderMapper.selectById(orderId);
                 System.out.println("tbNewbeeMallOrder====================="+tbNewbeeMallOrder);
                 //发消息给订单消息队列，创建订单
-              rabbitTemplate.convertAndSend(MyRabbitMQConfig.STORY_EXCHANGE, MyRabbitMQConfig.STORY_ROUTING_KEY, stockName);
+           //   rabbitTemplate.convertAndSend(MyRabbitMQConfig.STORY_EXCHANGE, MyRabbitMQConfig.STORY_ROUTING_KEY, stockName);
+
                 tb_seckill_order tb_seckill_order = new tb_seckill_order();
                 tb_seckill_order.setSeckillId((int) sgId);
                 tb_seckill_order.setMoney(mouney);
@@ -219,12 +226,68 @@ public class miaoshaController {
                 //状态 0失败 1成功
                 tb_seckill_order.setStatus("1");
                 tb_seckill_order.setTransactionId(sgId+liusui);
-                boolean save = tb_seckill_orderService.save(tb_seckill_order);
+              System.out.println(goodsId+"=======tb_seckill_order======"+tb_seckill_order);
+
+
+
+              //
+              TbSeckillGoods tbSeckillGoods2 = (TbSeckillGoods) request.getSession().getAttribute("tbSeckillGoods");
+              long guoqi = 2*60*60*1000;    //两个小时自动过期
+              long shicha = 8*60*60*1000;  //8个小时的时差
+              long endTime = tbSeckillGoods2.getEndTime().getTime();  //获取时间戳
+              System.out.println(tbSeckillGoods2.getEndTime()+"活动结束时间"+endTime+"\taaaa"+tbSeckillGoods2.getEndTime());
+              Date now = new Date();
+              System.out.println(now.getTime()+"当前时间"+now);
+              //       Long timestamp = LocalDateTime.now().toInstant(ZoneOffset.of("+8")).toEpochMilli();
+              long time = now.getTime()+guoqi+shicha;  //过期时间的时间戳
+              long to = 0;
+              if(endTime - now.getTime() > 0){
+                  to = endTime - time;
+              }
+              System.out.println(to+"/shop-cart"+endTime);
+              int isDeleted = 0;   //0显示 1删除
+       /* if (to <= 0){
+            isDeleted = 1;  //删除  过期
+        }*/
+
+              //结束时间
+              Date time2 = new Date(time);
+              //      LocalDateTime time2 =LocalDateTime.ofEpochSecond(time/1000,0,ZoneOffset.ofHours(8));
+              System.out.println("结束时间======="+time2);
+              cartItem.setUserId(newBeeMallUser.getUserId());
+              cartItem.setIsDeleted(isDeleted);
+              cartItem.setGoodsId(goodsId);
+              cartItem.setGoodsCount(1);
+              cartItem.setUpdateTime(time2);
+              cartItem.setIsMiaos(1);  // 1表示是秒杀
+              //
+
+
+
+              //发消息给mq进行削峰
+              try{
+                  System.out.println("发消息给mq进行削峰=========");
+                  Result result =  new Result(1,goodsId,tb_seckill_order,cartItem);
+                  System.out.println("result========"+result);
+                  send(result);
+                  System.out.println("发消息给mq进行削峰========");
+                  resultCode = 200;
+                  message = "用户" + username + "秒杀" + stockName + "成功";
+
+              }catch (Exception e){
+                  resultCode = 500;
+              }
+              /*  boolean save = tb_seckill_orderService.save(tb_seckill_order);
                 System.out.println("添加成功？？？"+save);
                 resultCode = 200;
                 message = "用户" + username + "秒杀" + stockName + "成功";
                 TbNewbeeMallShoppingCartItem cartItem2 = new TbNewbeeMallShoppingCartItem();
-              shuaxin(cartItem2,goodsId,1,request);   //加入购物车
+              shuaxin(cartItem2,goodsId,request);   //加入购物车*/
+
+              //刷新购物车  右上角的角标
+              int count2 = tbNewbeeMallShoppingCartItemService.getCartCountByUserId(newBeeMallUser.getUserId());
+              newBeeMallUser.setShopCartItemCount(count2);
+              request.getSession().setAttribute("newBeeMallUser",newBeeMallUser);
             }else {
               /**
                * 说明该商品的库存量没有剩余，直接返回秒杀失败的消息给用户
@@ -246,6 +309,7 @@ public class miaoshaController {
     }
 
 
+
     /**
      * 测试
      * @param username
@@ -259,7 +323,7 @@ public class miaoshaController {
     public String secu(@RequestParam(value = "username") String username, String stockName, @RequestParam(value = "gid") int gid) throws Exception{
 
         //发消息给库存消息队列，将库存数据加一
-     //   rabbitTemplate.convertAndSend(MyRabbitMQConfig.USER_EXCHANGE, MyRabbitMQConfig.USER_EN_KEY, "username");
+      //  rabbitTemplate.convertAndSend(MyRabbitMQConfig.USER_EXCHANGE, MyRabbitMQConfig.USER_EN_KEY, "username");
         TbNewbeeMallGoodsInfo tbNewbeeMallGoodsInfo = tbNewbeeMallGoodsInfoMapper.selectById(gid);
         //      TbNewbeeMallGoodsInfo tbNewbeeMallGoodsInfo = goodsService.findByid(gid); //查询商品表
  //       log.info("是否存在"+redisService.isExist(tbNewbeeMallGoodsInfo.getGoodsName()));
@@ -286,7 +350,7 @@ public class miaoshaController {
              */
             log.info("用户：{}秒杀该商品：{}库存还有{}，可以进行下订单操作", username, stockName, decrByResult);
             //发消息给库存消息队列，将库存数据减一
-            rabbitTemplate.convertAndSend(MyRabbitMQConfig.STORY_EXCHANGE, MyRabbitMQConfig.STORY_ROUTING_KEY, stockName);
+     //       rabbitTemplate.convertAndSend(MyRabbitMQConfig.STORY_EXCHANGE, MyRabbitMQConfig.STORY_ROUTING_KEY, stockName);
 
             //发消息给订单消息队列，创建订单
 
@@ -303,66 +367,35 @@ public class miaoshaController {
         log.info(message);
 
         return message;
+
     }
+
+
+
 
 
 
 
     /**
-     * 秒杀那边过来的  加入购物车
-     * @param cartItem
-     * @param
-     * @return
+     * 生产者
+     * @param obj  这里传进来的是秒杀成功后生成的订单     主要作用就是削峰
+     * @throws IOException
+     * @throws TimeoutException
      */
-    public boolean addShopCart2(TbNewbeeMallShoppingCartItem cartItem,long goodsId,int goodsCount, HttpServletRequest request) {
 
-        TbSeckillGoods tbSeckillGoods = (TbSeckillGoods) request.getSession().getAttribute("tbSeckillGoods");
-        long guoqi = 2*60*60*1000;    //两个小时自动过期
-        long shicha = 8*60*60*1000;  //8个小时的时差
-        long endTime = tbSeckillGoods.getEndTime().getTime();  //获取时间戳
-        System.out.println(tbSeckillGoods.getEndTime()+"活动结束时间"+endTime+"\taaaa"+tbSeckillGoods.getEndTime());
-        Date now = new Date();
-        System.out.println(now.getTime()+"当前时间"+now);
- //       Long timestamp = LocalDateTime.now().toInstant(ZoneOffset.of("+8")).toEpochMilli();
-        long time = now.getTime()+guoqi+shicha;  //过期时间的时间戳
-        long to = 0;
-        if(endTime - now.getTime() > 0){
-             to = endTime - time;
-        }
-        System.out.println(to+"/shop-cart"+endTime);
-        int isDeleted = 0;   //0显示 1删除
-       /* if (to <= 0){
-            isDeleted = 1;  //删除  过期
+    public void send(Result obj) throws IOException, TimeoutException {
+        System.out.println("这里传进来的是秒杀成功后生成的订单     主要作用就是削峰"+obj.toString());
+        System.out.println("这里传进来的是秒杀成功后生成的订单     主要作用就是削峰"+obj.toString());
+        ConnectionFactory connectionFactory = new ConnectionFactory();
+        // 创建一个新的连接
+        Connection connection = connectionFactory.newConnection();
+// 创建一个新的频道
+        Channel channel = connection.createChannel();
+        /*for (int i=0;i<50;i++){
+            this.rabbitTemplate.convertAndSend("workMq", i);
         }*/
-
-       //结束时间
-        Date time2 = new Date(time);
-  //      LocalDateTime time2 =LocalDateTime.ofEpochSecond(time/1000,0,ZoneOffset.ofHours(8));
-        System.out.println("结束时间======="+time2);
-        TbNewbeeMallUser newBeeMallUser = (TbNewbeeMallUser)  request.getSession().getAttribute("newBeeMallUser");
-        cartItem.setUserId(newBeeMallUser.getUserId());
-        cartItem.setIsDeleted(isDeleted);
-        cartItem.setGoodsId(goodsId);
-        cartItem.setGoodsCount(goodsCount);
-        cartItem.setUpdateTime(time2);
-        cartItem.setIsMiaos(1);  // 1表示是秒杀
-        boolean isok =false;
-        try{
-            isok = tbNewbeeMallShoppingCartItemService.save(cartItem);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-
-//        ResultUtil resultUtil = new ResultUtil(tbNewbeeMallShoppingCartItemService.saveCart(cartItem));
-        return isok;
-    }
-
-    public void shuaxin(TbNewbeeMallShoppingCartItem cartItem,long goodsId,int goodsCount, HttpServletRequest request){
-        System.out.println("刷新购物车===========");
-        boolean o = addShopCart2(cartItem, goodsId, 1, request);
-        TbNewbeeMallUser newBeeMallUser = (TbNewbeeMallUser) request.getSession().getAttribute("newBeeMallUser");
-        int count = tbNewbeeMallShoppingCartItemService.getCartCountByUserId(newBeeMallUser.getUserId());
-        newBeeMallUser.setShopCartItemCount(count);
-        request.getSession().setAttribute("newBeeMallUser",newBeeMallUser);
+        this.rabbitTemplate.convertAndSend("workMq", obj);
+        // 限流方式  削峰
+        channel.basicQos(0,10,true);
     }
 }

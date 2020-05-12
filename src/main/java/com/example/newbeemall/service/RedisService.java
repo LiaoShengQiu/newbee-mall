@@ -57,8 +57,10 @@ public class RedisService {
      * @return
      */
     public Long decrBy(String key) {
-        System.out.println(Integer.parseInt(redisTemplate.opsForValue().get(key).toString())+1);
-        return redisTemplate.opsForValue().decrement(key);
+       Long num = redisTemplate.opsForValue().decrement(key);
+        System.out.println("减一后"+num);
+      //  System.out.println(Integer.parseInt(redisTemplate.opsForValue().get(key).toString())+1);
+        return num;
     }
 
     /**
