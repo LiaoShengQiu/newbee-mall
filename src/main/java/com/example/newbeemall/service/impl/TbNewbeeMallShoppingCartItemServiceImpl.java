@@ -24,6 +24,12 @@ public class TbNewbeeMallShoppingCartItemServiceImpl extends ServiceImpl<TbNewbe
 
     @Resource
     private TbNewbeeMallShoppingCartItemMapper mapper;
+
+    @Override
+    public TbNewbeeMallShoppingCartItem findItemByUserIdByGoodsId(Long userId, Long goodsId) {
+        return mapper.findItemByUserIdByGoodsId(userId,goodsId);
+    }
+
     @Override
     public boolean saveCart(TbNewbeeMallShoppingCartItem cartItem) {
         return mapper.saveCart(cartItem)==1;

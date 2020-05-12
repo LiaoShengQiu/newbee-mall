@@ -11,16 +11,16 @@ import com.alipay.api.request.*;
 import com.alipay.api.response.AlipayTradeCloseResponse;
 import com.alipay.api.response.AlipayTradeFastpayRefundQueryResponse;
 import com.alipay.api.response.AlipayTradeRefundResponse;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.example.newbeemall.config.AlipayConfig;
 import com.example.newbeemall.entity.TbNewbeeMallOrder;
 import com.example.newbeemall.service.TbNewbeeMallOrderService;
+import com.example.newbeemall.utils.ResultUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -177,29 +177,51 @@ public class AlipayWebPayController {
 
     /**
      * 退款
-     * @param orderNo 商户订单号
+     * @param id orderNo 商户订单号
      * @return
      */
     @PostMapping("/refund")
+    @Transactional
     @ResponseBody
-    public String refund(String orderNo) throws AlipayApiException {
+    public Object refund(@RequestBody int id) throws AlipayApiException {
         AlipayTradeRefundRequest alipayRequest = new AlipayTradeRefundRequest();
-
-        AlipayTradeRefundModel model=new AlipayTradeRefundModel();
-        // 商户订单号
-        model.setOutTradeNo(orderNo);
-        // 退款金额
-        model.setRefundAmount("0.01");
-        // 退款原因
-        model.setRefundReason("无理由退货");
-        // 退款订单号(同一个订单可以分多次部分退款，当分多次时必传)
+        TbNewbeeMallOrder byId = orderService.getById(id);
+        ResultUtil resultUtil = new ResultUtil();
+        //确定是已支付并且是支付宝
+        if(byId.getPayStatus()==1 && byId.getPayType()==1){
+            UpdateWrapper<TbNewbeeMallOrder> updateWrapper = new UpdateWrapper<>();
+            updateWrapper.set("order_status",-1);
+            updateWrapper.eq("order_",id);
+            boolean b = orderService.update(updateWrapper);
+            if(b){
+                AlipayTradeRefundModel model=new AlipayTradeRefundModel();
+                // 商户订单号
+                model.setOutTradeNo(byId.getOrderNo());
+                // 退款金额
+                model.setRefundAmount(byId.getTotalPrice().toString());
+                // 退款原因
+                model.setRefundReason("无理由退货");
+                // 退款订单号(同一个订单可以分多次部分退款，当分多次时必传)
 //        model.setOutRequestNo(UUID.randomUUID().toString());
-        alipayRequest.setBizModel(model);
+                alipayRequest.setBizModel(model);
 
-        AlipayTradeRefundResponse alipayResponse = alipayClient.execute(alipayRequest);
-        System.out.println(alipayResponse.getBody());
+                AlipayTradeRefundResponse alipayResponse = alipayClient.execute(alipayRequest);
+                System.out.println(alipayResponse.getBody());
+                if(alipayResponse.getFundChange().equals("Y")){
+                    resultUtil.setMessage("退款成功");
+                    resultUtil.setResultCode(200);
+                } else {
+                    resultUtil.setResultCode(500);
+                    resultUtil.setMessage(alipayResponse.getSubMsg());
+                    throw new AlipayApiException();
+                }
+            }
+        } else {
+            resultUtil.setResultCode(500);
+            resultUtil.setMessage("出现异常");
+        }
+        return resultUtil;
 
-        return alipayResponse.getBody();
     }
 
     /**

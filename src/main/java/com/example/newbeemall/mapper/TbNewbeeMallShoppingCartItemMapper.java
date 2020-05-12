@@ -4,6 +4,7 @@ import com.example.newbeemall.entity.TbNewbeeMallOrderItem;
 import com.example.newbeemall.entity.TbNewbeeMallShoppingCartItem;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 import java.util.Map;
@@ -18,6 +19,7 @@ import java.util.Map;
  */
 public interface TbNewbeeMallShoppingCartItemMapper extends BaseMapper<TbNewbeeMallShoppingCartItem> {
 
+    public TbNewbeeMallShoppingCartItem findItemByUserIdByGoodsId(@Param("userId")Long userId,@Param("goodsId")Long goodsId);
     /**
      * 添加购物车
      * @param cartItem
@@ -38,6 +40,7 @@ public interface TbNewbeeMallShoppingCartItemMapper extends BaseMapper<TbNewbeeM
      * @return
      */
     public List<TbNewbeeMallOrderItem> getCartByUserId(@Param("userId") Long userId);
+
     public List<TbNewbeeMallOrderItem> getCartByUserId2(Long userId);
 
     public int updateCartCount(Map<String,Object> map);

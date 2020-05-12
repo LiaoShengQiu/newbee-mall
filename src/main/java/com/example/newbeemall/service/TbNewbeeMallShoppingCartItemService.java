@@ -17,6 +17,9 @@ import java.util.Map;
  */
 public interface TbNewbeeMallShoppingCartItemService extends IService<TbNewbeeMallShoppingCartItem> {
 
+    TbNewbeeMallShoppingCartItem findItemByUserIdByGoodsId(Long userId,Long goodsId);
+
+
     public boolean saveCart(TbNewbeeMallShoppingCartItem cartItem);
 
     /**
