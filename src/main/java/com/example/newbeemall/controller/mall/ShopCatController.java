@@ -91,18 +91,6 @@ public class ShopCatController {
     @PostMapping("/shop-cart")
     @ResponseBody
     public Object addShopCart(@RequestBody TbNewbeeMallShoppingCartItem cartItem,HttpServletRequest request,HttpSession session){
-        System.out.println("post-----------/shop-cart"+cartItem.toString());
-        //TbSeckillGoods tbSeckillGoods = (TbSeckillGoods) session.getAttribute("tbSeckillGoods");
- /*       long endTime = tbSeckillGoods.getEndTime().getTime();  //活动结束时间 获取时间戳
-        Date now = new Date();
-        now.getTime();  //当前时间的时间戳
-        long to = endTime - now.getTime();
-        System.out.println(to+"/shop-cart"+endTime);
-        int isDeleted = 0;
-        if (to <= 0){
-            isDeleted = 1;  //删除
-        }*/
-
         int isDeleted = 0;
         TbNewbeeMallUser newBeeMallUser = (TbNewbeeMallUser) session.getAttribute("newBeeMallUser");
         if(newBeeMallUser == null){
@@ -113,10 +101,23 @@ public class ShopCatController {
         }
         cartItem.setUserId(newBeeMallUser.getUserId());
         cartItem.setIsDeleted(isDeleted);
-        ResultUtil resultUtil = new ResultUtil(shopCatService.saveCart(cartItem));
-        int count = shopCatService.getCartCountByUserId(newBeeMallUser.getUserId());
-        newBeeMallUser.setShopCartItemCount(count);
-        session.setAttribute("newBeeMallUser",newBeeMallUser);
+        TbNewbeeMallShoppingCartItem itemByUserIdByGoodsId = shopCatService.findItemByUserIdByGoodsId(newBeeMallUser.getUserId(), cartItem.getGoodsId());
+        ResultUtil resultUtil = new ResultUtil();
+        if(itemByUserIdByGoodsId!= null){
+            Integer goodsCount = itemByUserIdByGoodsId.getGoodsCount();
+            if(goodsCount <5){
+                itemByUserIdByGoodsId.setGoodsCount(goodsCount+1);
+                resultUtil.setResultCode(tbNewbeeMallShoppingCartItemMapper.updateById(itemByUserIdByGoodsId)>0?200:500);
+            } else {
+                resultUtil.setResultCode(500);
+                resultUtil.setMessage("限购5件");
+            }
+        } else {
+            resultUtil.setResultCode(shopCatService.saveCart(cartItem)?200:500);
+            int count = shopCatService.getCartCountByUserId(newBeeMallUser.getUserId());
+            newBeeMallUser.setShopCartItemCount(count);
+        }
+        session.setAttribute("newBeeMallUser", newBeeMallUser);
         return resultUtil;
     }
 

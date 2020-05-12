@@ -333,8 +333,8 @@ function orderCheckOut() {
 }
 
 function closeOrder() {
-    var ids = getSelectedRows();
-    if (ids == null) {
+    var id = getSelectedRow();
+    if (id == null) {
         return;
     }
     swal({
@@ -344,19 +344,32 @@ function closeOrder() {
         buttons: true,
         dangerMode: true,
     }).then((flag) => {
-
             if (flag) {
                 $.ajax({
                     type: "POST",
-                    url: "/admin/orders/close",
+                    url: "/alipay/web/refund",
                     contentType: "application/json",
-                    data: JSON.stringify(ids),
+                    data: JSON.stringify(id),
                     success: function (r) {
                         if (r.resultCode == 200) {
-                            swal("关闭成功", {
-                                icon: "success",
+                            $.ajax({
+                                type: "POST",
+                                url: "/admin/orders/close",
+                                contentType: "application/json",
+                                data: JSON.stringify(id),
+                                success: function (r) {
+                                    if (r.resultCode == 200) {
+                                        swal("关闭成功", {
+                                            icon: "success",
+                                        });
+                                        $("#jqGrid").trigger("reloadGrid");
+                                    } else {
+                                        swal(r.message, {
+                                            icon: "error",
+                                        });
+                                    }
+                                }
                             });
-                            $("#jqGrid").trigger("reloadGrid");
                         } else {
                             swal(r.message, {
                                 icon: "error",
@@ -364,6 +377,7 @@ function closeOrder() {
                         }
                     }
                 });
+
             }
         }
     )

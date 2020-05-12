@@ -3,17 +3,20 @@ package com.example.newbeemall.controller.mall;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.example.newbeemall.entity.TbNewbeeMallGoodsInfo;
 import com.example.newbeemall.entity.TbNewbeeMallOrder;
 import com.example.newbeemall.entity.TbNewbeeMallOrderItem;
 import com.example.newbeemall.entity.TbNewbeeMallUser;
 import com.example.newbeemall.mapper.TbNewbeeMallOrderItemMapper;
 import com.example.newbeemall.mapper.TbNewbeeMallOrderMapper;
+import com.example.newbeemall.service.TbNewbeeMallGoodsInfoService;
 import com.example.newbeemall.service.TbNewbeeMallOrderItemService;
 import com.example.newbeemall.service.TbNewbeeMallOrderService;
 import com.example.newbeemall.service.TbNewbeeMallShoppingCartItemService;
 import com.example.newbeemall.utils.NewBeeMallOrderStatusEnum;
 import com.example.newbeemall.utils.ResultUtil;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -37,25 +40,36 @@ public class OrderController {
     @Resource
     private TbNewbeeMallOrderMapper tbNewbeeMallOrderMapper;
     @Resource
-    private TbNewbeeMallOrderItemMapper tbNewbeeMallOrderItemMapper;
-    @Resource
     private TbNewbeeMallOrderService orderService;
     @Resource
     private TbNewbeeMallShoppingCartItemService shopCatService;
     @Resource
     private TbNewbeeMallOrderItemService itemService;
+    @Resource
+    private TbNewbeeMallGoodsInfoService goodsInfoService;
 
     @PutMapping("/orders/{orderNo}/cancel")
     @ResponseBody
+    @Transactional
     public Object cancelOrder(@PathVariable("orderNo") String orderNo){
-        UpdateWrapper<TbNewbeeMallOrder> updateWrapper = new UpdateWrapper<>();
-        updateWrapper.set("order_status",-1);
-        updateWrapper.eq("order_no",orderNo);
-        boolean b = orderService.update(updateWrapper);
-        ResultUtil resultUtil = new ResultUtil(b);
-        if(b){
-            resultUtil.setMessage("订单取消成功");
-        } else {
+        ResultUtil resultUtil=new ResultUtil();
+        try {
+            TbNewbeeMallOrder orderByOrderNo = orderService.findOrderByOrderNo(orderNo);
+            orderByOrderNo.setOrderStatus(-1);
+            boolean b = orderService.updateById(orderByOrderNo);
+            resultUtil.setResultCode(b?200:500);
+            if(b){
+                List<TbNewbeeMallOrderItem> orderItemByOrderId = itemService.getOrderItemByOrderId(orderByOrderNo.getOrderId());
+                for (TbNewbeeMallOrderItem orderItem : orderItemByOrderId) {
+                    TbNewbeeMallGoodsInfo byId = goodsInfoService.getById(orderItem.getGoodsId());
+                    byId.setStockNum(byId.getStockNum()+orderItem.getGoodsCount());
+                    goodsInfoService.updateById(byId);
+                }
+                resultUtil.setMessage("订单取消成功");
+            } else {
+                throw new Exception("订单取消失败");
+            }
+        } catch (Exception e){
             resultUtil.setMessage("订单取消失败");
         }
         return resultUtil;
